@@ -5,11 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.skydoves.landscapist.glide.GlideImage
 import net.teamof.whisper.components.BottomNavigation
 import net.teamof.whisper.components.floatingActionButton
