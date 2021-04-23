@@ -1,8 +1,6 @@
 package net.teamof.whisper.components
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -68,11 +66,17 @@ fun BottomNavigation() {
         NavItem.Settings
     )
 
-
-
-    BottomAppBar(modifier = Modifier.background(Color.Black)) {
-
-        BottomNavigation(modifier = Modifier.background(Color.Black)) {
+    BottomAppBar(
+        backgroundColor = Color.Transparent,
+        elevation = 0.dp,
+        contentPadding = PaddingValues(horizontal = 0.dp, vertical = 0.dp),
+        modifier = Modifier.height(75.dp)
+    ) {
+        BottomNavigation(
+            backgroundColor = Color.Yellow,
+            elevation = 0.dp,
+            modifier = Modifier.height(75.dp)
+        ) {
             val navController = rememberNavController()
             val currentRoute = navController.currentBackStackEntry?.arguments?.getString(KEY_ROUTE)
 
@@ -95,7 +99,10 @@ fun BottomNavigation() {
 
 @Composable
 fun floatingActionButton() {
-    FloatingActionButton(onClick = { /*TODO*/ }, modifier = Modifier.offset(Dp(0F), Dp(25F))) {
+    FloatingActionButton(
+        onClick = { /*TODO*/ },
+        modifier = Modifier.offset(Dp(0F), Dp(35F)).size(60.dp),
+    ) {
         Icon(painter = painterResource(id = R.drawable.ic_flash), contentDescription = null)
     }
 }
