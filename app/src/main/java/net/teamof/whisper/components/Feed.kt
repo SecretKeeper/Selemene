@@ -60,10 +60,12 @@ fun MessagePortal(
                     data.location?.let { Text(text = it, fontSize = 12.sp) }
                 }
                 Column(horizontalAlignment = Alignment.End, modifier = Modifier.padding(end = 10.dp)) {
-                    Text(
-                        text = data.time,
-                        fontSize = 13.sp,
-                        modifier = Modifier.padding(bottom = 7.dp)
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_more_vertical ),
+                        contentDescription = null,
+                        Modifier
+                            .width(20.dp)
+                            .height(20.dp),
                     )
                 }
             }

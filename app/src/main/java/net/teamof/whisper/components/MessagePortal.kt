@@ -40,7 +40,7 @@ fun MessagePortal(
             Column(Modifier.weight(2f).padding(start = 15.dp)) {
                 Text(
                     text = data.username,
-                    fontWeight = FontWeight.SemiBold ,
+                    fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.padding(bottom = 7.dp)
                 )
                 Text(text = data.last_message, fontSize = 13.sp)
