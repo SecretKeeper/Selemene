@@ -1,6 +1,7 @@
 package net.teamof.whisper.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.material.Text
@@ -18,7 +19,7 @@ import net.teamof.whisper.models.MessagePortal
 fun MessagePortal(
     data: MessagePortal
 ) {
-    Card(Modifier.fillMaxWidth()) {
+    Card(Modifier.fillMaxWidth().clickable {  }) {
         Row(
             verticalAlignment  = Alignment.CenterVertically,
             modifier = Modifier

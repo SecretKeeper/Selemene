@@ -40,7 +40,7 @@ class MainActivity : ComponentActivity() {
                         ) {
                             NavHost(
                                 navController = navController,
-                                startDestination = "messages"
+                                startDestination = "feeds"
                             ) {
                                 composable("messages") { Messages() }
                                 composable("feeds") { Feeds() }
