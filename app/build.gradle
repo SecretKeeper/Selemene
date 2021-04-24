@@ -67,4 +67,7 @@ dependencies {
 
     // Material Design
     implementation "androidx.compose.material:material:$compose_version"
+
+    // Accompanist
+    implementation 'com.google.accompanist:accompanist-glide:0.8.1'
 }
