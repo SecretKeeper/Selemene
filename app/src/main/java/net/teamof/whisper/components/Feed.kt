@@ -28,7 +28,7 @@ fun MessagePortal(
 
     val actionIconSize = 25
 
-    Card(Modifier.fillMaxWidth()) {
+    Card(Modifier.fillMaxWidth().padding(bottom = 25.dp), elevation = 0.dp) {
         Column {
             Row(
                 verticalAlignment  = Alignment.CenterVertically,
@@ -140,7 +140,8 @@ fun MessagePortal(
             Text(
                 text = "Apply for feature following the link in our portfolio and we will publish your photos in our account @travel",
                 fontSize = 13.sp,
-                lineHeight = 16.sp
+                lineHeight = 20.sp,
+                modifier = Modifier.padding(horizontal = 10.dp)
             )
         }
     }
