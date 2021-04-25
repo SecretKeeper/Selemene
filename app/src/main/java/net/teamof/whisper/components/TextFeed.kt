@@ -19,7 +19,7 @@ import net.teamof.whisper.R
 import net.teamof.whisper.models.Feed
 
 @Composable
-fun ImageFeed(
+fun TextFeed(
     data: Feed
 ) {
 
@@ -73,15 +73,13 @@ fun ImageFeed(
                     )
                 }
             }
-            Image(
-                painter = rememberGlidePainter(
-                    request = data.image,
-                ),
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(275.dp)
+            Text(
+                text = "Apply for feature following the link in our portfolio and we will publish your photos in our account @travel",
+                fontSize = 13.sp,
+                lineHeight = 20.sp,
+                modifier = Modifier.padding(vertical = 15.dp, horizontal = 10.dp)
             )
+            Divider(Modifier.padding(horizontal = 15.dp, vertical = 10.dp))
             Row {
                 Row(
                     Modifier
@@ -142,13 +140,6 @@ fun ImageFeed(
                     Text(text = "Like", Modifier.padding(start = 10.dp))
                 }
             }
-            Divider(Modifier.padding(horizontal = 15.dp, vertical = 10.dp))
-            Text(
-                text = "Apply for feature following the link in our portfolio and we will publish your photos in our account @travel",
-                fontSize = 13.sp,
-                lineHeight = 20.sp,
-                modifier = Modifier.padding(horizontal = 10.dp)
-            )
         }
     }
 }

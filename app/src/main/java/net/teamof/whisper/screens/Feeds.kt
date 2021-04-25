@@ -6,12 +6,15 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import net.teamof.whisper.components.ImageFeed
 import net.teamof.whisper.components.MessagePortal
+import net.teamof.whisper.components.TextFeed
 import net.teamof.whisper.models.Feed
 
 
 val feeds = listOf(
     Feed(
+        1,
         1,
         "Jaina",
         "Los Angeles, USA",
@@ -23,6 +26,7 @@ val feeds = listOf(
     ),
     Feed(
         2,
+        2,
         "Lichking",
         "Tokyo, Japan",
         null,
@@ -32,6 +36,7 @@ val feeds = listOf(
         "27mins",
     ),
     Feed(
+        1,
         3,
         "Sylvanas Windrunner",
         "Ghale Gabri, Iran",
@@ -47,7 +52,11 @@ val feeds = listOf(
 fun Feeds() {
     LazyColumn(Modifier.padding(bottom = 80.dp)) {
         itemsIndexed(feeds) { index, item ->
-            MessagePortal(item)
+            if(item.type == 1) {
+                ImageFeed(item)
+            } else if (item.type == 2) {
+                TextFeed(item)
+            }
         }
     }
 

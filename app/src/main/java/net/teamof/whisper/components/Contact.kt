@@ -9,17 +9,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bumptech.glide.request.RequestOptions
 import com.google.accompanist.glide.rememberGlidePainter
-import net.teamof.whisper.models.MessagePortal
+import net.teamof.whisper.models.Contact
 
 @Composable
-fun MessagePortal(
-    data: MessagePortal
-) {
-    Card(Modifier.fillMaxWidth().clickable {  }) {
+fun Contact(data: Contact) {
+    Card(elevation = 0.dp, modifier = Modifier.fillMaxWidth().clickable {  }) {
         Row(
             verticalAlignment  = Alignment.CenterVertically,
             modifier = Modifier
@@ -27,7 +26,7 @@ fun MessagePortal(
                 .padding(vertical = 10.dp, horizontal = 10.dp)
         ) {
             Image(
-                painter = rememberGlidePainter(request = data.image,
+                painter = rememberGlidePainter(request = data.image , fadeIn= true,
                     requestBuilder = {
                         apply(RequestOptions().circleCrop())
                     }
@@ -43,16 +42,21 @@ fun MessagePortal(
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.padding(bottom = 7.dp)
                 )
-                Text(text = data.last_message, fontSize = 13.sp)
-            }
-            Column(horizontalAlignment = Alignment.End, modifier = Modifier.padding(end = 10.dp)) {
-                Text(
-                    text = data.last_message_time,
-                    fontSize = 13.sp,
-                    modifier = Modifier.padding(bottom = 7.dp)
-                )
-                Text(text = data.unread_messages.toString(), fontSize = 13.sp)
+                Text(text = data.status, fontSize = 13.sp)
             }
         }
     }
+}
+
+
+@Preview
+@Composable
+fun ContactPreview() {
+    Contact(Contact(
+        1,
+        "Jaina",
+        "https://c4.wallpaperflare.com/wallpaper/607/463/825/world-of-warcraft-jaina-proudmoore-magic-mazert-young-turquoise-hd-wallpaper-preview.jpg",
+        "No Battrey",
+        true
+    ))
 }
