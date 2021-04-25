@@ -44,7 +44,7 @@ sealed class NavItem(
     )
 
     object Settings: NavItem(
-        "settings",
+        "messaging",
         R.drawable.ic_settings,
         true
     )

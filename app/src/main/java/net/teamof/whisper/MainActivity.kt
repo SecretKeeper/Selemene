@@ -5,21 +5,19 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material.FabPosition
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.*
 import net.teamof.whisper.components.BottomAppBar
 import net.teamof.whisper.components.FloatingActionButton
-import net.teamof.whisper.screens.Contacts
-import net.teamof.whisper.screens.Create
-import net.teamof.whisper.screens.Feeds
-import net.teamof.whisper.screens.Messages
+import net.teamof.whisper.screens.*
 import net.teamof.whisper.ui.theme.WhisperTheme
 
 
@@ -32,8 +30,12 @@ class MainActivity : ComponentActivity() {
             WhisperTheme {
                 Surface(color = MaterialTheme.colors.background) {
                     Scaffold(
-                        bottomBar = { BottomAppBar(navController) },
-                        floatingActionButton = { FloatingActionButton()},
+                        bottomBar = {
+                            if (currentRoute(navController) != "messaging") BottomAppBar(
+                                navController
+                            )
+                        },
+                        floatingActionButton = { if (currentRoute(navController) != "messaging") FloatingActionButton() },
                         isFloatingActionButtonDocked = true,
                         floatingActionButtonPosition = FabPosition.Center
                     ) {
@@ -43,11 +45,12 @@ class MainActivity : ComponentActivity() {
                         ) {
                             NavHost(
                                 navController = navController,
-                                startDestination = "contacts"
+                                startDestination = "messages"
                             ) {
                                 composable("messages") { Messages() }
+                                composable("messaging") { Messaging() }
                                 composable("feeds") { Feeds() }
-                                composable("create") { Create()}
+                                composable("create") { Create() }
                                 composable("contacts") { Contacts() }
                             }
                         }
@@ -56,4 +59,11 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    @Composable
+    public fun currentRoute(navController: NavHostController): String? {
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        return navBackStackEntry?.arguments?.getString(KEY_ROUTE)
+    }
+
 }
