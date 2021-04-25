@@ -19,9 +19,12 @@ import net.teamof.whisper.models.MessagePortal
 fun MessagePortal(
     data: MessagePortal
 ) {
-    Card(Modifier.fillMaxWidth().clickable {  }) {
+    Card(
+        Modifier
+            .fillMaxWidth()
+            .clickable { }) {
         Row(
-            verticalAlignment  = Alignment.CenterVertically,
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 10.dp, horizontal = 10.dp)
@@ -37,7 +40,10 @@ fun MessagePortal(
                     .width(60.dp)
                     .height(60.dp)
             )
-            Column(Modifier.weight(2f).padding(start = 15.dp)) {
+            Column(
+                Modifier
+                    .weight(2f)
+                    .padding(start = 15.dp)) {
                 Text(
                     text = data.username,
                     fontWeight = FontWeight.SemiBold,
@@ -51,7 +57,10 @@ fun MessagePortal(
                     fontSize = 13.sp,
                     modifier = Modifier.padding(bottom = 7.dp)
                 )
-                Text(text = data.unread_messages.toString(), fontSize = 13.sp)
+                if (data.unread_messages != 0) Text(
+                    text = data.unread_messages.toString(),
+                    fontSize = 13.sp
+                )
             }
         }
     }
