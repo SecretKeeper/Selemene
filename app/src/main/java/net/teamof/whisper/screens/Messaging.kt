@@ -6,10 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -19,19 +16,95 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.bumptech.glide.request.RequestOptions
+import com.google.accompanist.glide.rememberGlidePainter
 import net.teamof.whisper.R
 
 @SuppressLint("RememberReturnType")
 @Composable
 fun Messaging() {
 
+    val expanded = remember { mutableStateOf(false) }
     val text = remember { mutableStateOf("") }
 
     Column {
-        Column() {
-            Text(text = "QWEQRT")
+        Column {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(vertical = 15.dp, horizontal = 10.dp)
+            ) {
+                IconButton(onClick = { /*TODO*/ }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_chevron_left),
+                        contentDescription = null,
+                        Modifier
+                            .width(25.dp)
+                            .height(25.dp)
+                    )
+                }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(horizontal = 15.dp)
+                ) {
+                    Image(
+                        painter = rememberGlidePainter(request = "https://c4.wallpaperflare.com/wallpaper/607/463/825/world-of-warcraft-jaina-proudmoore-magic-mazert-young-turquoise-hd-wallpaper-preview.jpg",
+                            requestBuilder = {
+                                apply(RequestOptions().circleCrop())
+                            }
+                        ),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .width(50.dp)
+                            .height(50.dp)
+                    )
+                    Column(
+                        Modifier
+                            .padding(start = 15.dp)
+                    ) {
+                        Text(
+                            text = "Alexandra",
+                            fontWeight = FontWeight.W600,
+                            modifier = Modifier.padding(bottom = 5.dp)
+                        )
+                        Text(
+                            text = "just now",
+                            fontSize = 13.sp,
+                            modifier = Modifier.padding(bottom = 5.dp)
+                        )
+                    }
+                }
+                Box() {
+                    IconButton(onClick = { expanded.value = true }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_more_vertical),
+                            contentDescription = null,
+                            Modifier
+                                .width(25.dp)
+                                .height(25.dp)
+                        )
+                    }
+                    DropdownMenu(
+                        expanded = expanded.value,
+                        onDismissRequest = { expanded.value = false }
+                    ) {
+                        DropdownMenuItem(onClick = { /* Handle refresh! */ }) {
+                            Text("Refresh")
+                        }
+                        DropdownMenuItem(onClick = { /* Handle settings! */ }) {
+                            Text("Settings")
+                        }
+                        Divider()
+                        DropdownMenuItem(onClick = { /* Handle send feedback! */ }) {
+                            Text("Send Feedback")
+                        }
+                    }
+                }
+            }
         }
         Column(Modifier.weight(1f)) {
             Text(text = "Hello Jaina")
@@ -42,8 +115,8 @@ fun Messaging() {
                 modifier = Modifier.padding(
                     start = 15.dp,
                     end = 20.dp,
-                    top = 10.dp,
-                    bottom = 10.dp
+                    top = 3.dp,
+                    bottom = 3.dp
                 )
             ) {
                 Image(
@@ -71,14 +144,15 @@ fun Messaging() {
                     )
 
                 )
-                Image(
-                    painter = painterResource(id = R.drawable.ic_send),
-                    contentDescription = null,
-                    Modifier
-                        .width(25.dp)
-                        .height(25.dp)
-                        .clickable { }
-                )
+                IconButton(onClick = { }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_send),
+                        contentDescription = null,
+                        Modifier
+                            .width(25.dp)
+                            .height(25.dp)
+                    )
+                }
             }
         }
 
