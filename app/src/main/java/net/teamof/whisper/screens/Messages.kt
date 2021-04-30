@@ -30,6 +30,14 @@ val messages = listOf(
         "Something in your eye?",
         "12:59",
         0
+    ),
+    MessagePortal(
+        3,
+        "Duel",
+        "https://a-static.besthdwallpaper.com/world-of-warcraft-wow-valeera-sanguinar-wallpaper-55768_L.jpg",
+        "Something in your eye?",
+        "12:59",
+        0
     )
 )
 

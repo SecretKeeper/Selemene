@@ -147,7 +147,7 @@ fun ImageFeed(
                 text = "Apply for feature following the link in our portfolio and we will publish your photos in our account @travel",
                 fontSize = 13.sp,
                 lineHeight = 20.sp,
-                modifier = Modifier.padding(horizontal = 10.dp)
+                modifier = Modifier.padding(bottom = 15.dp, start = 10.dp, end = 10.dp)
             )
         }
     }

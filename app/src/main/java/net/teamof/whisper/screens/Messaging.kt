@@ -5,6 +5,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -22,6 +24,37 @@ import androidx.compose.ui.unit.sp
 import com.bumptech.glide.request.RequestOptions
 import com.google.accompanist.glide.rememberGlidePainter
 import net.teamof.whisper.R
+import net.teamof.whisper.components.Message
+import net.teamof.whisper.models.Message
+
+
+private val sampleMessages = listOf(
+    Message(
+        1,
+        "The veil between life and death",
+        "2020-08-09"
+    ),
+    Message(
+        2,
+        "Hello Phantom Assassin!",
+        "2020-08-08"
+    ),
+    Message(
+        2,
+        "That's Cool!",
+        "2020-08-08"
+    ),
+    Message(
+        1,
+        "QQWEWRWQRWQEWQE",
+        "2020-08-08"
+    ),
+    Message(
+        1,
+        "EQWQw;fhdfhqwejkqleqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
+        "2020-08-08"
+    )
+)
 
 @SuppressLint("RememberReturnType")
 @Composable
@@ -107,7 +140,11 @@ fun Messaging() {
             }
         }
         Column(Modifier.weight(1f)) {
-            Text(text = "Hello Jaina")
+            LazyColumn(reverseLayout = true, modifier = Modifier.padding(horizontal = 15.dp)) {
+                itemsIndexed(sampleMessages) { index, message ->
+                    Message(message)
+                }
+            }
         }
         Column(Modifier.background(Color(red = 245, green = 245, blue = 253))) {
             Row(
