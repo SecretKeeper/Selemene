@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -21,6 +22,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.navigate
 import com.bumptech.glide.request.RequestOptions
 import com.google.accompanist.glide.rememberGlidePainter
 import net.teamof.whisper.R
@@ -58,10 +61,12 @@ private val sampleMessages = listOf(
 
 @SuppressLint("RememberReturnType")
 @Composable
-fun Messaging() {
+fun Messaging(navController: NavController, username: String) {
 
     val expanded = remember { mutableStateOf(false) }
     val text = remember { mutableStateOf("") }
+
+    val interactionSource = remember { MutableInteractionSource() }
 
     Column {
         Column {
@@ -82,7 +87,12 @@ fun Messaging() {
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .weight(1f)
-                        .padding(horizontal = 15.dp)
+                        .padding(horizontal = 15.dp).clickable (
+                            interactionSource = interactionSource,
+                            indication = null
+                                ) {
+                            navController.navigate("profile")
+                        }
                 ) {
                     Image(
                         painter = rememberGlidePainter(request = "https://c4.wallpaperflare.com/wallpaper/607/463/825/world-of-warcraft-jaina-proudmoore-magic-mazert-young-turquoise-hd-wallpaper-preview.jpg",
@@ -100,7 +110,7 @@ fun Messaging() {
                             .padding(start = 15.dp)
                     ) {
                         Text(
-                            text = "Alexandra",
+                            text = username,
                             fontWeight = FontWeight.W600,
                             modifier = Modifier.padding(bottom = 5.dp)
                         )

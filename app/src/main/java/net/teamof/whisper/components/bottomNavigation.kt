@@ -5,13 +5,14 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.KEY_ROUTE
 import androidx.navigation.compose.navigate
-import androidx.navigation.compose.rememberNavController
 import net.teamof.whisper.R
 
 sealed class NavItem(
@@ -19,31 +20,31 @@ sealed class NavItem(
     val icon: Int,
     val enabled: Boolean
 ) {
-    object Messages: NavItem(
+    object Messages : NavItem(
         "messages",
         R.drawable.ic_flash,
         true
     )
 
-    object Feeds: NavItem(
+    object Feeds : NavItem(
         "feeds",
         R.drawable.ic_layers,
         true
     )
 
-    object Holder: NavItem(
+    object Holder : NavItem(
         "holder",
         R.drawable.ic_settings,
         false
     )
 
-    object Activities: NavItem(
+    object Activities : NavItem(
         "create",
         R.drawable.ic_timer,
         true
     )
 
-    object Settings: NavItem(
+    object Settings : NavItem(
         "messaging",
         R.drawable.ic_settings,
         true
@@ -58,7 +59,7 @@ fun BottomAppBar(navController: NavController) {
         NavItem.Messages,
         NavItem.Feeds,
         NavItem.Holder,
-        NavItem.Activities ,
+        NavItem.Activities,
         NavItem.Settings
     )
 
@@ -80,17 +81,18 @@ fun BottomAppBar(navController: NavController) {
                 BottomNavigationItem(
                     selected = currentRoute == screen.route,
                     onClick = {
-                              navController.navigate(screen.route) {
-                                  popUpTo = navController.graph.startDestination
-                                  launchSingleTop = true
-                              }
+                        navController.navigate(screen.route) {
+                            popUpTo = navController.graph.startDestination
+                            launchSingleTop = true
+                        }
                     },
                     icon = {
                         Icon(
                             painter = painterResource(id = screen.icon),
                             contentDescription = null,
-                            modifier = Modifier.size(28.dp, 28.dp))
-                        },
+                            modifier = Modifier.size(28.dp, 28.dp)
+                        )
+                    },
                     enabled = screen.enabled,
                 )
             }
@@ -102,10 +104,16 @@ fun BottomAppBar(navController: NavController) {
 fun FloatingActionButton() {
     FloatingActionButton(
         onClick = { /*TODO*/ },
+        backgroundColor = MaterialTheme.colors.primary,
         modifier = Modifier
             .offset(Dp(0F), Dp(35F))
-            .size(60.dp),
+            .size(50.dp),
     ) {
-        Icon(painter = painterResource(id = R.drawable.ic_flash), contentDescription = null)
+        Icon(
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_add),
+            contentDescription = null,
+            tint = Color.White,
+            modifier = Modifier.width(30.dp).height(30.dp)
+        )
     }
 }

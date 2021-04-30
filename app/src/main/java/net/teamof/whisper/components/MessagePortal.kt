@@ -11,18 +11,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.navigate
+import androidx.navigation.compose.rememberNavController
 import com.bumptech.glide.request.RequestOptions
 import com.google.accompanist.glide.rememberGlidePainter
 import net.teamof.whisper.models.MessagePortal
 
 @Composable
 fun MessagePortal(
-    data: MessagePortal
+    data: MessagePortal,
+    navController: NavController
 ) {
+
     Card(
         Modifier
             .fillMaxWidth()
-            .clickable { }) {
+            .clickable {
+                navController.navigate("messaging/${data.username}")
+            }) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
