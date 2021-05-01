@@ -5,18 +5,21 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bumptech.glide.request.RequestOptions
 import com.google.accompanist.glide.rememberGlidePainter
 import net.teamof.whisper.R
+import net.teamof.whisper.components.Feed.FeedActions
 import net.teamof.whisper.models.Feed
 
 @Composable
@@ -24,7 +27,7 @@ fun ImageFeed(
     data: Feed
 ) {
 
-    val actionIconSize = 20
+    val expanded = remember { mutableStateOf(false) }
 
     Card(
         elevation = 0.dp,
@@ -53,7 +56,7 @@ fun ImageFeed(
                 )
                 Column(
                     Modifier
-                        .weight(2f)
+                        .weight(1f)
                         .padding(start = 15.dp)
                 ) {
                     Text(
@@ -64,17 +67,59 @@ fun ImageFeed(
                     )
                     data.location?.let { Text(text = it, fontSize = 12.sp) }
                 }
-                Column(
-                    horizontalAlignment = Alignment.End,
-                    modifier = Modifier.padding(end = 10.dp)
+                Box(
+                    modifier = Modifier
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_more_vertical),
-                        contentDescription = null,
-                        Modifier
-                            .width(20.dp)
-                            .height(20.dp),
-                    )
+                    IconButton(onClick = { expanded.value = !expanded.value }) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_more_vertical),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .width(22.dp)
+                                .height(22.dp)
+                        )
+                    }
+                    DropdownMenu(
+                        expanded = expanded.value,
+                        onDismissRequest = { expanded.value = false }
+                    ) {
+                        DropdownMenuItem(onClick = { /* Handle refresh! */ }) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_eraser),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .width(25.dp)
+                                        .height(25.dp)
+                                )
+                                Text("Clear History", modifier = Modifier.padding(start = 15.dp))
+                            }
+                        }
+                        DropdownMenuItem(onClick = { /* Handle settings! */ }) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_blocked),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .width(23.dp)
+                                        .height(23.dp)
+                                )
+                                Text("Block", modifier = Modifier.padding(start = 15.dp))
+                            }
+                        }
+                        DropdownMenuItem(onClick = { /* Handle send feedback! */ }) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_add_user),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .width(24.dp)
+                                        .height(24.dp)
+                                )
+                                Text("Add Contact", modifier = Modifier.padding(start = 15.dp))
+                            }
+                        }
+                    }
                 }
             }
             Image(
@@ -86,75 +131,23 @@ fun ImageFeed(
                     .fillMaxWidth()
                     .height(275.dp)
             )
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.End,
-                modifier = Modifier.padding(horizontal = 5.dp)
-            ) {
-                Row (Modifier.weight(1f)){
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_heart),
-                            contentDescription = null,
-                            Modifier
-                                .width(actionIconSize.dp)
-                                .height(actionIconSize.dp)
-                        )
-                    }
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_share),
-                            contentDescription = null,
-                            Modifier
-                                .width(actionIconSize.dp)
-                                .height(actionIconSize.dp)
-                        )
-                    }
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_star),
-                            contentDescription = null,
-                            Modifier
-                                .width(actionIconSize.dp)
-                                .height(actionIconSize.dp)
-                        )
-                    }
-                }
-                IconButton(
-                    onClick = { /*TODO*/ },
-                    modifier = Modifier) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_add),
-                        contentDescription = null,
-                        Modifier
-                            .width(actionIconSize.dp)
-                            .height(actionIconSize.dp)
+            Column(modifier = Modifier.padding(horizontal = 10.dp)) {
+                Text(
+                    text = "Apply for feature following the link in our portfolio and we will publish your photos in our account @travel",
+                    fontSize = 13.sp,
+                    lineHeight = 20.sp,
+                    modifier = Modifier.padding(top = 15.dp, bottom = 20.dp)
+                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(text = "Tags...", fontSize = 14.sp, modifier = Modifier.weight(1f))
+                    Text(
+                        text = "Sep 17th , 2021",
+                        fontSize = 14.sp,
+                        color = MaterialTheme.colors.onSecondary
                     )
                 }
-            }
-            Text(
-                text = "Apply for feature following the link in our portfolio and we will publish your photos in our account @travel",
-                fontSize = 13.sp,
-                lineHeight = 20.sp,
-                modifier = Modifier.padding(top = 10.dp, bottom = 15.dp, start = 10.dp, end = 10.dp)
-            )
-            Divider(Modifier.padding(horizontal = 15.dp, vertical = 10.dp))
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 10.dp)
-            ) {
-                TextButton(onClick = { /*TODO*/ }) {
-                    Text(text = "Comments")
-                }
-                Text(
-                    text = "Sep 17th, 2021",
-                    fontSize = 14.sp,
-                    color = MaterialTheme.colors.onSecondary,
-                    modifier = Modifier.weight(1f),
-                    textAlign = TextAlign.End
-                )
+                Divider(Modifier.padding(vertical = 10.dp))
+                FeedActions()
             }
         }
     }
