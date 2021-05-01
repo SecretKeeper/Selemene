@@ -23,7 +23,6 @@ fun MessagePortal(
     data: MessagePortal,
     navController: NavController
 ) {
-
     Card(
         Modifier
             .fillMaxWidth()

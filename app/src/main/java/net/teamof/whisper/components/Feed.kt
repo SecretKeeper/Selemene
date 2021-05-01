@@ -18,6 +18,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.accompanist.glide.rememberGlidePainter
 import net.teamof.whisper.R
 import net.teamof.whisper.components.Feed.FeedActions
+import net.teamof.whisper.components.Feed.FeedComments
 import net.teamof.whisper.models.Feed
 
 @Composable
@@ -91,19 +92,11 @@ fun Feed(
                                         .width(25.dp)
                                         .height(25.dp)
                                 )
-                                Text("Clear History", modifier = Modifier.padding(start = 15.dp))
-                            }
-                        }
-                        DropdownMenuItem(onClick = { /* Handle settings! */ }) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Icon(
-                                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_blocked),
-                                    contentDescription = null,
-                                    modifier = Modifier
-                                        .width(23.dp)
-                                        .height(23.dp)
+                                Text(
+                                    "Clear History",
+                                    fontSize = 14.sp,
+                                    modifier = Modifier.padding(start = 15.dp)
                                 )
-                                Text("Block", modifier = Modifier.padding(start = 15.dp))
                             }
                         }
                         DropdownMenuItem(onClick = { /* Handle send feedback! */ }) {
@@ -112,10 +105,30 @@ fun Feed(
                                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_add_user),
                                     contentDescription = null,
                                     modifier = Modifier
-                                        .width(24.dp)
-                                        .height(24.dp)
+                                        .width(23.dp)
+                                        .height(23.dp)
                                 )
-                                Text("Add Contact", modifier = Modifier.padding(start = 15.dp))
+                                Text(
+                                    "Add Contact",
+                                    fontSize = 14.sp,
+                                    modifier = Modifier.padding(start = 15.dp)
+                                )
+                            }
+                        }
+                        DropdownMenuItem(onClick = { /* Handle settings! */ }) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_blocked),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .width(21.dp)
+                                        .height(21.dp)
+                                )
+                                Text(
+                                    "Block",
+                                    fontSize = 14.sp,
+                                    modifier = Modifier.padding(start = 15.dp)
+                                )
                             }
                         }
                     }
@@ -140,10 +153,10 @@ fun Feed(
                     modifier = Modifier.padding(top = 15.dp, bottom = 20.dp)
                 )
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(text = "Tags...", fontSize = 14.sp, modifier = Modifier.weight(1f))
+                    Text(text = "Tags...", fontSize = 13.sp, modifier = Modifier.weight(1f))
                     Text(
                         text = "Sep 17th , 2021",
-                        fontSize = 14.sp,
+                        fontSize = 13.sp,
                         color = MaterialTheme.colors.onSecondary
                     )
                 }
@@ -151,11 +164,13 @@ fun Feed(
                 FeedActions(
                     showCommentsState = showComments.value,
                     showComments = { showComments.value = true },
-                    hideComments = { showComments.value = false })
+                    hideComments = { showComments.value = false },
+                    numberOfComments = data.comments.size
+                )
+
                 if (showComments.value)
-                    data.comments.forEach { comment ->
-                        Text(text = comment.content)
-                    }
+                    FeedComments(comments = data.comments)
+
             }
         }
     }

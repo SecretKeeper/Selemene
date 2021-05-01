@@ -4,7 +4,6 @@ package net.teamof.whisper.screens
 import android.content.res.Resources
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -260,7 +259,8 @@ fun Profile() {
                                     )
                                 ),
                                 onClick = {},
-                                modifier = Modifier.weight(1f)
+                                modifier = Modifier
+                                    .weight(1f)
                                     .wrapContentWidth(Alignment.End)
                             )
                         }
@@ -352,7 +352,11 @@ fun Profile() {
                                         .width(25.dp)
                                         .height(25.dp)
                                 )
-                                Text("Clear History", modifier = Modifier.padding(start = 15.dp))
+                                Text(
+                                    "Clear History",
+                                    fontSize = 14.sp,
+                                    modifier = Modifier.padding(start = 15.dp)
+                                )
                             }
                         }
                         DropdownMenuItem(onClick = { /* Handle settings! */ }) {
@@ -364,7 +368,11 @@ fun Profile() {
                                         .width(23.dp)
                                         .height(23.dp)
                                 )
-                                Text("Block", modifier = Modifier.padding(start = 15.dp))
+                                Text(
+                                    "Block",
+                                    fontSize = 14.sp,
+                                    modifier = Modifier.padding(start = 15.dp)
+                                )
                             }
                         }
                         DropdownMenuItem(onClick = { /* Handle send feedback! */ }) {
@@ -376,7 +384,11 @@ fun Profile() {
                                         .width(24.dp)
                                         .height(24.dp)
                                 )
-                                Text("Add Contact", modifier = Modifier.padding(start = 15.dp))
+                                Text(
+                                    "Add Contact",
+                                    fontSize = 14.sp,
+                                    modifier = Modifier.padding(start = 15.dp)
+                                )
                             }
                         }
                     }
