@@ -23,7 +23,7 @@ import net.teamof.whisper.components.Feed.FeedActions
 import net.teamof.whisper.models.Feed
 
 @Composable
-fun ImageFeed(
+fun Feed(
     data: Feed
 ) {
 
@@ -122,15 +122,17 @@ fun ImageFeed(
                     }
                 }
             }
-            Image(
-                painter = rememberGlidePainter(
-                    request = data.image,
-                ),
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(275.dp)
-            )
+            data.image?.let {
+                Image(
+                    painter = rememberGlidePainter(
+                        request = data.image,
+                    ),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(275.dp)
+                )
+            }
             Column(modifier = Modifier.padding(horizontal = 10.dp)) {
                 Text(
                     text = "Apply for feature following the link in our portfolio and we will publish your photos in our account @travel",
