@@ -94,8 +94,8 @@ fun Feed(
                                 )
                                 Text(
                                     "Clear History",
-                                    fontSize = 14.sp,
-                                    modifier = Modifier.padding(start = 15.dp)
+                                    fontSize = 13.sp,
+                                    modifier = Modifier.padding(start = 15.dp, end = 10.dp)
                                 )
                             }
                         }
@@ -105,13 +105,13 @@ fun Feed(
                                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_add_user),
                                     contentDescription = null,
                                     modifier = Modifier
-                                        .width(23.dp)
-                                        .height(23.dp)
+                                        .width(22.dp)
+                                        .height(22.dp)
                                 )
                                 Text(
                                     "Add Contact",
-                                    fontSize = 14.sp,
-                                    modifier = Modifier.padding(start = 15.dp)
+                                    fontSize = 13.sp,
+                                    modifier = Modifier.padding(start = 15.dp, end = 10.dp)
                                 )
                             }
                         }
@@ -121,13 +121,13 @@ fun Feed(
                                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_blocked),
                                     contentDescription = null,
                                     modifier = Modifier
-                                        .width(21.dp)
-                                        .height(21.dp)
+                                        .width(20.dp)
+                                        .height(20.dp)
                                 )
                                 Text(
                                     "Block",
-                                    fontSize = 14.sp,
-                                    modifier = Modifier.padding(start = 15.dp)
+                                    fontSize = 13.sp,
+                                    modifier = Modifier.padding(start = 15.dp, end = 10.dp)
                                 )
                             }
                         }

@@ -355,23 +355,7 @@ fun Profile() {
                                 Text(
                                     "Clear History",
                                     fontSize = 14.sp,
-                                    modifier = Modifier.padding(start = 15.dp)
-                                )
-                            }
-                        }
-                        DropdownMenuItem(onClick = { /* Handle settings! */ }) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Icon(
-                                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_blocked),
-                                    contentDescription = null,
-                                    modifier = Modifier
-                                        .width(23.dp)
-                                        .height(23.dp)
-                                )
-                                Text(
-                                    "Block",
-                                    fontSize = 14.sp,
-                                    modifier = Modifier.padding(start = 15.dp)
+                                    modifier = Modifier.padding(start = 15.dp, end = 10.dp)
                                 )
                             }
                         }
@@ -387,7 +371,23 @@ fun Profile() {
                                 Text(
                                     "Add Contact",
                                     fontSize = 14.sp,
-                                    modifier = Modifier.padding(start = 15.dp)
+                                    modifier = Modifier.padding(start = 15.dp, end = 10.dp)
+                                )
+                            }
+                        }
+                        DropdownMenuItem(onClick = { /* Handle settings! */ }) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_blocked),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .width(23.dp)
+                                        .height(23.dp)
+                                )
+                                Text(
+                                    "Block",
+                                    fontSize = 14.sp,
+                                    modifier = Modifier.padding(start = 15.dp, end = 10.dp)
                                 )
                             }
                         }
