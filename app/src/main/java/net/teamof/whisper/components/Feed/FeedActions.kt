@@ -1,6 +1,9 @@
 package net.teamof.whisper.components.Feed
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -14,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import net.teamof.whisper.R
 
 @Composable
-fun FeedActions() {
+fun FeedActions(showCommentsState: Boolean, showComments: () -> Unit, hideComments: () -> Unit) {
 
     val actionIconSize = 20
 
@@ -22,7 +25,7 @@ fun FeedActions() {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.End,
     ) {
-        TextButton(onClick = { /*TODO*/ }) {
+        TextButton(onClick = if(showCommentsState) hideComments else showComments) {
             Text(text = "Comments")
         }
         Row(

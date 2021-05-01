@@ -9,12 +9,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import net.teamof.whisper.components.Feed
+import net.teamof.whisper.models.Comment
 import net.teamof.whisper.models.Feed
 
 
 val feeds = listOf(
     Feed(
-        1,
         1,
         "Jaina",
         "https://c4.wallpaperflare.com/wallpaper/607/463/825/world-of-warcraft-jaina-proudmoore-magic-mazert-young-turquoise-hd-wallpaper-preview.jpg",
@@ -24,9 +24,24 @@ val feeds = listOf(
         null,
         "Something in your eye?",
         "Just now",
+        listOf(
+            Comment(
+                1,
+                "Lichking",
+                "https://s1.1zoom.me/b5050/962/Elves_World_of_WarCraft_Battle_of_Azeroth_Face_574335_2560x1440.jpg",
+                "otherwise, you could use the flags in the manifest. See here for more information",
+                "12 mins"
+            ),
+            Comment(
+                2,
+                "Sylvanas Windrunner",
+                "https://s1.1zoom.me/b5050/962/Elves_World_of_WarCraft_Battle_of_Azeroth_Face_574335_2560x1440.jpg",
+                "otherwise, you could use the flags in the manifest. See here for more information",
+                "19 hrs ago"
+            )
+        )
     ),
     Feed(
-        2,
         2,
         "Lichking",
         "https://s1.1zoom.me/b5050/962/Elves_World_of_WarCraft_Battle_of_Azeroth_Face_574335_2560x1440.jpg",
@@ -36,9 +51,9 @@ val feeds = listOf(
         null,
         "Something in your eye?",
         "27mins",
+        listOf()
     ),
     Feed(
-        1,
         3,
         "Sylvanas Windrunner",
         "https://s1.1zoom.me/b5050/962/Elves_World_of_WarCraft_Battle_of_Azeroth_Face_574335_2560x1440.jpg",
@@ -48,6 +63,7 @@ val feeds = listOf(
         null,
         "Something in your eye?",
         "12:59",
+        listOf()
     )
 )
 

@@ -9,9 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -28,6 +26,7 @@ fun Feed(
 ) {
 
     val expanded = remember { mutableStateOf(false) }
+    val showComments = remember { mutableStateOf(false) }
 
     Card(
         elevation = 0.dp,
@@ -149,7 +148,14 @@ fun Feed(
                     )
                 }
                 Divider(Modifier.padding(vertical = 10.dp))
-                FeedActions()
+                FeedActions(
+                    showCommentsState = showComments.value,
+                    showComments = { showComments.value = true },
+                    hideComments = { showComments.value = false })
+                if (showComments.value)
+                    data.comments.forEach { comment ->
+                        Text(text = comment.content)
+                    }
             }
         }
     }
