@@ -101,9 +101,11 @@ fun BottomAppBar(navController: NavController) {
 }
 
 @Composable
-fun FloatingActionButton() {
+fun FloatingActionButton(navController: NavController) {
     FloatingActionButton(
-        onClick = { /*TODO*/ },
+        onClick = {
+            navController.navigate("create")
+        },
         backgroundColor = MaterialTheme.colors.primary,
         modifier = Modifier
             .offset(Dp(0F), Dp(35F))
@@ -113,7 +115,9 @@ fun FloatingActionButton() {
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_add),
             contentDescription = null,
             tint = Color.White,
-            modifier = Modifier.width(30.dp).height(30.dp)
+            modifier = Modifier
+                .width(30.dp)
+                .height(30.dp)
         )
     }
 }

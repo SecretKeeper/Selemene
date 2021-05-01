@@ -4,6 +4,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FabPosition
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
@@ -18,8 +19,7 @@ import net.teamof.whisper.ui.theme.WhisperTheme
 fun MainScreen() {
     val navController = rememberNavController()
 
-    val disabledNavScreens = listOf("messaging", "profile")
-
+    val disabledNavScreens = listOf("messaging/{username}", "profile")
 
     WhisperTheme {
         Scaffold(
@@ -34,7 +34,7 @@ fun MainScreen() {
                             navController
                         )
                     )
-                ) FloatingActionButton()
+                ) FloatingActionButton(navController)
             },
             isFloatingActionButtonDocked = true,
             floatingActionButtonPosition = FabPosition.Center
@@ -58,19 +58,16 @@ private fun MainScreenNavigationConfigurations(
         composable("messages") {
             Messages(navController)
         }
-
         composable(
             "messaging"
                 .plus("/{username}")
         ) { backStackEntry ->
             Messaging(navController, username = backStackEntry.arguments?.getString("username")!!)
         }
-
         composable("feeds") { Feeds() }
         composable("create") { Create() }
         composable("contacts") { Contacts() }
         composable("profile") { Profile() }
-
     }
 }
 
