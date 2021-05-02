@@ -5,5 +5,6 @@ data class Contact(
     val username: String,
     val image: String,
     val status: String,
-    val is_online: Boolean
+    val is_online: Boolean,
+    var selected: Boolean
 )

@@ -53,7 +53,7 @@ private fun MainScreenNavigationConfigurations(
 ) {
     NavHost(
         navController = navController,
-        startDestination = "messages"
+        startDestination = "createGroup"
     ) {
         composable("messages") {
             Messages(navController)
@@ -65,9 +65,10 @@ private fun MainScreenNavigationConfigurations(
             Messaging(navController, username = backStackEntry.arguments?.getString("username")!!)
         }
         composable("feeds") { Feeds() }
-        composable("create") { Create() }
+        composable("create") { Create(navController) }
         composable("contacts") { Contacts() }
         composable("profile") { Profile() }
+        composable("createGroup") { CreateGroup(navController) }
     }
 }
 
