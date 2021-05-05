@@ -18,7 +18,7 @@ import net.teamof.whisper.ui.theme.WhisperTheme
 fun MainScreen() {
     val navController = rememberNavController()
 
-    val disabledNavScreens = listOf("messaging/{username}", "profile", "Contacts/{action}")
+    val disabledNavScreens = listOf("Messaging/{username}", "Profile", "Contacts/{action}")
 
     WhisperTheme {
         Scaffold(
