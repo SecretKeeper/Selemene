@@ -4,7 +4,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FabPosition
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
@@ -19,7 +18,7 @@ import net.teamof.whisper.ui.theme.WhisperTheme
 fun MainScreen() {
     val navController = rememberNavController()
 
-    val disabledNavScreens = listOf("messaging/{username}", "profile")
+    val disabledNavScreens = listOf("messaging/{username}", "profile", "Contacts/{action}")
 
     WhisperTheme {
         Scaffold(
@@ -53,22 +52,28 @@ private fun MainScreenNavigationConfigurations(
 ) {
     NavHost(
         navController = navController,
-        startDestination = "createGroup"
+        startDestination = "CreateGroup"
     ) {
-        composable("messages") {
+        composable("Messages") {
             Messages(navController)
         }
         composable(
-            "messaging"
+            "Messaging"
                 .plus("/{username}")
         ) { backStackEntry ->
             Messaging(navController, username = backStackEntry.arguments?.getString("username")!!)
         }
-        composable("feeds") { Feeds() }
-        composable("create") { Create(navController) }
-        composable("contacts") { Contacts() }
-        composable("profile") { Profile() }
-        composable("createGroup") { CreateGroup(navController) }
+        composable("Feeds") { Feeds() }
+        composable("Create") { Create(navController) }
+        composable("Contacts/{action}") { backStackEntry ->
+            backStackEntry.arguments?.getString("action")?.let {
+                Contacts(
+                    action = it
+                )
+            }
+        }
+        composable("Profile") { Profile() }
+        composable("CreateGroup") { CreateGroup(navController) }
     }
 }
 

@@ -32,7 +32,7 @@ fun Create(navController: NavController) {
                 .fillMaxWidth()
                 .background(Color.White)
                 .clickable {
-                    navController.navigate("createGroup")
+                    navController.navigate("CreateGroup")
                 }
         ) {
             Column(Modifier.padding(40.dp), horizontalAlignment = Alignment.CenterHorizontally) {

@@ -4,6 +4,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -52,15 +53,12 @@ fun CreateGroup(navController: NavController) {
                 fontSize = 16.sp,
                 modifier = Modifier.padding(bottom = 10.dp)
             )
-            TextField(
+            BasicTextField(
                 value = "",
                 onValueChange = { /*...*/ },
-                shape = RoundedCornerShape(3.dp),
-                colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = Color.Transparent
-                ),
                 modifier = Modifier
-                    .border(1.dp, Color.LightGray)
+                    .border(1.dp, Color.LightGray, shape = RoundedCornerShape(3.dp))
+                    .padding(10.dp , 12.dp)
                     .fillMaxWidth()
             )
         }
@@ -75,15 +73,12 @@ fun CreateGroup(navController: NavController) {
                 fontSize = 16.sp,
                 modifier = Modifier.padding(bottom = 10.dp)
             )
-            TextField(
+            BasicTextField(
                 value = "",
                 onValueChange = { /*...*/ },
-                shape = RoundedCornerShape(3.dp),
-                colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = Color.Transparent
-                ),
                 modifier = Modifier
-                    .border(1.dp, Color.LightGray)
+                    .border(1.dp, Color.LightGray, shape = RoundedCornerShape(3.dp))
+                    .padding(10.dp , 12.dp)
                     .fillMaxWidth()
             )
         }
@@ -105,7 +100,7 @@ fun CreateGroup(navController: NavController) {
             )
         }
         Button(
-            onClick = { navController.navigate("contacts") },
+            onClick = { navController.navigate("contacts/CreateGroup") },
             elevation = ButtonDefaults.elevation(defaultElevation = 0.dp, pressedElevation = 0.dp),
             shape = RoundedCornerShape(3.dp),
             modifier = Modifier
@@ -115,7 +110,7 @@ fun CreateGroup(navController: NavController) {
             Text(
                 text = "Proceed to next step!",
                 color = Color.White,
-                fontSize = 18.sp,
+                fontSize = 16.sp,
                 modifier = Modifier.padding(vertical = 7.dp)
             )
         }

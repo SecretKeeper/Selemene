@@ -26,7 +26,7 @@ fun MessagePortal(
         Modifier
             .fillMaxWidth()
             .clickable {
-                navController.navigate("messaging/${data.username}")
+                navController.navigate("Messaging/${data.username}")
             }) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

@@ -2,15 +2,23 @@ package net.teamof.whisper.screens
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.Text
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import net.teamof.whisper.R
 import net.teamof.whisper.components.Contact
 import net.teamof.whisper.models.Contact
 
@@ -108,13 +116,60 @@ val contacts = listOf(
 @SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun Contacts() {
+fun Contacts(action: String) {
 
     val grouped = contacts.groupBy { it.username[0] }
 
-    LazyColumn(modifier = Modifier.padding(bottom = 80.dp)) {
-        grouped.forEach { (initial, contactsForInitial) ->
+    Column(modifier = Modifier.padding(20.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(text = "Choose users to invite", modifier = Modifier.weight(1f))
+            TextButton(
+                shape = RoundedCornerShape(10.dp),
+                onClick = { /* Do something! */ },
+//                colors = ButtonDefaults.buttonColors(
+//                    backgroundColor = MaterialTheme.colors.primary
+//                )
+            ) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_checkmark),
+                    tint =  MaterialTheme.colors.primary,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .width(18.dp)
+                        .height(18.dp)
+                )
+                Text(
+                    "Done",
+                    color =  MaterialTheme.colors.primary,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.W600,
+                    modifier = Modifier.padding(start = 7.dp)
+                )
+            }
+        }
+    }
 
+
+    LazyColumn(modifier = Modifier.padding(top = 80.dp)) {
+
+        item {
+            TextField(
+                value = "",
+                onValueChange = { /*...*/ },
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color(235, 235, 235),
+                    disabledIndicatorColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
+                ),
+                placeholder = { Text(text = "Search") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 15.dp)
+            )
+        }
+
+        grouped.forEach { (initial, contactsForInitial) ->
             stickyHeader {
                 Text(
                     text = initial.toString(),
@@ -124,14 +179,8 @@ fun Contacts() {
             }
 
             itemsIndexed(contactsForInitial) { _, contact ->
-                Contact(contact)
+                Contact(contact, action)
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun ContactsPreview() {
-    Contacts()
 }
