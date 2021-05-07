@@ -28,12 +28,12 @@ fun MainScreen() {
                 )
             },
             floatingActionButton = {
-                if (!disabledNavScreens.contains(
-                        currentRoute(
-                            navController
+                    if (!disabledNavScreens.contains(
+                            currentRoute(
+                                navController
+                            )
                         )
-                    )
-                ) FloatingActionButton(navController)
+                    ) FloatingActionButton(navController)
             },
             isFloatingActionButtonDocked = true,
             floatingActionButtonPosition = FabPosition.Center
@@ -52,7 +52,7 @@ private fun MainScreenNavigationConfigurations(
 ) {
     NavHost(
         navController = navController,
-        startDestination = "CreateGroup"
+        startDestination = "Messages"
     ) {
         composable("Messages") {
             Messages(navController)
@@ -74,6 +74,7 @@ private fun MainScreenNavigationConfigurations(
         }
         composable("Profile") { Profile() }
         composable("CreateGroup") { CreateGroup(navController) }
+        composable("Activities") { Activities() }
     }
 }
 

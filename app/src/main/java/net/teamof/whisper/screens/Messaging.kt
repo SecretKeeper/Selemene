@@ -151,7 +151,7 @@ fun Messaging(navController: NavController, username: String) {
         }
         Column(Modifier.weight(1f)) {
             LazyColumn(reverseLayout = true, modifier = Modifier.padding(horizontal = 15.dp)) {
-                itemsIndexed(sampleMessages) { index, message ->
+                itemsIndexed(sampleMessages) { _, message ->
                     Message(message)
                 }
             }

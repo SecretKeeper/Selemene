@@ -39,7 +39,7 @@ sealed class NavItem(
     )
 
     object Activities : NavItem(
-        "create",
+        "activities",
         R.drawable.ic_timer,
         true
     )
