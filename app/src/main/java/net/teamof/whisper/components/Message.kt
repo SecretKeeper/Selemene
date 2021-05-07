@@ -1,38 +1,66 @@
 package net.teamof.whisper.components
 
+
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import net.teamof.whisper.R
 import net.teamof.whisper.models.Message
 
 @Composable
-fun Message(data: Message) {
+fun Message(data: Message, selection: Boolean, enableSelectionMode: () -> Unit) {
 
     val isOwnMessage = data.user_id == 1
 
-
     Row(
-        horizontalArrangement = if (isOwnMessage) Arrangement.End else Arrangement.Start,
-        modifier = Modifier.fillMaxWidth()
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onLongPress = {
+                        enableSelectionMode()
+                    }
+                )
+            }
     ) {
-
-
-
-        Text(
-            text = data.content,
-            color = if (isOwnMessage) Color.White else Color.Black,
-            modifier = Modifier.padding(vertical = 15.dp)
-                .background(if(isOwnMessage) MaterialTheme.colors.primary else Color.LightGray)
-                .padding(vertical = 5.dp, horizontal = 10.dp)
-        )
+        if (selection)
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_checkmark),
+                tint = MaterialTheme.colors.primary,
+                contentDescription = null,
+                modifier = Modifier
+                    .width(18.dp)
+                    .height(18.dp)
+            )
+        Row(
+            horizontalArrangement = if (isOwnMessage) Arrangement.End else Arrangement.Start,
+            modifier = Modifier
+                .padding(start = 15.dp)
+                .fillMaxWidth()
+        ) {
+            Text(
+                text = data.content,
+                color = if (isOwnMessage) Color.White else Color.Black,
+                fontSize = 14.sp,
+                lineHeight = 20.sp,
+                modifier = Modifier
+                    .padding(vertical = 15.dp)
+                    .background(if (isOwnMessage) MaterialTheme.colors.primary else Color.LightGray)
+                    .padding(vertical = 5.dp, horizontal = 10.dp)
+            )
+        }
     }
-
 }

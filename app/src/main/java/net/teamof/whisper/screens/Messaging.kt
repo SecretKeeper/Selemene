@@ -1,6 +1,8 @@
 package net.teamof.whisper.screens
 
+import BackPressHandler
 import android.annotation.SuppressLint
+import androidx.activity.OnBackPressedCallback
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -11,12 +13,14 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -63,10 +67,17 @@ private val sampleMessages = listOf(
 @Composable
 fun Messaging(navController: NavController, username: String) {
 
+    val selection = remember { mutableStateOf(false) }
     val expanded = remember { mutableStateOf(false) }
     val text = remember { mutableStateOf("") }
 
     val interactionSource = remember { MutableInteractionSource() }
+
+    if(selection.value) {
+        BackPressHandler {
+            selection.value = false
+        }
+    }
 
     Column {
         Column {
@@ -87,10 +98,11 @@ fun Messaging(navController: NavController, username: String) {
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .weight(1f)
-                        .padding(horizontal = 15.dp).clickable (
+                        .padding(horizontal = 15.dp)
+                        .clickable(
                             interactionSource = interactionSource,
                             indication = null
-                                ) {
+                        ) {
                             navController.navigate("profile")
                         }
                 ) {
@@ -152,7 +164,10 @@ fun Messaging(navController: NavController, username: String) {
         Column(Modifier.weight(1f)) {
             LazyColumn(reverseLayout = true, modifier = Modifier.padding(horizontal = 15.dp)) {
                 itemsIndexed(sampleMessages) { _, message ->
-                    Message(message)
+                    Message(
+                        message,
+                        selection.value,
+                        enableSelectionMode = { selection.value = true })
                 }
             }
         }
@@ -202,6 +217,5 @@ fun Messaging(navController: NavController, username: String) {
                 }
             }
         }
-
     }
 }
