@@ -2,6 +2,7 @@ package net.teamof.whisper.screens
 
 
 import android.content.res.Resources
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -10,12 +11,10 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
@@ -42,6 +41,7 @@ val gridImages = listOf(
 )
 
 
+@ExperimentalAnimationApi
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @Composable
@@ -55,6 +55,18 @@ fun Profile() {
 
     val expanded = remember { mutableStateOf(false) }
 
+
+    val scaleFab = remember { androidx.compose.animation.core.Animatable(1F) }
+    LaunchedEffect(key1 = scaffoldState.bottomSheetState.isAnimationRunning, key2 = scaffoldState.bottomSheetState.isExpanded) {
+        scaleFab.animateTo(
+            if (
+                scaffoldState.bottomSheetState.isAnimationRunning ||
+                scaffoldState.bottomSheetState.isExpanded
+            )
+                0.001F else 1F
+        )
+    }
+
     BottomSheetScaffold(
         sheetContent = {
             LazyColumn() {
@@ -63,14 +75,14 @@ fun Profile() {
                         Text(
                             text = "Jaina Proudmoore",
                             fontSize = 18.sp,
-                            fontFamily= fontFamily ,
+                            fontFamily = fontFamily,
                             fontWeight = FontWeight.SemiBold,
                             color = Color.DarkGray
                         )
                         Text(
                             text = "Don't let them take your mind",
                             fontSize = 14.sp,
-                            fontFamily= fontFamily ,
+                            fontFamily = fontFamily,
                             fontWeight = FontWeight.Medium,
                             color = Color(red = 23, green = 155, blue = 128),
                             modifier = Modifier.padding(vertical = 10.dp)
@@ -81,7 +93,7 @@ fun Profile() {
                                     "223 Feeds",
                                     spanStyle = SpanStyle(
                                         fontSize = 14.sp,
-                                        fontFamily= fontFamily ,
+                                        fontFamily = fontFamily,
                                         fontWeight = FontWeight.SemiBold,
                                         color = MaterialTheme.colors.primary
                                     )
@@ -100,7 +112,7 @@ fun Profile() {
                                     "209 Followers",
                                     spanStyle = SpanStyle(
                                         fontSize = 14.sp,
-                                        fontFamily= fontFamily ,
+                                        fontFamily = fontFamily,
                                         fontWeight = FontWeight.SemiBold,
                                         color = MaterialTheme.colors.primary
                                     )
@@ -114,7 +126,7 @@ fun Profile() {
                             Text(
                                 text = "We provide guests with everything needed for a relaxing holiday. With on-site spa services, a state-of-the-art fitness center and endless leisure activities.",
                                 color = Color(red = 130, green = 130, blue = 130),
-                                fontFamily= fontFamily,
+                                fontFamily = fontFamily,
                                 fontWeight = FontWeight.Normal,
                                 fontSize = 14.sp,
                                 lineHeight = 20.sp,
@@ -137,7 +149,7 @@ fun Profile() {
                                 Text(
                                     text = "Starbucks Major Guild",
                                     color = MaterialTheme.colors.onPrimary,
-                                    fontFamily= fontFamily ,
+                                    fontFamily = fontFamily,
                                     fontWeight = FontWeight.SemiBold,
                                     modifier = Modifier.padding(bottom = 5.dp)
                                 )
@@ -145,7 +157,7 @@ fun Profile() {
                                     text = "Rank 2",
                                     color = MaterialTheme.colors.onSecondary,
                                     fontSize = 14.sp,
-                                    fontFamily= fontFamily ,
+                                    fontFamily = fontFamily,
                                     fontWeight = FontWeight.Medium,
                                     modifier = Modifier.padding(bottom = 5.dp)
                                 )
@@ -153,7 +165,7 @@ fun Profile() {
                                     text = "546 Members",
                                     color = MaterialTheme.colors.onSecondary,
                                     fontSize = 14.sp,
-                                    fontFamily= fontFamily ,
+                                    fontFamily = fontFamily,
                                     fontWeight = FontWeight.Medium,
                                 )
                             }
@@ -164,7 +176,7 @@ fun Profile() {
                                 text = "Phone",
                                 color = MaterialTheme.colors.onSecondary,
                                 fontSize = 14.sp,
-                                fontFamily= fontFamily ,
+                                fontFamily = fontFamily,
                                 fontWeight = FontWeight.Normal,
                                 lineHeight = 20.sp,
                                 modifier = Modifier
@@ -175,7 +187,7 @@ fun Profile() {
                                 text = "+989339419119",
                                 color = MaterialTheme.colors.onSecondary,
                                 fontSize = 14.sp,
-                                fontFamily= fontFamily ,
+                                fontFamily = fontFamily,
                                 fontWeight = FontWeight.Normal,
                                 lineHeight = 20.sp,
                                 modifier = Modifier.weight(1f)
@@ -185,7 +197,7 @@ fun Profile() {
                             Text(
                                 text = "Location",
                                 color = MaterialTheme.colors.onSecondary,
-                                fontFamily= fontFamily ,
+                                fontFamily = fontFamily,
                                 fontWeight = FontWeight.Normal,
                                 fontSize = 14.sp,
                                 lineHeight = 20.sp,
@@ -196,7 +208,7 @@ fun Profile() {
                             Text(
                                 text = "Tottenham, England",
                                 color = MaterialTheme.colors.onSecondary,
-                                fontFamily= fontFamily ,
+                                fontFamily = fontFamily,
                                 fontWeight = FontWeight.Normal,
                                 fontSize = 14.sp,
                                 lineHeight = 20.sp,
@@ -208,7 +220,7 @@ fun Profile() {
                                 text = "Last Seen",
                                 color = MaterialTheme.colors.onSecondary,
                                 fontSize = 14.sp,
-                                fontFamily= fontFamily ,
+                                fontFamily = fontFamily,
                                 fontWeight = FontWeight.Normal,
                                 lineHeight = 20.sp,
                                 modifier = Modifier
@@ -219,7 +231,7 @@ fun Profile() {
                                 text = "2 hours ago",
                                 color = MaterialTheme.colors.onSecondary,
                                 fontSize = 14.sp,
-                                fontFamily= fontFamily ,
+                                fontFamily = fontFamily,
                                 fontWeight = FontWeight.Normal,
                                 lineHeight = 20.sp,
                                 modifier = Modifier.weight(1f)
@@ -230,7 +242,7 @@ fun Profile() {
                                 text = "Groups",
                                 color = MaterialTheme.colors.onSecondary,
                                 fontSize = 14.sp,
-                                fontFamily= fontFamily ,
+                                fontFamily = fontFamily,
                                 fontWeight = FontWeight.Normal,
                                 lineHeight = 20.sp,
                                 modifier = Modifier
@@ -242,7 +254,7 @@ fun Profile() {
                                     text = "Global Anime Chat",
                                     color = MaterialTheme.colors.onSecondary,
                                     fontSize = 14.sp,
-                                    fontFamily= fontFamily ,
+                                    fontFamily = fontFamily,
                                     fontWeight = FontWeight.Normal,
                                     lineHeight = 20.sp,
                                     modifier = Modifier.padding(bottom = 15.dp)
@@ -251,7 +263,7 @@ fun Profile() {
                                     text = "Margin Whales",
                                     color = MaterialTheme.colors.onSecondary,
                                     fontSize = 14.sp,
-                                    fontFamily= fontFamily ,
+                                    fontFamily = fontFamily,
                                     fontWeight = FontWeight.Normal,
                                     lineHeight = 20.sp,
                                     modifier = Modifier.padding(bottom = 15.dp)
@@ -260,7 +272,7 @@ fun Profile() {
                                     text = "Vahid Azizi Studio",
                                     color = MaterialTheme.colors.onSecondary,
                                     fontSize = 14.sp,
-                                    fontFamily= fontFamily ,
+                                    fontFamily = fontFamily,
                                     fontWeight = FontWeight.Normal,
                                     lineHeight = 20.sp,
                                     modifier = Modifier.padding(bottom = 15.dp)
@@ -273,7 +285,7 @@ fun Profile() {
                                 text = "Shared Media",
                                 color = Color.DarkGray,
                                 fontSize = 15.sp,
-                                fontFamily= fontFamily ,
+                                fontFamily = fontFamily,
                                 fontWeight = FontWeight.Medium,
                                 modifier = Modifier
                                     .weight(1f)
@@ -284,7 +296,7 @@ fun Profile() {
                                     "Show More",
                                     spanStyle = SpanStyle(
                                         fontSize = 13.sp,
-                                        fontFamily= fontFamily ,
+                                        fontFamily = fontFamily,
                                         fontWeight = FontWeight.Medium,
                                         color = MaterialTheme.colors.primary
                                     )
@@ -315,13 +327,15 @@ fun Profile() {
         },
         scaffoldState = scaffoldState,
         floatingActionButton = {
-            if (scaffoldState.bottomSheetState.isCollapsed) FloatingActionButton(
+            FloatingActionButton(
                 backgroundColor = MaterialTheme.colors.primary,
+                elevation = FloatingActionButtonDefaults.elevation(0.dp),
                 onClick = {
                     scope.launch {
                         scaffoldState.snackbarHostState.showSnackbar("Snackbar")
                     }
-                }
+                },
+                modifier = Modifier.scale(scaleFab.value)
             ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_flash),

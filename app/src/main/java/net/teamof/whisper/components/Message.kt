@@ -1,6 +1,8 @@
 package net.teamof.whisper.components
 
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
@@ -21,6 +23,7 @@ import net.teamof.whisper.R
 import net.teamof.whisper.models.Message
 import net.teamof.whisper.ui.theme.fontFamily
 
+@ExperimentalAnimationApi
 @Composable
 fun Message(data: Message, selection: Boolean, enableSelectionMode: () -> Unit) {
 
@@ -38,7 +41,7 @@ fun Message(data: Message, selection: Boolean, enableSelectionMode: () -> Unit) 
                 )
             }
     ) {
-        if (selection)
+        AnimatedVisibility(visible = selection) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_checkmark),
                 tint = MaterialTheme.colors.primary,
@@ -47,6 +50,7 @@ fun Message(data: Message, selection: Boolean, enableSelectionMode: () -> Unit) 
                     .width(18.dp)
                     .height(18.dp)
             )
+        }
         Row(
             horizontalArrangement = if (isOwnMessage) Arrangement.End else Arrangement.Start,
             modifier = Modifier
@@ -58,7 +62,7 @@ fun Message(data: Message, selection: Boolean, enableSelectionMode: () -> Unit) 
                 color = if (isOwnMessage) Color.White else Color.Black,
                 fontSize = 14.sp,
                 lineHeight = 20.sp,
-                fontFamily= fontFamily ,
+                fontFamily = fontFamily,
                 fontWeight = FontWeight.Medium,
                 modifier = Modifier
                     .padding(vertical = 15.dp)
