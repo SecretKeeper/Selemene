@@ -67,12 +67,12 @@ fun BottomAppBar(navController: NavController) {
         backgroundColor = Color(red = 245, green = 245, blue = 253),
         elevation = 0.dp,
         contentPadding = PaddingValues(horizontal = 0.dp, vertical = 0.dp),
-        modifier = Modifier.height(75.dp)
+        modifier = Modifier.height(65.dp)
     ) {
         BottomNavigation(
             backgroundColor = Color(red = 245, green = 245, blue = 253),
             elevation = 0.dp,
-            modifier = Modifier.height(75.dp)
+            modifier = Modifier.height(65.dp)
         ) {
 
             val currentRoute = navController.currentBackStackEntry?.arguments?.getString(KEY_ROUTE)
@@ -90,7 +90,7 @@ fun BottomAppBar(navController: NavController) {
                         Icon(
                             painter = painterResource(id = screen.icon),
                             contentDescription = null,
-                            modifier = Modifier.size(28.dp, 28.dp)
+                            modifier = Modifier.size(24.dp, 24.dp)
                         )
                     },
                     enabled = screen.enabled,
@@ -109,15 +109,15 @@ fun FloatingActionButton(navController: NavController) {
         backgroundColor = MaterialTheme.colors.primary,
         modifier = Modifier
             .offset(Dp(0F), Dp(35F))
-            .size(50.dp),
+            .size(45.dp),
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_add),
             contentDescription = null,
             tint = Color.White,
             modifier = Modifier
-                .width(30.dp)
-                .height(30.dp)
+                .width(25.dp)
+                .height(25.dp)
         )
     }
 }
