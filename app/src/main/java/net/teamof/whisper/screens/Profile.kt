@@ -28,6 +28,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.accompanist.glide.rememberGlidePainter
 import kotlinx.coroutines.launch
 import net.teamof.whisper.R
+import net.teamof.whisper.ui.theme.fontFamily
 
 
 val gridImages = listOf(
@@ -62,13 +63,15 @@ fun Profile() {
                         Text(
                             text = "Jaina Proudmoore",
                             fontSize = 18.sp,
-                            fontWeight = FontWeight.W600,
+                            fontFamily= fontFamily ,
+                            fontWeight = FontWeight.SemiBold,
                             color = Color.DarkGray
                         )
                         Text(
                             text = "Don't let them take your mind",
                             fontSize = 14.sp,
-                            fontWeight = FontWeight.W600,
+                            fontFamily= fontFamily ,
+                            fontWeight = FontWeight.Medium,
                             color = Color(red = 23, green = 155, blue = 128),
                             modifier = Modifier.padding(vertical = 10.dp)
                         )
@@ -78,7 +81,8 @@ fun Profile() {
                                     "223 Feeds",
                                     spanStyle = SpanStyle(
                                         fontSize = 14.sp,
-                                        fontWeight = FontWeight.W600,
+                                        fontFamily= fontFamily ,
+                                        fontWeight = FontWeight.SemiBold,
                                         color = MaterialTheme.colors.primary
                                     )
                                 ),
@@ -86,7 +90,6 @@ fun Profile() {
                                 modifier = Modifier.padding(vertical = 0.dp)
                             )
                             Divider(
-//                                color = MaterialTheme.colors.primary,
                                 modifier = Modifier
                                     .fillMaxHeight()
                                     .width(10.dp)
@@ -97,7 +100,8 @@ fun Profile() {
                                     "209 Followers",
                                     spanStyle = SpanStyle(
                                         fontSize = 14.sp,
-                                        fontWeight = FontWeight.W600,
+                                        fontFamily= fontFamily ,
+                                        fontWeight = FontWeight.SemiBold,
                                         color = MaterialTheme.colors.primary
                                     )
                                 ),
@@ -110,6 +114,8 @@ fun Profile() {
                             Text(
                                 text = "We provide guests with everything needed for a relaxing holiday. With on-site spa services, a state-of-the-art fitness center and endless leisure activities.",
                                 color = Color(red = 130, green = 130, blue = 130),
+                                fontFamily= fontFamily,
+                                fontWeight = FontWeight.Normal,
                                 fontSize = 14.sp,
                                 lineHeight = 20.sp,
                                 modifier = Modifier.padding(vertical = 15.dp)
@@ -131,21 +137,24 @@ fun Profile() {
                                 Text(
                                     text = "Starbucks Major Guild",
                                     color = MaterialTheme.colors.onPrimary,
-                                    fontWeight = FontWeight.W600,
+                                    fontFamily= fontFamily ,
+                                    fontWeight = FontWeight.SemiBold,
                                     modifier = Modifier.padding(bottom = 5.dp)
                                 )
                                 Text(
                                     text = "Rank 2",
                                     color = MaterialTheme.colors.onSecondary,
                                     fontSize = 14.sp,
-                                    fontWeight = FontWeight.W500,
+                                    fontFamily= fontFamily ,
+                                    fontWeight = FontWeight.Medium,
                                     modifier = Modifier.padding(bottom = 5.dp)
                                 )
                                 Text(
                                     text = "546 Members",
                                     color = MaterialTheme.colors.onSecondary,
                                     fontSize = 14.sp,
-                                    fontWeight = FontWeight.W500
+                                    fontFamily= fontFamily ,
+                                    fontWeight = FontWeight.Medium,
                                 )
                             }
                         }
@@ -153,8 +162,10 @@ fun Profile() {
                         Row(Modifier.padding(vertical = 15.dp)) {
                             Text(
                                 text = "Phone",
-                                color = Color(red = 130, green = 130, blue = 130),
+                                color = MaterialTheme.colors.onSecondary,
                                 fontSize = 14.sp,
+                                fontFamily= fontFamily ,
+                                fontWeight = FontWeight.Normal,
                                 lineHeight = 20.sp,
                                 modifier = Modifier
                                     .padding(end = 35.dp)
@@ -162,8 +173,10 @@ fun Profile() {
                             )
                             Text(
                                 text = "+989339419119",
-                                color = Color(red = 130, green = 130, blue = 130),
+                                color = MaterialTheme.colors.onSecondary,
                                 fontSize = 14.sp,
+                                fontFamily= fontFamily ,
+                                fontWeight = FontWeight.Normal,
                                 lineHeight = 20.sp,
                                 modifier = Modifier.weight(1f)
                             )
@@ -171,7 +184,9 @@ fun Profile() {
                         Row(Modifier.padding(vertical = 15.dp)) {
                             Text(
                                 text = "Location",
-                                color = Color(red = 130, green = 130, blue = 130),
+                                color = MaterialTheme.colors.onSecondary,
+                                fontFamily= fontFamily ,
+                                fontWeight = FontWeight.Normal,
                                 fontSize = 14.sp,
                                 lineHeight = 20.sp,
                                 modifier = Modifier
@@ -180,7 +195,9 @@ fun Profile() {
                             )
                             Text(
                                 text = "Tottenham, England",
-                                color = Color(red = 130, green = 130, blue = 130),
+                                color = MaterialTheme.colors.onSecondary,
+                                fontFamily= fontFamily ,
+                                fontWeight = FontWeight.Normal,
                                 fontSize = 14.sp,
                                 lineHeight = 20.sp,
                                 modifier = Modifier.weight(1f)
@@ -189,8 +206,10 @@ fun Profile() {
                         Row(Modifier.padding(vertical = 15.dp)) {
                             Text(
                                 text = "Last Seen",
-                                color = Color(red = 130, green = 130, blue = 130),
+                                color = MaterialTheme.colors.onSecondary,
                                 fontSize = 14.sp,
+                                fontFamily= fontFamily ,
+                                fontWeight = FontWeight.Normal,
                                 lineHeight = 20.sp,
                                 modifier = Modifier
                                     .padding(end = 35.dp)
@@ -198,8 +217,10 @@ fun Profile() {
                             )
                             Text(
                                 text = "2 hours ago",
-                                color = Color(red = 130, green = 130, blue = 130),
+                                color = MaterialTheme.colors.onSecondary,
                                 fontSize = 14.sp,
+                                fontFamily= fontFamily ,
+                                fontWeight = FontWeight.Normal,
                                 lineHeight = 20.sp,
                                 modifier = Modifier.weight(1f)
                             )
@@ -207,8 +228,10 @@ fun Profile() {
                         Row(Modifier.padding(vertical = 15.dp)) {
                             Text(
                                 text = "Groups",
-                                color = Color(red = 130, green = 130, blue = 130),
+                                color = MaterialTheme.colors.onSecondary,
                                 fontSize = 14.sp,
+                                fontFamily= fontFamily ,
+                                fontWeight = FontWeight.Normal,
                                 lineHeight = 20.sp,
                                 modifier = Modifier
                                     .padding(end = 35.dp)
@@ -217,22 +240,28 @@ fun Profile() {
                             Column(modifier = Modifier.weight(1f)) {
                                 Text(
                                     text = "Global Anime Chat",
-                                    color = Color(red = 130, green = 130, blue = 130),
+                                    color = MaterialTheme.colors.onSecondary,
                                     fontSize = 14.sp,
+                                    fontFamily= fontFamily ,
+                                    fontWeight = FontWeight.Normal,
                                     lineHeight = 20.sp,
                                     modifier = Modifier.padding(bottom = 15.dp)
                                 )
                                 Text(
                                     text = "Margin Whales",
-                                    color = Color(red = 130, green = 130, blue = 130),
+                                    color = MaterialTheme.colors.onSecondary,
                                     fontSize = 14.sp,
+                                    fontFamily= fontFamily ,
+                                    fontWeight = FontWeight.Normal,
                                     lineHeight = 20.sp,
                                     modifier = Modifier.padding(bottom = 15.dp)
                                 )
                                 Text(
                                     text = "Vahid Azizi Studio",
-                                    color = Color(red = 130, green = 130, blue = 130),
+                                    color = MaterialTheme.colors.onSecondary,
                                     fontSize = 14.sp,
+                                    fontFamily= fontFamily ,
+                                    fontWeight = FontWeight.Normal,
                                     lineHeight = 20.sp,
                                     modifier = Modifier.padding(bottom = 15.dp)
                                 )
@@ -244,7 +273,8 @@ fun Profile() {
                                 text = "Shared Media",
                                 color = Color.DarkGray,
                                 fontSize = 15.sp,
-                                fontWeight = FontWeight.W600,
+                                fontFamily= fontFamily ,
+                                fontWeight = FontWeight.Medium,
                                 modifier = Modifier
                                     .weight(1f)
                                     .wrapContentWidth(Alignment.Start)
@@ -254,7 +284,8 @@ fun Profile() {
                                     "Show More",
                                     spanStyle = SpanStyle(
                                         fontSize = 13.sp,
-                                        fontWeight = FontWeight.W600,
+                                        fontFamily= fontFamily ,
+                                        fontWeight = FontWeight.Medium,
                                         color = MaterialTheme.colors.primary
                                     )
                                 ),

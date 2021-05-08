@@ -10,8 +10,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import net.teamof.whisper.R
+import net.teamof.whisper.ui.theme.fontFamily
 
 @Composable
 fun FeedActions(
@@ -31,7 +34,12 @@ fun FeedActions(
             onClick = if (showCommentsState) hideComments else showComments,
             enabled = numberOfComments > 0
         ) {
-            Text(text = "${if (numberOfComments > 0) numberOfComments else "No"} Comments")
+            Text(
+                text = "${if (numberOfComments > 0) numberOfComments else "No"} Comments",
+                fontSize = 13.sp,
+                fontFamily = fontFamily,
+                fontWeight = FontWeight.Normal,
+            )
         }
         Row(
             horizontalArrangement = Arrangement.End,

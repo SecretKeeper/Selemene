@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -16,6 +17,7 @@ import androidx.navigation.compose.navigate
 import com.bumptech.glide.request.RequestOptions
 import com.google.accompanist.glide.rememberGlidePainter
 import net.teamof.whisper.models.MessagePortal
+import net.teamof.whisper.ui.theme.fontFamily
 
 @Composable
 fun MessagePortal(
@@ -48,18 +50,29 @@ fun MessagePortal(
             Column(
                 Modifier
                     .weight(2f)
-                    .padding(start = 15.dp)) {
+                    .padding(start = 15.dp)
+            ) {
                 Text(
                     text = data.username,
-                    fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.padding(bottom = 7.dp)
+                    fontFamily = fontFamily,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 15.sp,
+                    modifier = Modifier.padding(bottom = 10.dp)
                 )
-                Text(text = data.last_message, fontSize = 13.sp)
+                Text(
+                    text = data.last_message,
+                    fontSize = 13.sp,
+                    fontFamily = fontFamily,
+                    fontWeight = FontWeight.Normal,
+                    color = MaterialTheme.colors.onSecondary
+                )
             }
             Column(horizontalAlignment = Alignment.End, modifier = Modifier.padding(end = 10.dp)) {
                 Text(
                     text = data.last_message_time,
-                    fontSize = 13.sp,
+                    fontSize = 12.sp,
+                    fontFamily = fontFamily,
+                    fontWeight = FontWeight.Normal,
                     modifier = Modifier.padding(bottom = 7.dp)
                 )
                 if (data.unread_messages != 0) Text(

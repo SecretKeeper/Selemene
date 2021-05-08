@@ -20,6 +20,7 @@ import net.teamof.whisper.R
 import net.teamof.whisper.components.Feed.FeedActions
 import net.teamof.whisper.components.Feed.FeedComments
 import net.teamof.whisper.models.Feed
+import net.teamof.whisper.ui.theme.fontFamily
 
 @Composable
 fun Feed(
@@ -61,11 +62,19 @@ fun Feed(
                 ) {
                     Text(
                         text = data.username,
+                        fontFamily = fontFamily,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 14.sp,
                         modifier = Modifier.padding(bottom = 4.dp)
                     )
-                    data.location?.let { Text(text = it, fontSize = 12.sp) }
+                    data.location?.let {
+                        Text(
+                            text = it,
+                            fontSize = 12.sp,
+                            fontFamily = fontFamily,
+                            fontWeight = FontWeight.Normal
+                        )
+                    }
                 }
                 Box(
                     modifier = Modifier
@@ -148,15 +157,25 @@ fun Feed(
             Column(modifier = Modifier.padding(horizontal = 10.dp)) {
                 Text(
                     text = "Apply for feature following the link in our portfolio and we will publish your photos in our account @travel",
+                    fontFamily = fontFamily,
+                    fontWeight = FontWeight.Normal,
                     fontSize = 13.sp,
                     lineHeight = 20.sp,
                     modifier = Modifier.padding(top = 15.dp, bottom = 20.dp)
                 )
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(text = "Tags...", fontSize = 13.sp, modifier = Modifier.weight(1f))
+                    Text(
+                        text = "Tags...",
+                        fontFamily = fontFamily,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 13.sp,
+                        modifier = Modifier.weight(1f)
+                    )
                     Text(
                         text = "Sep 17th , 2021",
                         fontSize = 13.sp,
+                        fontFamily = fontFamily,
+                        fontWeight = FontWeight.Normal,
                         color = MaterialTheme.colors.onSecondary
                     )
                 }

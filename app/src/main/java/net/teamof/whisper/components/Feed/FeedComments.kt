@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.sp
 import com.bumptech.glide.request.RequestOptions
 import com.google.accompanist.glide.rememberGlidePainter
 import net.teamof.whisper.models.Comment
+import net.teamof.whisper.ui.theme.fontFamily
 
 @Composable
 fun FeedComments(comments: List<Comment>) {
@@ -31,7 +32,7 @@ fun Comment(
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 10.dp)
-        ) {
+    ) {
         Row(
             verticalAlignment = Alignment.Top,
             modifier = Modifier
@@ -52,21 +53,31 @@ fun Comment(
             Column(
                 Modifier
                     .weight(2f)
-                    .padding(start = 15.dp)) {
+                    .padding(start = 15.dp)
+            ) {
                 Row(Modifier.padding(bottom = 7.dp)) {
                     Text(
                         text = data.username,
+                        fontFamily = fontFamily,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 14.sp,
                     )
                     Text(
                         text = data.time,
                         fontSize = 13.sp,
+                        fontFamily = fontFamily,
+                        fontWeight = FontWeight.Normal,
                         color = MaterialTheme.colors.onSecondary,
                         modifier = Modifier.padding(start = 7.dp)
                     )
                 }
-                Text(text = data.content, fontSize = 13.sp, lineHeight = 18.sp)
+                Text(
+                    text = data.content,
+                    fontSize = 13.sp,
+                    lineHeight = 18.sp,
+                    fontFamily = fontFamily,
+                    fontWeight = FontWeight.Normal,
+                )
             }
         }
     }

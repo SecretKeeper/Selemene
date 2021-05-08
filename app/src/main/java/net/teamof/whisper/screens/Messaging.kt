@@ -2,7 +2,6 @@ package net.teamof.whisper.screens
 
 import BackPressHandler
 import android.annotation.SuppressLint
-import androidx.activity.OnBackPressedCallback
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,14 +12,12 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -33,6 +30,7 @@ import com.google.accompanist.glide.rememberGlidePainter
 import net.teamof.whisper.R
 import net.teamof.whisper.components.Message
 import net.teamof.whisper.models.Message
+import net.teamof.whisper.ui.theme.fontFamily
 
 
 private val sampleMessages = listOf(
@@ -73,7 +71,7 @@ fun Messaging(navController: NavController, username: String) {
 
     val interactionSource = remember { MutableInteractionSource() }
 
-    if(selection.value) {
+    if (selection.value) {
         BackPressHandler {
             selection.value = false
         }
@@ -123,12 +121,17 @@ fun Messaging(navController: NavController, username: String) {
                     ) {
                         Text(
                             text = username,
-                            fontWeight = FontWeight.W600,
+                            fontFamily = fontFamily,
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 15.sp,
                             modifier = Modifier.padding(bottom = 5.dp)
                         )
                         Text(
-                            text = "just now",
-                            fontSize = 13.sp,
+                            text = "Last seen recently",
+                            fontSize = 12.sp,
+                            fontFamily = fontFamily,
+                            fontWeight = FontWeight.Normal,
+                            color= MaterialTheme.colors.onSecondary,
                             modifier = Modifier.padding(bottom = 5.dp)
                         )
                     }
@@ -198,7 +201,14 @@ fun Messaging(navController: NavController, username: String) {
                         .weight(1f)
                         .padding(horizontal = 8.dp),
                     textStyle = TextStyle(fontSize = 14.sp),
-                    placeholder = { Text(text = "Write message here...", fontSize = 14.sp) },
+                    placeholder = {
+                        Text(
+                            text = "Write message here...",
+                            fontSize = 14.sp,
+                            fontFamily = fontFamily,
+                            fontWeight = FontWeight.Normal
+                        )
+                    },
                     colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = Color.Transparent,
                         focusedIndicatorColor = Color.Transparent,

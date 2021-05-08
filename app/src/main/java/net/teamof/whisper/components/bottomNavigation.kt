@@ -108,7 +108,7 @@ fun FloatingActionButton(navController: NavController) {
         },
         backgroundColor = MaterialTheme.colors.primary,
         modifier = Modifier
-            .offset(Dp(0F), Dp(35F))
+            .offset(Dp(0F), Dp(33F))
             .size(45.dp),
     ) {
         Icon(

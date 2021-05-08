@@ -14,10 +14,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import net.teamof.whisper.R
 import net.teamof.whisper.models.Message
+import net.teamof.whisper.ui.theme.fontFamily
 
 @Composable
 fun Message(data: Message, selection: Boolean, enableSelectionMode: () -> Unit) {
@@ -56,6 +58,8 @@ fun Message(data: Message, selection: Boolean, enableSelectionMode: () -> Unit) 
                 color = if (isOwnMessage) Color.White else Color.Black,
                 fontSize = 14.sp,
                 lineHeight = 20.sp,
+                fontFamily= fontFamily ,
+                fontWeight = FontWeight.Medium,
                 modifier = Modifier
                     .padding(vertical = 15.dp)
                     .background(if (isOwnMessage) MaterialTheme.colors.primary else Color.LightGray)

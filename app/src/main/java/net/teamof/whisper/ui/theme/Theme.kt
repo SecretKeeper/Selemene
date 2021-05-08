@@ -6,6 +6,19 @@ import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import net.teamof.whisper.R
+
+
+val fontFamily = FontFamily(
+    Font(R.font.roboto_black, FontWeight.Black),
+    Font(R.font.roboto_bold, FontWeight.Bold),
+    Font(R.font.roboto_light, FontWeight.Light),
+    Font(R.font.roboto_medium, FontWeight.Medium),
+    Font(R.font.roboto_regular, FontWeight.Normal)
+)
 
 private val DarkColorPalette = darkColors(
         primary = Purple200,
