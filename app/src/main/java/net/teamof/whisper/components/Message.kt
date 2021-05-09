@@ -32,8 +32,7 @@ import net.teamof.whisper.ui.theme.fontFamily
 fun Message(
     data: Message,
     selection: Boolean,
-    enableSelectionMode: () -> Unit,
-    selectMessage: () -> Unit
+    enableSelectionMode: () -> Unit
 ) {
 
     val isOwnMessage = data.user_id == 1
@@ -42,7 +41,7 @@ fun Message(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .padding(10.dp)
+            .padding(15.dp)
             .fillMaxWidth()
             .pointerInput(Unit) {
                 detectTapGestures(

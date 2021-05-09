@@ -238,10 +238,6 @@ fun Messaging(navController: NavController, username: String) {
                         message,
                         selection.value,
                         enableSelectionMode = { selection.value = true },
-                        selectMessage = {
-                            messages.value.find { it.id == message.id }?.selected =
-                                !message.selected
-                        }
                     )
                 }
             }
@@ -293,8 +289,8 @@ fun Messaging(navController: NavController, username: String) {
                         painter = painterResource(id = R.drawable.ic_send),
                         contentDescription = null,
                         Modifier
-                            .width(25.dp)
-                            .height(25.dp)
+                            .width(23.dp)
+                            .height(23.dp)
                     )
                 }
             }

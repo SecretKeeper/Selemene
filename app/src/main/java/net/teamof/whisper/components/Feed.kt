@@ -154,7 +154,7 @@ fun Feed(
                         .height(275.dp)
                 )
             }
-            Column(modifier = Modifier.padding(horizontal = 10.dp)) {
+            Column(modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp)) {
                 Text(
                     text = "Apply for feature following the link in our portfolio and we will publish your photos in our account @travel",
                     fontFamily = fontFamily,
@@ -168,12 +168,12 @@ fun Feed(
                         text = "Tags...",
                         fontFamily = fontFamily,
                         fontWeight = FontWeight.Normal,
-                        fontSize = 13.sp,
+                        fontSize = 12.sp,
                         modifier = Modifier.weight(1f)
                     )
                     Text(
                         text = "Sep 17th , 2021",
-                        fontSize = 13.sp,
+                        fontSize = 12.sp,
                         fontFamily = fontFamily,
                         fontWeight = FontWeight.Normal,
                         color = MaterialTheme.colors.onSecondary

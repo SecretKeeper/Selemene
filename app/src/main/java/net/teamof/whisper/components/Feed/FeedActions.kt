@@ -27,8 +27,7 @@ fun FeedActions(
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.End,
-        modifier = Modifier.padding(bottom = 10.dp)
+        horizontalArrangement = Arrangement.End
     ) {
         TextButton(
             onClick = if (showCommentsState) hideComments else showComments,
