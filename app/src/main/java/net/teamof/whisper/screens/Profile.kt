@@ -3,6 +3,7 @@ package net.teamof.whisper.screens
 
 import android.content.res.Resources
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -55,8 +56,7 @@ fun Profile() {
 
     val expanded = remember { mutableStateOf(false) }
 
-
-    val scaleFab = remember { androidx.compose.animation.core.Animatable(1F) }
+    val scaleFab = remember { Animatable(1F) }
     LaunchedEffect(key1 = scaffoldState.bottomSheetState.isAnimationRunning, key2 = scaffoldState.bottomSheetState.isExpanded) {
         scaleFab.animateTo(
             if (

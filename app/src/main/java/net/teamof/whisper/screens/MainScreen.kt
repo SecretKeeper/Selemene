@@ -1,5 +1,6 @@
 package net.teamof.whisper.screens
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FabPosition
@@ -12,6 +13,7 @@ import net.teamof.whisper.components.BottomAppBar
 import net.teamof.whisper.components.FloatingActionButton
 import net.teamof.whisper.ui.theme.WhisperTheme
 
+@ExperimentalAnimationApi
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @Composable
@@ -44,6 +46,7 @@ fun MainScreen() {
 }
 
 
+@ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi
 @Composable

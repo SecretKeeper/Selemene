@@ -3,6 +3,8 @@ package net.teamof.whisper.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
@@ -10,6 +12,8 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,31 +29,67 @@ import net.teamof.whisper.ui.theme.fontFamily
 
 @ExperimentalAnimationApi
 @Composable
-fun Message(data: Message, selection: Boolean, enableSelectionMode: () -> Unit) {
+fun Message(
+    data: Message,
+    selection: Boolean,
+    enableSelectionMode: () -> Unit,
+    selectMessage: () -> Unit
+) {
 
     val isOwnMessage = data.user_id == 1
+    val messageSelected = remember { mutableStateOf(data.selected) }
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
+            .padding(10.dp)
             .fillMaxWidth()
             .pointerInput(Unit) {
                 detectTapGestures(
-                    onLongPress = {
-                        enableSelectionMode()
-                    }
+                    onLongPress = { enableSelectionMode() },
+                    onTap = { messageSelected.value = !messageSelected.value }
                 )
             }
     ) {
         AnimatedVisibility(visible = selection) {
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_checkmark),
-                tint = MaterialTheme.colors.primary,
-                contentDescription = null,
+            Column(
                 modifier = Modifier
-                    .width(18.dp)
-                    .height(18.dp)
-            )
+                    .width(23.dp)
+                    .height(23.dp)
+            ) {
+                AnimatedVisibility(
+                    visible = messageSelected.value,
+                    enter = fadeIn(),
+                    exit = fadeOut()
+                ) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(
+                            id = R.drawable.ic_checkmark
+                        ),
+                        tint = MaterialTheme.colors.primary,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .width(23.dp)
+                            .height(23.dp)
+                    )
+                }
+                AnimatedVisibility(
+                    visible = !messageSelected.value,
+                    enter = fadeIn(),
+                    exit = fadeOut()
+                ) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(
+                            id = R.drawable.ic_circle
+                        ),
+                        tint = Color.DarkGray,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .width(23.dp)
+                            .height(23.dp)
+                    )
+                }
+            }
         }
         Row(
             horizontalArrangement = if (isOwnMessage) Arrangement.End else Arrangement.Start,
