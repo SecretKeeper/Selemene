@@ -38,6 +38,7 @@ import com.google.accompanist.glide.rememberGlidePainter
 import kotlinx.coroutines.launch
 import net.teamof.whisper.R
 import net.teamof.whisper.components.Message
+import net.teamof.whisper.components.Messaging.MessagingAttachSource
 import net.teamof.whisper.models.Message
 import net.teamof.whisper.ui.theme.fontFamily
 
@@ -102,17 +103,7 @@ fun Messaging(navController: NavController, username: String) {
         }
     }
 
-    ModalBottomSheetLayout(sheetContent = {
-        LazyVerticalGrid(cells = GridCells.Adaptive(minSize = 128.dp)) {
-            items(150) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_launcher_background ),
-                    contentDescription = null,
-                    modifier = Modifier.width(128.dp).height(128.dp).padding(bottom = 10.dp)
-                )
-            }
-        }
-    }, sheetState = bottomSheetState) {
+    ModalBottomSheetLayout(sheetContent = { MessagingAttachSource() }, sheetState = bottomSheetState) {
 
         Column() {
             Column(Modifier.height(75.dp)) {
