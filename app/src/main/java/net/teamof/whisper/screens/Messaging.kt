@@ -49,7 +49,7 @@ private val sampleMessages = listOf(
         1,
         "The veil between life and death",
         "2020-08-09",
-        true
+        false
     ),
     Message(
         2,
@@ -77,7 +77,7 @@ private val sampleMessages = listOf(
         1,
         "EQWQw;fhdfhqwejkqleqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
         "2020-08-08",
-        true
+        false
     )
 )
 
