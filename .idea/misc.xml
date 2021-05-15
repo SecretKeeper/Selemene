@@ -8,6 +8,7 @@
         <entry key="..\:/Users/OF/AndroidStudioProjects/Whisper/app/src/main/res/drawable/ic_checkmark.xml" value="0.24444444444444444" />
         <entry key="..\:/Users/OF/AndroidStudioProjects/Whisper/app/src/main/res/drawable/ic_chevron_left.xml" value="0.23333333333333334" />
         <entry key="..\:/Users/OF/AndroidStudioProjects/Whisper/app/src/main/res/drawable/ic_copy.xml" value="0.15462962962962962" />
+        <entry key="..\:/Users/OF/AndroidStudioProjects/Whisper/app/src/main/res/drawable/ic_document.xml" value="0.24259259259259258" />
         <entry key="..\:/Users/OF/AndroidStudioProjects/Whisper/app/src/main/res/drawable/ic_flash.xml" value="0.2324074074074074" />
         <entry key="..\:/Users/OF/AndroidStudioProjects/Whisper/app/src/main/res/drawable/ic_forward.xml" value="0.225" />
         <entry key="..\:/Users/OF/AndroidStudioProjects/Whisper/app/src/main/res/drawable/ic_heart.xml" value="0.20925925925925926" />
@@ -16,12 +17,14 @@
         <entry key="..\:/Users/OF/AndroidStudioProjects/Whisper/app/src/main/res/drawable/ic_layers.xml" value="0.2046875" />
         <entry key="..\:/Users/OF/AndroidStudioProjects/Whisper/app/src/main/res/drawable/ic_message.xml" value="0.20925925925925926" />
         <entry key="..\:/Users/OF/AndroidStudioProjects/Whisper/app/src/main/res/drawable/ic_more_vertical.xml" value="0.20555555555555555" />
+        <entry key="..\:/Users/OF/AndroidStudioProjects/Whisper/app/src/main/res/drawable/ic_musical_notes.xml" value="0.24259259259259258" />
         <entry key="..\:/Users/OF/AndroidStudioProjects/Whisper/app/src/main/res/drawable/ic_send.xml" value="0.23333333333333334" />
         <entry key="..\:/Users/OF/AndroidStudioProjects/Whisper/app/src/main/res/drawable/ic_settings.xml" value="0.22962962962962963" />
         <entry key="..\:/Users/OF/AndroidStudioProjects/Whisper/app/src/main/res/drawable/ic_share.xml" value="0.20925925925925926" />
         <entry key="..\:/Users/OF/AndroidStudioProjects/Whisper/app/src/main/res/drawable/ic_star.xml" value="0.20925925925925926" />
         <entry key="..\:/Users/OF/AndroidStudioProjects/Whisper/app/src/main/res/drawable/ic_timer.xml" value="0.22962962962962963" />
         <entry key="..\:/Users/OF/AndroidStudioProjects/Whisper/app/src/main/res/drawable/ic_trash.xml" value="0.20572916666666666" />
+        <entry key="..\:/Users/OF/AndroidStudioProjects/Whisper/app/src/main/res/drawable/ic_user.xml" value="0.24444444444444444" />
         <entry key="..\:/Users/OF/AndroidStudioProjects/Whisper/app/src/main/res/drawable/ic_x.xml" value="0.20572916666666666" />
         <entry key="..\:/Users/OF/AndroidStudioProjects/Whisper/app/src/main/res/layout/fragment_create.xml" value="0.16767983789260385" />
         <entry key="..\:/Users/OF/AndroidStudioProjects/Whisper/app/src/main/res/layout/fragment_messages.xml" value="0.22826086956521738" />

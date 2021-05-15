@@ -41,7 +41,7 @@ fun Message(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .padding(15.dp)
+            .padding(start = 10.dp, end = 15.dp)
             .fillMaxWidth()
             .pointerInput(Unit) {
                 detectTapGestures(

@@ -24,6 +24,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.bumptech.glide.request.RequestOptions
 import com.google.accompanist.glide.rememberGlidePainter
 import kotlinx.coroutines.launch
@@ -46,7 +47,7 @@ val gridImages = listOf(
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @Composable
-fun Profile() {
+fun Profile(navController: NavController) {
 
     val displayMetrics = Resources.getSystem().displayMetrics
     val heightDp = displayMetrics.heightPixels / displayMetrics.density
@@ -362,7 +363,7 @@ fun Profile() {
                 .offset(y = (-(heightDp * 58) / 100).dp)
                 .padding(vertical = 15.dp, horizontal = 10.dp)
         ) {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { navController.navigateUp() }) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_chevron_left),
                     contentDescription = null,

@@ -112,7 +112,7 @@ fun Messaging(navController: NavController, username: String) {
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.padding(vertical = 15.dp, horizontal = 10.dp)
                     ) {
-                        IconButton(onClick = { /*TODO*/ }) {
+                        IconButton(onClick = { navController.navigateUp() }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_chevron_left),
                                 contentDescription = null,
