@@ -7,11 +7,15 @@ import androidx.compose.material.FabPosition
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
 import net.teamof.whisper.components.BottomAppBar
 import net.teamof.whisper.components.FloatingActionButton
+import net.teamof.whisper.models.MessagePortal
 import net.teamof.whisper.ui.theme.WhisperTheme
+import net.teamof.whisper.viewModel.MessagePortalsViewModel
 
 @ExperimentalAnimationApi
 @ExperimentalFoundationApi
@@ -51,14 +55,18 @@ fun MainScreen() {
 @ExperimentalFoundationApi
 @Composable
 private fun MainScreenNavigationConfigurations(
-    navController: NavHostController
+    navController: NavHostController,
+    messagePortalsViewModel: MessagePortalsViewModel = viewModel()
 ) {
+
+    val messages: List<MessagePortal> by messagePortalsViewModel.messages.observeAsState(listOf())
+
     NavHost(
         navController = navController,
         startDestination = "Messages"
     ) {
         composable("Messages") {
-            Messages(navController)
+            Messages(navController, messages)
         }
         composable(
             "Messaging"

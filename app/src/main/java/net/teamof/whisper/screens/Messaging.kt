@@ -17,10 +17,8 @@ import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +29,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.navigate
 import com.bumptech.glide.request.RequestOptions
@@ -41,54 +40,20 @@ import net.teamof.whisper.components.Message
 import net.teamof.whisper.components.Messaging.MessagingAttachSource
 import net.teamof.whisper.models.Message
 import net.teamof.whisper.ui.theme.fontFamily
-
-
-private val sampleMessages = listOf(
-    Message(
-        1,
-        1,
-        "The veil between life and death",
-        "2020-08-09",
-        false
-    ),
-    Message(
-        2,
-        2,
-        "Hello Phantom Assassin!",
-        "2020-08-08",
-        false
-    ),
-    Message(
-        3,
-        2,
-        "That's Cool!",
-        "2020-08-08",
-        false
-    ),
-    Message(
-        4,
-        1,
-        "QQWEWRWQRWQEWQE",
-        "2020-08-08",
-        false
-    ),
-    Message(
-        5,
-        1,
-        "EQWQw;fhdfhqwejkqleqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
-        "2020-08-08",
-        false
-    )
-)
+import net.teamof.whisper.viewModel.MessagesViewModel
 
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @ExperimentalAnimationApi
 @SuppressLint("RememberReturnType")
 @Composable
-fun Messaging(navController: NavController, username: String) {
+fun Messaging(
+    navController: NavController,
+    messagesViewModel: MessagesViewModel = viewModel(),
+    username: String
+) {
 
-    val messages = rememberSaveable { mutableStateOf(sampleMessages) }
+    val messages: List<Message> by messagesViewModel.messages.observeAsState(listOf())
     val selection = remember { mutableStateOf(false) }
     val expanded = remember { mutableStateOf(false) }
     val text = remember { mutableStateOf("") }
@@ -244,7 +209,7 @@ fun Messaging(navController: NavController, username: String) {
             }
             Column(Modifier.weight(1f)) {
                 LazyColumn(reverseLayout = true) {
-                    itemsIndexed(messages.value) { _, message ->
+                    itemsIndexed(messages) { _, message ->
                         Message(
                             message,
                             selection.value,
