@@ -11,8 +11,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.KEY_ROUTE
-import androidx.navigation.compose.navigate
 import net.teamof.whisper.R
 
 sealed class NavItem(
@@ -75,14 +73,14 @@ fun BottomAppBar(navController: NavController) {
             modifier = Modifier.height(65.dp)
         ) {
 
-            val currentRoute = navController.currentBackStackEntry?.arguments?.getString(KEY_ROUTE)
+            val currentRoute = navController.currentBackStackEntry?.destination?.route
 
             items.forEach { screen ->
                 BottomNavigationItem(
                     selected = currentRoute == screen.route,
                     onClick = {
                         navController.navigate(screen.route) {
-                            popUpTo = navController.graph.startDestination
+                            popUpTo = navController.graph.startDestinationId
                             launchSingleTop = true
                         }
                     },

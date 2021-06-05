@@ -1,7 +1,11 @@
 package net.teamof.whisper.screens
 
 import BackPressHandler
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.slideInVertically
@@ -11,27 +15,25 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.navigate
 import com.bumptech.glide.request.RequestOptions
 import com.google.accompanist.glide.rememberGlidePainter
 import kotlinx.coroutines.launch
@@ -53,6 +55,11 @@ fun Messaging(
     username: String
 ) {
 
+    val launcher =
+        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+            if (isGranted) true else false
+        }
+    val context = LocalContext.current
     val messages: List<Message> by messagesViewModel.messages.observeAsState(listOf())
     val selection = remember { mutableStateOf(false) }
     val expanded = remember { mutableStateOf(false) }
@@ -68,7 +75,7 @@ fun Messaging(
         }
     }
 
-    ModalBottomSheetLayout(sheetContent = { MessagingAttachSource() }, sheetState = bottomSheetState) {
+    ModalBottomSheetLayout(sheetContent = { MessagingAttachSource() } , sheetState = bottomSheetState) {
 
         Column() {
             Column(Modifier.height(75.dp)) {
@@ -229,7 +236,19 @@ fun Messaging(
                     )
                 ) {
                     IconButton(
-                        onClick = { scope.launch { bottomSheetState.show() } },
+                        onClick = { scope.launch {
+                            when (PackageManager.PERMISSION_GRANTED) {
+                                ContextCompat.checkSelfPermission(
+                                    context,
+                                    Manifest.permission.READ_EXTERNAL_STORAGE
+                                ) -> {
+                                    scope.launch { bottomSheetState.show() }
+                                }
+                                else -> {
+                                    launcher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+                                }
+                            }
+                        } },
                         Modifier
                             .width(27.dp)
                             .height(27.dp)

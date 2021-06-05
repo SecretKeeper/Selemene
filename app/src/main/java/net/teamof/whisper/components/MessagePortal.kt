@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -13,23 +14,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.navigate
 import com.bumptech.glide.request.RequestOptions
 import com.google.accompanist.glide.rememberGlidePainter
 import net.teamof.whisper.models.MessagePortal
 import net.teamof.whisper.ui.theme.fontFamily
 
+@ExperimentalMaterialApi
 @Composable
 fun MessagePortal(
     data: MessagePortal,
     navController: NavController
 ) {
     Card(
-        Modifier
+        onClick = { navController.navigate("Messaging/${data.username}") },
+        modifier = Modifier
             .fillMaxWidth()
-            .clickable {
-                navController.navigate("Messaging/${data.username}")
-            }) {
+    ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier

@@ -10,6 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.*
 import net.teamof.whisper.components.BottomAppBar
 import net.teamof.whisper.components.FloatingActionButton
@@ -34,12 +35,12 @@ fun MainScreen() {
                 )
             },
             floatingActionButton = {
-                    if (!disabledNavScreens.contains(
-                            currentRoute(
-                                navController
-                            )
+                if (!disabledNavScreens.contains(
+                        currentRoute(
+                            navController
                         )
-                    ) FloatingActionButton(navController)
+                    )
+                ) FloatingActionButton(navController)
             },
             isFloatingActionButtonDocked = true,
             floatingActionButtonPosition = FabPosition.Center
@@ -92,5 +93,5 @@ private fun MainScreenNavigationConfigurations(
 @Composable
 fun currentRoute(navController: NavHostController): String? {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    return navBackStackEntry?.arguments?.getString(KEY_ROUTE)
+    return navBackStackEntry?.destination?.route
 }
