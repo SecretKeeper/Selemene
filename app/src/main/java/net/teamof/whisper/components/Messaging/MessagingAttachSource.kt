@@ -1,7 +1,6 @@
 package net.teamof.whisper.components.Messaging
 
-import android.content.Context
-import android.media.MediaPlayer
+
 import android.net.Uri
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -31,11 +30,7 @@ import com.google.accompanist.glide.rememberGlidePainter
 import net.teamof.whisper.R
 import net.teamof.whisper.ui.theme.fontFamily
 import net.teamof.whisper.utils.AudioPlayer
-import net.teamof.whisper.viewModel.Audio
-import net.teamof.whisper.viewModel.StorageAudiosViewModel
-import net.teamof.whisper.viewModel.StorageImagesViewModel
-import java.sql.Time
-import java.util.concurrent.TimeUnit
+import net.teamof.whisper.viewModel.*
 
 data class GalleryImage(
     val contentUri: Uri
@@ -47,12 +42,14 @@ data class GalleryImage(
 fun MessagingAttachSource(
     storageImagesViewModel: StorageImagesViewModel = viewModel(),
     storageAudiosViewModel: StorageAudiosViewModel = viewModel(),
+    storageDocsViewModel: StorageDocsViewModel = viewModel()
 ) {
 
     val context = LocalContext.current
 
     val images: List<GalleryImage> by storageImagesViewModel.images.observeAsState(listOf())
     val audios: List<Audio> by storageAudiosViewModel.audios.observeAsState(listOf())
+    val documents: List<Document> by storageDocsViewModel.docs.observeAsState(listOf())
     val tabState = remember { mutableStateOf(0) }
     val titles = listOf(
         R.drawable.ic_image,
@@ -138,6 +135,19 @@ fun MessagingAttachSource(
                         }
                     }
                 }
+            }
+            2 -> {
+                LazyVerticalGrid(cells = GridCells.Adaptive(minSize = 130.dp)) {
+                    itemsIndexed(documents) { _, document ->
+                        Text(text = document.name)
+                    }
+                }
+            }
+            3 -> {
+                Text(text = "Tab 3")
+            }
+            4 -> {
+                Text(text = "Tab 4")
             }
         }
 
