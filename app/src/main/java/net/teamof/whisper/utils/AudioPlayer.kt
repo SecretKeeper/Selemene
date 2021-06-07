@@ -4,14 +4,27 @@ import android.content.Context
 import android.media.MediaPlayer
 import android.net.Uri
 
-class AudioPlayer(context: Context, contentUri: Uri) {
 
-    private val mediaPlayer: MediaPlayer = MediaPlayer.create(context, contentUri)
+class AudioPlayer {
 
-    val duration get() = mediaPlayer.duration
+    companion object {
+        val mediaPlayer = MediaPlayer()
+    }
 
-    fun play() { mediaPlayer.start() }
+    fun play(context: Context,contentUris: Uri) {
+        mediaPlayer.reset()
 
-    fun stop() { mediaPlayer.stop() }
+        if(!mediaPlayer.isPlaying) {
+            mediaPlayer.setDataSource(context, contentUris)
+            mediaPlayer.setOnPreparedListener {
+                it.start()
+            }
+            mediaPlayer.prepareAsync()
+        }
+    }
+
+    fun stop() {
+        mediaPlayer.stop()
+    }
 
 }

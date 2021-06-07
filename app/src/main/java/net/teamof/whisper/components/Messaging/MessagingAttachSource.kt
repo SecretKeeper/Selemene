@@ -1,7 +1,10 @@
 package net.teamof.whisper.components.Messaging
 
 
+import android.media.MediaMetadata
+import android.media.MediaMetadataRetriever
 import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -55,8 +58,7 @@ fun MessagingAttachSource(
         R.drawable.ic_image,
         R.drawable.ic_musical_notes,
         R.drawable.ic_document,
-        R.drawable.ic_map_pin,
-        R.drawable.ic_user
+        R.drawable.ic_map_pin
     )
 
     Column {
@@ -97,13 +99,16 @@ fun MessagingAttachSource(
                 LazyColumn {
                     itemsIndexed(audios) { _, audioCtx ->
 
-                        val audio = AudioPlayer(context, audioCtx.contentUri)
+                        val audio = AudioPlayer()
+                        val audioMetaData = MediaMetadataRetriever()
+                        audioMetaData.setDataSource(context, audioCtx.contentUri)
+                        val audioDuration = audioMetaData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)!!.toInt()
 
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp)
                         ) {
-                            IconButton(onClick = { audio.play() }) {
+                            IconButton(onClick = { audio.play(context, audioCtx.contentUri) }) {
                                 Icon(
                                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_add),
                                     contentDescription = null,
@@ -126,8 +131,8 @@ fun MessagingAttachSource(
                             Text(
                                 text = String.format(
                                     "%02d:%02d",
-                                    ((audio.duration / 1000) / 60) % 60,
-                                    (audio.duration / 1000) % 60,
+                                    (( audioDuration / 1000) / 60) % 60,
+                                    (audioDuration / 1000) % 60,
                                 ),
                                 fontFamily = fontFamily,
                                 fontSize = 12.sp
@@ -145,9 +150,6 @@ fun MessagingAttachSource(
             }
             3 -> {
                 Text(text = "Tab 3")
-            }
-            4 -> {
-                Text(text = "Tab 4")
             }
         }
 
