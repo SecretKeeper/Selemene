@@ -13,6 +13,7 @@ import androidx.lifecycle.MutableLiveData
 
 data class Document(
     val name: String,
+    val type: String,
     val contentUri: Uri
 )
 
@@ -32,6 +33,7 @@ class StorageDocsViewModel(application: Application) : AndroidViewModel(applicat
         MediaStore.Files.FileColumns._ID,
         MediaStore.Files.FileColumns.TITLE,
         MediaStore.Files.FileColumns.SIZE,
+        MediaStore.Files.FileColumns.MIME_TYPE,
     )
 
     private val where =
@@ -63,15 +65,18 @@ class StorageDocsViewModel(application: Application) : AndroidViewModel(applicat
                 val idColumn = cursor.getColumnIndex(MediaStore.Files.FileColumns._ID)
                 val nameColumn =
                     cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.TITLE)
+                val typeColumn =
+                    cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.MIME_TYPE)
 
                 while (cursor.moveToNext()) {
                     val audioId = cursor.getLong(idColumn)
                     val name = cursor.getString(nameColumn)
+                    val type = cursor.getString(typeColumn)
                     val contentUri: Uri = ContentUris.withAppendedId(
                         MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL),
                         audioId
                     )
-                    storageDocs += Document(name ,contentUri)
+                    storageDocs += Document(name , type ,contentUri)
                 }
             }
 

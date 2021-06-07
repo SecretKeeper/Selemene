@@ -157,7 +157,7 @@ fun MessagingAttachSource(
             2 -> {
                 LazyVerticalGrid(cells = GridCells.Adaptive(minSize = 130.dp)) {
                     itemsIndexed(documents) { _, document ->
-                        Text(text = document.name)
+                        Text(text = document.name + document.type)
                     }
                 }
             }
