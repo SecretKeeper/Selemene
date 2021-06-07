@@ -1,10 +1,8 @@
 package net.teamof.whisper.components.Messaging
 
 
-import android.media.MediaMetadata
 import android.media.MediaMetadataRetriever
 import android.net.Uri
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -102,15 +100,30 @@ fun MessagingAttachSource(
                         val audio = AudioPlayer()
                         val audioMetaData = MediaMetadataRetriever()
                         audioMetaData.setDataSource(context, audioCtx.contentUri)
-                        val audioDuration = audioMetaData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)!!.toInt()
+                        val audioDuration =
+                            audioMetaData.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)!!
+                                .toInt()
+                        val isPlaying = remember { mutableStateOf(false) }
+
 
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp)
                         ) {
-                            IconButton(onClick = { audio.play(context, audioCtx.contentUri) }) {
+                            IconButton(onClick = {
+                                if (isPlaying.value) {
+                                    audio.stop()
+                                    isPlaying.value = false
+                                } else {
+                                    audio.play(
+                                        context,
+                                        audioCtx.contentUri,
+                                        updatePlayingStatus = { isPlaying.value = false })
+                                    isPlaying.value = true
+                                }
+                            }) {
                                 Icon(
-                                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_add),
+                                    imageVector = ImageVector.vectorResource(id = if (isPlaying.value) R.drawable.ic_add else R.drawable.ic_document),
                                     contentDescription = null,
                                     modifier = Modifier
                                         .width(25.dp)
@@ -123,7 +136,7 @@ fun MessagingAttachSource(
                                     .padding(start = 10.dp)
                             ) {
                                 Text(
-                                    text = audioCtx.name,
+                                    text = audioCtx.name + isPlaying.value.toString(),
                                     fontFamily = fontFamily,
                                     fontSize = 16.sp
                                 )
@@ -131,7 +144,7 @@ fun MessagingAttachSource(
                             Text(
                                 text = String.format(
                                     "%02d:%02d",
-                                    (( audioDuration / 1000) / 60) % 60,
+                                    ((audioDuration / 1000) / 60) % 60,
                                     (audioDuration / 1000) % 60,
                                 ),
                                 fontFamily = fontFamily,

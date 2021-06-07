@@ -9,15 +9,18 @@ class AudioPlayer {
 
     companion object {
         val mediaPlayer = MediaPlayer()
+
     }
 
-    fun play(context: Context,contentUris: Uri) {
+    fun play(context: Context,contentUris: Uri, updatePlayingStatus: () -> Unit) {
         mediaPlayer.reset()
-
         if(!mediaPlayer.isPlaying) {
             mediaPlayer.setDataSource(context, contentUris)
             mediaPlayer.setOnPreparedListener {
                 it.start()
+            }
+            mediaPlayer.setOnCompletionListener {
+                updatePlayingStatus()
             }
             mediaPlayer.prepareAsync()
         }
@@ -25,6 +28,10 @@ class AudioPlayer {
 
     fun stop() {
         mediaPlayer.stop()
+    }
+
+    fun getInstance(): MediaPlayer {
+        return mediaPlayer
     }
 
 }
