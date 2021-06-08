@@ -5,7 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import net.teamof.whisper.models.Message
 
-class MessagesViewModel: ViewModel() {
+class MessagesViewModel(username: String) : ViewModel() {
+
 
     private val _messages = MutableLiveData(
         listOf(
@@ -26,7 +27,7 @@ class MessagesViewModel: ViewModel() {
             Message(
                 3,
                 2,
-                "That's Cool!",
+                "That's Cool! I am user $username",
                 "2020-08-08",
                 false
             ),

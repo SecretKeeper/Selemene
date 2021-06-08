@@ -45,6 +45,7 @@ import net.teamof.whisper.components.messaging.MessagingAttachSource
 import net.teamof.whisper.models.Message
 import net.teamof.whisper.ui.theme.fontFamily
 import net.teamof.whisper.viewModel.MessagesViewModel
+import net.teamof.whisper.viewModel.MessagesViewModelFactory
 
 @RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalFoundationApi
@@ -54,8 +55,8 @@ import net.teamof.whisper.viewModel.MessagesViewModel
 @Composable
 fun Messaging(
     navController: NavController,
-    messagesViewModel: MessagesViewModel = viewModel(),
-    username: String
+    username: String,
+    messagesViewModel: MessagesViewModel = viewModel(factory = MessagesViewModelFactory(username))
 ) {
 
     val launcher =
@@ -78,8 +79,10 @@ fun Messaging(
         }
     }
 
-    ModalBottomSheetLayout(sheetContent = { MessagingAttachSource() },
-        sheetState = bottomSheetState) {
+    ModalBottomSheetLayout(
+        sheetContent = { MessagingAttachSource() },
+        sheetState = bottomSheetState
+    ) {
 
         Column() {
             Column(Modifier.height(75.dp)) {
