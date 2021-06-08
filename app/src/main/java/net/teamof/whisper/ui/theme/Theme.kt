@@ -21,28 +21,28 @@ val fontFamily = FontFamily(
 )
 
 private val DarkColorPalette = darkColors(
-        primary = Purple200,
-        primaryVariant = Purple700,
-        secondary = Teal200,
-        onPrimary = Color(0xff4080fe),
-        onSecondary = Color(red = 209, green = 213, blue = 219, alpha = 1),
+    primary = Purple200,
+    primaryVariant = Purple700,
+    secondary = Teal200,
+    onPrimary = Color(0xff4080fe),
+    onSecondary = Color(red = 209, green = 213, blue = 219, alpha = 1),
 )
 
 private val LightColorPalette = lightColors(
-        primary = Color(0xff544eee),
-        primaryVariant = Purple700,
-        secondary = Teal200,
-        onPrimary = Color(0xff111827),
-        onSecondary = Color(0xff6b7280),
+    primary = Color(0xff0a5dfe),
+    primaryVariant = Purple700,
+    secondary = Teal200,
+    onPrimary = Color(0xff111827),
+    onSecondary = Color(0xff6b7280),
 
-        /* Other default colors to override
-    background = Color.White,
-    surface = Color.White,
-    onPrimary = Color.White,
-    onSecondary = Color.Black,
-    onBackground = Color.Black,
-    onSurface = Color.Black,
-    */
+    /* Other default colors to override
+background = Color.White,
+surface = Color.White,
+onPrimary = Color.White,
+onSecondary = Color.Black,
+onBackground = Color.Black,
+onSurface = Color.Black,
+*/
 )
 
 @Composable
@@ -54,9 +54,9 @@ fun WhisperTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composabl
     }
 
     MaterialTheme(
-            colors = colors,
-            typography = Typography,
-            shapes = Shapes,
-            content = content
+        colors = colors,
+        typography = Typography,
+        shapes = Shapes,
+        content = content
     )
 }
