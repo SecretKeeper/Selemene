@@ -11,15 +11,20 @@ class AudioPlayer {
     companion object {
         val mediaPlayer = MediaPlayer()
         var playingStatus: MutableState<Boolean>? = null
+        var currentContentUri: Uri? = null
     }
 
     fun play(context: Context, contentUris: Uri, updatePlayingStatus: MutableState<Boolean>) {
+
         if (playingStatus != null) playingStatus!!.value = false
+
         playingStatus = updatePlayingStatus
 
-        mediaPlayer.reset()
-        if (!mediaPlayer.isPlaying) {
+        // Check if new source want to play
+        if (currentContentUri != contentUris) {
+            mediaPlayer.reset()
             mediaPlayer.setDataSource(context, contentUris)
+            currentContentUri = contentUris
             mediaPlayer.setOnPreparedListener {
                 it.start()
                 playingStatus!!.value = true
@@ -29,10 +34,16 @@ class AudioPlayer {
             }
             mediaPlayer.prepareAsync()
         }
+
+
+        if (currentContentUri == contentUris) {
+            mediaPlayer.start()
+            playingStatus!!.value = true
+        }
     }
 
-    fun stop() {
-        mediaPlayer.stop()
+    fun pause() {
+        mediaPlayer.pause()
         if (playingStatus != null) playingStatus!!.value = false
     }
 

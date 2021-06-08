@@ -1,6 +1,8 @@
 package net.teamof.whisper.components.messaging
 
 import android.media.MediaMetadataRetriever
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -23,6 +25,7 @@ import net.teamof.whisper.ui.theme.fontFamily
 import net.teamof.whisper.utils.AudioPlayer
 import net.teamof.whisper.viewModel.Audio
 
+@RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalFoundationApi
 @Composable
 fun BottomSheetAudiosTab(audios: List<Audio>) {
@@ -47,7 +50,7 @@ fun BottomSheetAudiosTab(audios: List<Audio>) {
             ) {
                 IconButton(onClick = {
                     if (isPlaying.value) {
-                        audio.stop()
+                        audio.pause()
                     } else {
                         audio.play(
                             context,

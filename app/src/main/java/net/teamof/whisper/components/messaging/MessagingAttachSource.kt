@@ -2,6 +2,8 @@ package net.teamof.whisper.components.messaging
 
 
 import android.net.Uri
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,6 +31,7 @@ data class GalleryImage(
 )
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalFoundationApi
 @Composable
 fun MessagingAttachSource(
