@@ -8,7 +8,7 @@ import android.provider.MediaStore
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import net.teamof.whisper.components.Messaging.GalleryImage
+import net.teamof.whisper.components.messaging.GalleryImage
 
 class StorageImagesViewModel(application: Application): AndroidViewModel(application) {
 

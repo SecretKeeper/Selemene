@@ -39,7 +39,7 @@ import com.google.accompanist.glide.rememberGlidePainter
 import kotlinx.coroutines.launch
 import net.teamof.whisper.R
 import net.teamof.whisper.components.Message
-import net.teamof.whisper.components.Messaging.MessagingAttachSource
+import net.teamof.whisper.components.messaging.MessagingAttachSource
 import net.teamof.whisper.models.Message
 import net.teamof.whisper.ui.theme.fontFamily
 import net.teamof.whisper.viewModel.MessagesViewModel

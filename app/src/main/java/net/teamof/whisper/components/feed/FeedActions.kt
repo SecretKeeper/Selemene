@@ -1,4 +1,4 @@
-package net.teamof.whisper.components.Feed
+package net.teamof.whisper.components.feed
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon

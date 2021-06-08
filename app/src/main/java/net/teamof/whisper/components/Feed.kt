@@ -17,8 +17,8 @@ import androidx.compose.ui.unit.sp
 import com.bumptech.glide.request.RequestOptions
 import com.google.accompanist.glide.rememberGlidePainter
 import net.teamof.whisper.R
-import net.teamof.whisper.components.Feed.FeedActions
-import net.teamof.whisper.components.Feed.FeedComments
+import net.teamof.whisper.components.feed.FeedActions
+import net.teamof.whisper.components.feed.FeedComments
 import net.teamof.whisper.models.Feed
 import net.teamof.whisper.ui.theme.fontFamily
 
