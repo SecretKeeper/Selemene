@@ -4,8 +4,10 @@ import BackPressHandler
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.slideInVertically
@@ -44,6 +46,7 @@ import net.teamof.whisper.models.Message
 import net.teamof.whisper.ui.theme.fontFamily
 import net.teamof.whisper.viewModel.MessagesViewModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @ExperimentalAnimationApi
@@ -75,7 +78,8 @@ fun Messaging(
         }
     }
 
-    ModalBottomSheetLayout(sheetContent = { MessagingAttachSource() } , sheetState = bottomSheetState) {
+    ModalBottomSheetLayout(sheetContent = { MessagingAttachSource() },
+        sheetState = bottomSheetState) {
 
         Column() {
             Column(Modifier.height(75.dp)) {
@@ -236,19 +240,21 @@ fun Messaging(
                     )
                 ) {
                     IconButton(
-                        onClick = { scope.launch {
-                            when (PackageManager.PERMISSION_GRANTED) {
-                                ContextCompat.checkSelfPermission(
-                                    context,
-                                    Manifest.permission.READ_EXTERNAL_STORAGE
-                                ) -> {
-                                    scope.launch { bottomSheetState.show() }
-                                }
-                                else -> {
-                                    launcher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+                        onClick = {
+                            scope.launch {
+                                when (PackageManager.PERMISSION_GRANTED) {
+                                    ContextCompat.checkSelfPermission(
+                                        context,
+                                        Manifest.permission.READ_EXTERNAL_STORAGE
+                                    ) -> {
+                                        scope.launch { bottomSheetState.show() }
+                                    }
+                                    else -> {
+                                        launcher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+                                    }
                                 }
                             }
-                        } },
+                        },
                         Modifier
                             .width(27.dp)
                             .height(27.dp)
