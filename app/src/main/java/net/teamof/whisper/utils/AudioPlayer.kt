@@ -14,11 +14,11 @@ class AudioPlayer {
     }
 
     fun play(context: Context, contentUris: Uri, updatePlayingStatus: MutableState<Boolean>) {
-        if(playingStatus != null) playingStatus!!.value = false
+        if (playingStatus != null) playingStatus!!.value = false
         playingStatus = updatePlayingStatus
 
         mediaPlayer.reset()
-        if(!mediaPlayer.isPlaying) {
+        if (!mediaPlayer.isPlaying) {
             mediaPlayer.setDataSource(context, contentUris)
             mediaPlayer.setOnPreparedListener {
                 it.start()
@@ -28,10 +28,12 @@ class AudioPlayer {
                 playingStatus!!.value = false
             }
             mediaPlayer.prepareAsync()
-    }}
+        }
+    }
 
     fun stop() {
         mediaPlayer.stop()
+        if (playingStatus != null) playingStatus!!.value = false
     }
 
 }
