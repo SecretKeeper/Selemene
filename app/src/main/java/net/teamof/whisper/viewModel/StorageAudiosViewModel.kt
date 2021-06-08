@@ -60,4 +60,8 @@ class StorageAudiosViewModel(application: Application): AndroidViewModel(applica
 
     }
 
+    fun setPlaying(value: Boolean) {
+
+    }
+
 }

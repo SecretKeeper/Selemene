@@ -13,11 +13,8 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -113,13 +110,12 @@ fun MessagingAttachSource(
                             IconButton(onClick = {
                                 if (isPlaying.value) {
                                     audio.stop()
-                                    isPlaying.value = false
                                 } else {
                                     audio.play(
                                         context,
                                         audioCtx.contentUri,
-                                        updatePlayingStatus = { isPlaying.value = false })
-                                    isPlaying.value = true
+                                        updatePlayingStatus = isPlaying
+                                    )
                                 }
                             }) {
                                 Icon(
@@ -136,7 +132,7 @@ fun MessagingAttachSource(
                                     .padding(start = 10.dp)
                             ) {
                                 Text(
-                                    text = audioCtx.name + isPlaying.value.toString(),
+                                    text = audioCtx.name,
                                     fontFamily = fontFamily,
                                     fontSize = 16.sp
                                 )
