@@ -5,5 +5,5 @@ data class Message(
     val user_id: Int,
     val content: String,
     val time: String,
-    var selected: Boolean
+    var selected: Boolean = false
 )

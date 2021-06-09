@@ -25,11 +25,16 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import kotlinx.coroutines.launch
 import net.teamof.whisper.R
+import net.teamof.whisper.models.Message
 import net.teamof.whisper.ui.theme.fontFamily
+import net.teamof.whisper.viewModel.MessagesViewModel
 
 @ExperimentalMaterialApi
 @Composable
-fun MessagingFooter(bottomSheetState: ModalBottomSheetState) {
+fun MessagingFooter(
+    bottomSheetState: ModalBottomSheetState,
+    messagesViewModel: MessagesViewModel
+) {
 
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -38,7 +43,7 @@ fun MessagingFooter(bottomSheetState: ModalBottomSheetState) {
         rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
             if (isGranted) true else false
         }
-    
+
     Column(Modifier.background(Color(red = 245, green = 245, blue = 253))) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -102,7 +107,21 @@ fun MessagingFooter(bottomSheetState: ModalBottomSheetState) {
                 )
 
             )
-            IconButton(onClick = { }) {
+            IconButton(onClick = {
+                if (text.value.isNotEmpty())
+                    messagesViewModel.sendMessage(
+                        Message(
+                            5,
+                            1,
+                            text.value,
+                            "2020-08-08",
+                            false
+                        )
+                    ).also {
+                        text.value = ""
+                    }
+
+            }) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_send),
                     contentDescription = null,

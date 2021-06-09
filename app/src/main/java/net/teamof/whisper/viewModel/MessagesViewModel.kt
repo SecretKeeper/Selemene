@@ -1,6 +1,5 @@
 package net.teamof.whisper.viewModel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import net.teamof.whisper.models.Message
@@ -9,7 +8,7 @@ class MessagesViewModel(username: String) : ViewModel() {
 
 
     private val _messages = MutableLiveData(
-        listOf(
+        mutableListOf(
             Message(
                 1,
                 1,
@@ -48,5 +47,10 @@ class MessagesViewModel(username: String) : ViewModel() {
         )
     )
 
-    val messages: LiveData<List<Message>> = _messages
+    val messages: MutableLiveData<MutableList<Message>> = _messages
+
+    fun sendMessage(message: Message) {
+        _messages.value = (_messages.value)?.let { mutableListOf(message, *it.toTypedArray()) }
+    }
+
 }

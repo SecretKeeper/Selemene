@@ -69,7 +69,7 @@ fun Messaging(
                     }
                 }
             }
-            MessagingFooter(bottomSheetState)
+            MessagingFooter(bottomSheetState, messagesViewModel)
         }
     }
 }
