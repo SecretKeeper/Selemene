@@ -1,4 +1,4 @@
-name: GitlabSync
+name: Gitlab Mirroring
 
 on:
   - push
@@ -12,7 +12,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
-    - uses: SecretsNetwowrk/Messenger-Android@latest
+    - uses: SecretsNetwowrk/Messenger-Android@master
       with:
         # Such as https://github.com/SecretsNetwowrk/Messenger-Android.git
         target-url: ${{ secrets.GITLAB_REPO_MIRRORING_URL }}
