@@ -2,8 +2,6 @@ package net.teamof.whisper.screens
 
 import BackPressHandler
 import android.annotation.SuppressLint
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
@@ -27,7 +25,6 @@ import net.teamof.whisper.models.Message
 import net.teamof.whisper.viewModel.MessagesViewModel
 import net.teamof.whisper.viewModel.MessagesViewModelFactory
 
-@RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @ExperimentalAnimationApi
