@@ -12,9 +12,9 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
-    - uses: Messenger-Android/git-repo-sync@v0.1.0
+    - uses: SecretsNetwowrk/Messenger-Android@latest
       with:
-        # Such as https://github.com/wangchucheng/git-repo-sync.git
+        # Such as https://github.com/SecretsNetwowrk/Messenger-Android.git
         target-url: ${{ secrets.GITLAB_REPO_MIRRORING_URL }}
         # Such as wangchucheng
         target-username: ${{ secrets.GITLAB_USERNAME }}
