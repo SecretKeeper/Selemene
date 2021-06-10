@@ -5,8 +5,8 @@ import android.annotation.SuppressLint
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
@@ -56,8 +56,13 @@ fun Messaging(
         Column {
             MessagingHeader(navController, selection, username)
             Column(Modifier.weight(1f)) {
-                LazyColumn(reverseLayout = true) {
-                    itemsIndexed(messages) { _, message ->
+                Column(
+                    Modifier.verticalScroll(
+                        state = rememberScrollState(),
+                        reverseScrolling = true
+                    )
+                ) {
+                    messages.forEach { message ->
                         Message(
                             message,
                             selection.value,
