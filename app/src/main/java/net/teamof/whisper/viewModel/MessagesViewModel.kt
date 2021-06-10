@@ -50,7 +50,7 @@ class MessagesViewModel(username: String) : ViewModel() {
     val messages: MutableLiveData<MutableList<Message>> = _messages
 
     fun sendMessage(message: Message) {
-        _messages.value = (_messages.value)?.let { mutableListOf(message, *it.toTypedArray()) }
+        _messages.value = (_messages.value)?.let { mutableListOf(*it.toTypedArray(), message) }
     }
 
 }
