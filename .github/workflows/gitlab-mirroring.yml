@@ -1,22 +1,15 @@
-name: Gitlab Mirroring
+name: Mirroring
 
-on:
-  - push
-  - delete
+on: [push, delete]
 
 jobs:
-  sync:
-    runs-on: ubuntu-latest
-    name: Git Repo Sync
-    steps:
-    - uses: actions/checkout@v2
+  to_gitlab:
+    runs-on: ubuntu-18.04
+    steps:                                              # <-- must use actions/checkout@v1 before mirroring!
+    - uses: actions/checkout@v1
+    - uses: pixta-dev/repository-mirroring-action@v1
       with:
-        fetch-depth: 0
-    - uses: SecretsNetwowrk/Messenger-Android@master
-      with:
-        # Such as https://github.com/SecretsNetwowrk/Messenger-Android.git
-        target-url: ${{ secrets.GITLAB_REPO_MIRRORING_URL }}
-        # Such as wangchucheng
-        target-username: ${{ secrets.GITLAB_USERNAME }}
-          # You can store token in your project's 'Setting > Secrets' and reference the name here. Such as ${{ secrets.ACCESS\_TOKEN }}
-        target-token: ${{ secrets.GITLAB_TOKEN }}
+        target_repo_url:
+          git@gitlab.com:SecretsNetwork/Messenger-Android.git
+        ssh_private_key:                                # <-- use 'secrets' to pass credential information.
+          ${{ secrets.GITLAB_SSH_PRIVATE_KEY }}
