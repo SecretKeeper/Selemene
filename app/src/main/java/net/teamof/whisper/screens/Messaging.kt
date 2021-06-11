@@ -33,7 +33,7 @@ import net.teamof.whisper.viewModel.MessagesViewModelFactory
 fun Messaging(
     navController: NavController,
     username: String,
-    messagesViewModel: MessagesViewModel = viewModel(factory = MessagesViewModelFactory(username))
+    messagesViewModel: MessagesViewModel = viewModel(factory = MessagesViewModelFactory(1))
 ) {
 
     val messages: List<Message> by messagesViewModel.messages.observeAsState(listOf())
