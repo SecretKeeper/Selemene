@@ -2,7 +2,7 @@ package net.teamof.whisper
 
 import android.content.Context
 import io.objectbox.BoxStore
-import net.teamof.whisper.entities.MyObjectBox
+import net.teamof.whisper.models.MyObjectBox
 
 object ObjectBox {
     lateinit var store: BoxStore
