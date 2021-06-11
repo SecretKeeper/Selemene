@@ -35,8 +35,8 @@ fun Message(
     enableSelectionMode: () -> Unit
 ) {
 
-    val isOwnMessage = data.user_id == 1
-    val messageSelected = remember { mutableStateOf(data.selected) }
+    val isOwnMessage = data.user_id == 1L
+    val messageSelected = remember { mutableStateOf(false) }
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
