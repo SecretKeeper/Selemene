@@ -1,56 +1,39 @@
 package net.teamof.whisper.viewModel
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.objectbox.Box
+import net.teamof.whisper.ObjectBox
 import net.teamof.whisper.models.Message
+import net.teamof.whisper.models.Message_
 
-class MessagesViewModel(username: String) : ViewModel() {
+class MessagesViewModel(user_id: Long) : ViewModel() {
 
+    private val messageBox: Box<Message> = ObjectBox.store.boxFor(Message::class.java)
 
-    private val _messages = MutableLiveData(
-        mutableListOf(
-            Message(
-                1,
-                1,
-                "The veil between life and death",
-                "2020-08-09",
-                false
-            ),
-            Message(
-                2,
-                2,
-                "Hello Phantom Assassin!",
-                "2020-08-08",
-                false
-            ),
-            Message(
-                3,
-                2,
-                "That's Cool! I am user $username",
-                "2020-08-08",
-                false
-            ),
-            Message(
-                4,
-                1,
-                "QQWEWRWQRWQEWQE",
-                "2020-08-08",
-                false
-            ),
-            Message(
-                5,
-                1,
-                "EQWQw;fhdfhqwejkqleqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
-                "2020-08-08",
-                false
-            )
-        )
-    )
+    private val _messages: MutableLiveData<MutableList<Message>> by lazy {
+        MutableLiveData<MutableList<Message>>(loadMessages(user_id))
+    }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     val messages: MutableLiveData<MutableList<Message>> = _messages
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun sendMessage(message: Message) {
+
+        messageBox.put((message))
+
         _messages.value = (_messages.value)?.let { mutableListOf(*it.toTypedArray(), message) }
+    }
+
+    private fun loadMessages(user_id: Long): MutableList<Message> {
+        val query = messageBox.query().equal(Message_.user_id, user_id).build()
+        val results = query.find()
+        query.close()
+
+        return results
     }
 
 }
