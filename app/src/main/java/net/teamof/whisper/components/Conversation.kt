@@ -15,17 +15,17 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.bumptech.glide.request.RequestOptions
 import com.google.accompanist.glide.rememberGlidePainter
-import net.teamof.whisper.models.MessagePortal
+import net.teamof.whisper.models.Conversation
 import net.teamof.whisper.ui.theme.fontFamily
 
 @ExperimentalMaterialApi
 @Composable
 fun MessagePortal(
-    data: MessagePortal,
+    data: Conversation,
     navController: NavController
 ) {
     Card(
-        onClick = { navController.navigate("Messaging/${data.username}") },
+        onClick = { navController.navigate("Messaging/${data.user_id}") },
         modifier = Modifier
             .fillMaxWidth()
     ) {
@@ -36,7 +36,7 @@ fun MessagePortal(
                 .padding(vertical = 10.dp, horizontal = 10.dp)
         ) {
             Image(
-                painter = rememberGlidePainter(request = data.image,
+                painter = rememberGlidePainter(request = data.user_image,
                     requestBuilder = {
                         apply(RequestOptions().circleCrop())
                     }
