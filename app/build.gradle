@@ -77,8 +77,8 @@ dependencies {
     // Material Design
     implementation "androidx.compose.material:material:$compose_version"
 
-    // Accompanist
-    implementation 'com.google.accompanist:accompanist-glide:0.11.1'
+    // Accompanist Coil
+    implementation 'com.google.accompanist:accompanist-coil:0.11.1'
 
     // ObjectBox Browser Debug
     debugImplementation "io.objectbox:objectbox-android-objectbrowser:$objectbox_version"
