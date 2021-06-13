@@ -10,13 +10,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import net.teamof.whisper.components.MessagePortal
-import net.teamof.whisper.models.MessagePortal
+import net.teamof.whisper.models.Conversation
 
 @ExperimentalMaterialApi
 @Composable
 fun Messages(
     navController: NavController,
-    messages: List<MessagePortal>
+    messages: List<Conversation>
 ) {
     Column(
         Modifier

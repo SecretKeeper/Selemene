@@ -10,8 +10,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.bumptech.glide.request.RequestOptions
-import com.google.accompanist.glide.rememberGlidePainter
+import coil.transform.CircleCropTransformation
+import com.google.accompanist.coil.rememberCoilPainter
 import net.teamof.whisper.models.Activity
 import net.teamof.whisper.ui.theme.fontFamily
 
@@ -25,9 +25,9 @@ fun Activity(data: Activity) {
             .padding(vertical = 10.dp, horizontal = 10.dp)
     ) {
         Image(
-            painter = rememberGlidePainter(request = data.image,
+            painter = rememberCoilPainter(request = data.image,
                 requestBuilder = {
-                    apply(RequestOptions().circleCrop())
+                    transformations(CircleCropTransformation())
                 }
             ),
             contentDescription = null,
@@ -38,13 +38,13 @@ fun Activity(data: Activity) {
         Column(
             Modifier
                 .weight(2f)
-                .padding(start = 20.dp, top= 10.dp)
+                .padding(start = 20.dp, top = 10.dp)
         ) {
             Following()
             Text(
                 text = "2 month ago - activities",
                 fontSize = 13.sp,
-                fontFamily= fontFamily ,
+                fontFamily = fontFamily,
                 fontWeight = FontWeight.Normal,
                 color = Color.DarkGray,
                 modifier = Modifier.padding(top = 15.dp)
@@ -58,7 +58,7 @@ fun Following() {
     Text(
         text = "Sylvanas Windrunner starts following you. you want also follow him back?",
         fontSize = 14.sp,
-        fontFamily= fontFamily ,
+        fontFamily = fontFamily,
         fontWeight = FontWeight.Normal,
         lineHeight = 22.sp
     )

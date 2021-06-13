@@ -11,8 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.bumptech.glide.request.RequestOptions
-import com.google.accompanist.glide.rememberGlidePainter
+import coil.transform.CircleCropTransformation
+import com.google.accompanist.coil.rememberCoilPainter
 import net.teamof.whisper.models.Comment
 import net.teamof.whisper.ui.theme.fontFamily
 
@@ -40,9 +40,9 @@ fun Comment(
                 .padding(vertical = 10.dp, horizontal = 10.dp)
         ) {
             Image(
-                painter = rememberGlidePainter(request = data.user_image,
+                painter = rememberCoilPainter(request = data.user_image,
                     requestBuilder = {
-                        apply(RequestOptions().circleCrop())
+                        transformations(CircleCropTransformation())
                     }
                 ),
                 contentDescription = null,

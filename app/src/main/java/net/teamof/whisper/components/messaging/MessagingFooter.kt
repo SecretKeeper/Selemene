@@ -1,9 +1,12 @@
 package net.teamof.whisper.components.messaging
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -28,14 +31,17 @@ import net.teamof.whisper.R
 import net.teamof.whisper.models.Message
 import net.teamof.whisper.ui.theme.fontFamily
 import net.teamof.whisper.viewModel.MessagesViewModel
+import java.text.SimpleDateFormat
+import java.util.*
 
+@SuppressLint("SimpleDateFormat")
+@RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalMaterialApi
 @Composable
 fun MessagingFooter(
     bottomSheetState: ModalBottomSheetState,
     messagesViewModel: MessagesViewModel
 ) {
-
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val text = remember { mutableStateOf("") }
@@ -108,18 +114,23 @@ fun MessagingFooter(
 
             )
             IconButton(onClick = {
-                if (text.value.isNotEmpty())
-                    messagesViewModel.sendMessage(
-                        Message(
-                            5,
-                            1,
-                            text.value,
-                            "2020-08-08",
-                            false
-                        )
-                    ).also {
-                        text.value = ""
-                    }
+                if (text.value.isNotEmpty()) {
+
+                    val sdf = SimpleDateFormat("yyyy/M/dd-hh:mm:ss")
+                    val currentDate = sdf.format(Date())
+
+                    val message = Message(
+                        user_id = 1,
+                        content = text.value,
+                        created_at = currentDate
+                    )
+
+                    messagesViewModel.sendMessage(message)
+
+                    text.value = ""
+
+                }
+
 
             }) {
                 Icon(

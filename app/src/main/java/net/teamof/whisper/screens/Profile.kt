@@ -25,8 +25,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.bumptech.glide.request.RequestOptions
-import com.google.accompanist.glide.rememberGlidePainter
+import coil.transform.CircleCropTransformation
+import com.google.accompanist.coil.rememberCoilPainter
 import kotlinx.coroutines.launch
 import net.teamof.whisper.R
 import net.teamof.whisper.ui.theme.fontFamily
@@ -58,7 +58,10 @@ fun Profile(navController: NavController) {
     val expanded = remember { mutableStateOf(false) }
 
     val scaleFab = remember { Animatable(1F) }
-    LaunchedEffect(key1 = scaffoldState.bottomSheetState.isAnimationRunning, key2 = scaffoldState.bottomSheetState.isExpanded) {
+    LaunchedEffect(
+        key1 = scaffoldState.bottomSheetState.isAnimationRunning,
+        key2 = scaffoldState.bottomSheetState.isExpanded
+    ) {
         scaleFab.animateTo(
             if (
                 scaffoldState.bottomSheetState.isAnimationRunning ||
@@ -138,8 +141,8 @@ fun Profile(navController: NavController) {
                         Divider(modifier = Modifier.padding(vertical = 15.dp))
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Image(
-                                painter = rememberGlidePainter(request = "https://upload.wikimedia.org/wikipedia/en/thumb/d/d3/Starbucks_Corporation_Logo_2011.svg/1200px-Starbucks_Corporation_Logo_2011.svg.png",
-                                    requestBuilder = { apply(RequestOptions().circleCrop()) }),
+                                painter = rememberCoilPainter(request = "https://upload.wikimedia.org/wikipedia/en/thumb/d/d3/Starbucks_Corporation_Logo_2011.svg/1200px-Starbucks_Corporation_Logo_2011.svg.png",
+                                    requestBuilder = { transformations(CircleCropTransformation()) }),
                                 contentDescription = null,
                                 modifier = Modifier
                                     .width(90.dp)
@@ -311,8 +314,8 @@ fun Profile(navController: NavController) {
                         LazyRow() {
                             itemsIndexed(gridImages) { _, image ->
                                 Image(
-                                    painter = rememberGlidePainter(request = image,
-                                        requestBuilder = { apply(RequestOptions().centerCrop()) }),
+                                    painter = rememberCoilPainter(request = image,
+                                        requestBuilder = { transformations(CircleCropTransformation()) }),
                                     contentDescription = null,
                                     modifier = Modifier
                                         .width(100.dp)
@@ -352,7 +355,7 @@ fun Profile(navController: NavController) {
         sheetPeekHeight = ((heightDp * 42) / 100).dp,
     ) {
         Image(
-            painter = rememberGlidePainter(request = "https://uupload.ir/files/2fk9_6087f98a3cd34_(2).jpg"),
+            painter = rememberCoilPainter(request = "https://uupload.ir/files/2fk9_6087f98a3cd34_(2).jpg"),
             contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth()

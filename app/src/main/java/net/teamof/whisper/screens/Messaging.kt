@@ -32,8 +32,8 @@ import net.teamof.whisper.viewModel.MessagesViewModelFactory
 @Composable
 fun Messaging(
     navController: NavController,
-    username: String,
-    messagesViewModel: MessagesViewModel = viewModel(factory = MessagesViewModelFactory(username))
+    user_id: String,
+    messagesViewModel: MessagesViewModel = viewModel(factory = MessagesViewModelFactory(1))
 ) {
 
     val messages: List<Message> by messagesViewModel.messages.observeAsState(listOf())
@@ -54,7 +54,7 @@ fun Messaging(
     ) {
 
         Column {
-            MessagingHeader(navController, selection, username)
+            MessagingHeader(navController, selection, user_id)
             Column(Modifier.weight(1f)) {
                 Column(
                     Modifier.verticalScroll(

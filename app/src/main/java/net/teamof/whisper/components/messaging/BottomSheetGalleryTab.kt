@@ -10,8 +10,8 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.bumptech.glide.request.RequestOptions
-import com.google.accompanist.glide.rememberGlidePainter
+import coil.size.Scale
+import com.google.accompanist.coil.rememberCoilPainter
 
 @ExperimentalFoundationApi
 @Composable
@@ -19,11 +19,9 @@ fun BottomSheetGalleryTab(images: List<GalleryImage>) {
     LazyVerticalGrid(cells = GridCells.Adaptive(minSize = 130.dp)) {
         itemsIndexed(images) { _, image ->
             Image(
-                painter = rememberGlidePainter(
+                painter = rememberCoilPainter(
                     request = image.contentUri,
-                    requestBuilder = {
-                        apply(RequestOptions().centerCrop())
-                    }),
+                    requestBuilder = { scale(Scale.FILL) }),
                 contentDescription = null,
                 modifier = Modifier
                     .width(130.dp)
