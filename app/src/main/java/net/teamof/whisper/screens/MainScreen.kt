@@ -16,9 +16,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import net.teamof.whisper.components.BottomAppBar
 import net.teamof.whisper.components.FloatingActionButton
-import net.teamof.whisper.models.MessagePortal
+import net.teamof.whisper.models.Conversation
 import net.teamof.whisper.ui.theme.WhisperTheme
-import net.teamof.whisper.viewModel.MessagePortalsViewModel
+import net.teamof.whisper.viewModel.ConversationsViewModel
 
 @ExperimentalAnimationApi
 @ExperimentalFoundationApi
@@ -59,10 +59,10 @@ fun MainScreen() {
 @Composable
 private fun MainScreenNavigationConfigurations(
     navController: NavHostController,
-    messagePortalsViewModel: MessagePortalsViewModel = viewModel()
+    conversationsViewModel: ConversationsViewModel = viewModel()
 ) {
-
-    val messages: List<MessagePortal> by messagePortalsViewModel.messages.observeAsState(listOf())
+    
+    val messages: List<Conversation> by conversationsViewModel.conversations.observeAsState(listOf())
 
     NavHost(
         navController = navController,
@@ -73,9 +73,9 @@ private fun MainScreenNavigationConfigurations(
         }
         composable(
             "Messaging"
-                .plus("/{username}")
+                .plus("/{user_id}")
         ) { backStackEntry ->
-            Messaging(navController, username = backStackEntry.arguments?.getString("username")!!)
+            Messaging(navController, user_id = backStackEntry.arguments?.getString("user_id")!!)
         }
         composable("Feeds") { Feeds() }
         composable("Create") { Create(navController) }
