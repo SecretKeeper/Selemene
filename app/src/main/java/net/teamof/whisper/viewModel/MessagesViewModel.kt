@@ -9,12 +9,12 @@ import net.teamof.whisper.ObjectBox
 import net.teamof.whisper.models.Message
 import net.teamof.whisper.models.Message_
 
-class MessagesViewModel(user_id: Long) : ViewModel() {
+class MessagesViewModel(channel: Long) : ViewModel() {
 
     private val messageBox: Box<Message> = ObjectBox.store.boxFor(Message::class.java)
 
     private val _messages: MutableLiveData<MutableList<Message>> by lazy {
-        MutableLiveData<MutableList<Message>>(loadMessages(user_id))
+        MutableLiveData<MutableList<Message>>(loadMessages(channel))
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
