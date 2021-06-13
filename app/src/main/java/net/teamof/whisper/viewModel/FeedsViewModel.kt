@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import net.teamof.whisper.models.Comment
 import net.teamof.whisper.models.Feed
-import net.teamof.whisper.models.MessagePortal
 
 class FeedsViewModel : ViewModel() {
 
