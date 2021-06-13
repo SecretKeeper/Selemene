@@ -14,7 +14,7 @@ data class Audio(
     val contentUri: Uri
 )
 
-class StorageAudiosViewModel(application: Application): AndroidViewModel(application) {
+class StorageAudiosViewModel(application: Application) : AndroidViewModel(application) {
 
     private val collection = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
         MediaStore.Audio.Media.getContentUri(
@@ -40,27 +40,23 @@ class StorageAudiosViewModel(application: Application): AndroidViewModel(applica
         val storageAudios: MutableList<Audio> = mutableListOf()
 
         application.contentResolver.query(collection, projection, null, null, null, null)
-        ?.use { cursor ->
-            val idColumn = cursor.getColumnIndex(MediaStore.Audio.Media._ID)
-            val nameColumn =
-            cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME)
+            ?.use { cursor ->
+                val idColumn = cursor.getColumnIndex(MediaStore.Audio.Media._ID)
+                val nameColumn =
+                    cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME)
 
-            while (cursor.moveToNext()) {
-                val audioId = cursor.getLong(idColumn)
-                val name = cursor.getString(nameColumn)
-                val contentUri: Uri = ContentUris.withAppendedId(
-                    MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                    audioId
-                )
-                storageAudios += Audio(name ,contentUri)
+                while (cursor.moveToNext()) {
+                    val audioId = cursor.getLong(idColumn)
+                    val name = cursor.getString(nameColumn)
+                    val contentUri: Uri = ContentUris.withAppendedId(
+                        MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                        audioId
+                    )
+                    storageAudios += Audio(name, contentUri)
+                }
             }
-        }
 
         return storageAudios
-
-    }
-
-    fun setPlaying(value: Boolean) {
 
     }
 
