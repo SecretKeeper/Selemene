@@ -4,7 +4,6 @@ plugins {
     id 'kotlin-parcelize'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
-    id 'io.objectbox'
 }
 
 android {
@@ -80,4 +79,11 @@ dependencies {
 
     // Accompanist
     implementation 'com.google.accompanist:accompanist-glide:0.11.1'
+
+    // ObjectBox Browser Debug
+    debugImplementation "io.objectbox:objectbox-android-objectbrowser:$objectbox_version"
+    releaseImplementation "io.objectbox:objectbox-android:$objectbox_version"
 }
+
+// Should be defined here or will Duplicate class error according to https://docs.objectbox.io/data-browser
+apply plugin: 'io.objectbox'
