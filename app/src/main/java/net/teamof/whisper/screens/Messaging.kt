@@ -32,7 +32,7 @@ import net.teamof.whisper.viewModel.MessagesViewModelFactory
 @Composable
 fun Messaging(
     navController: NavController,
-    username: String,
+    user_id: String,
     messagesViewModel: MessagesViewModel = viewModel(factory = MessagesViewModelFactory(1))
 ) {
 
@@ -54,7 +54,7 @@ fun Messaging(
     ) {
 
         Column {
-            MessagingHeader(navController, selection, username)
+            MessagingHeader(navController, selection, user_id)
             Column(Modifier.weight(1f)) {
                 Column(
                     Modifier.verticalScroll(
