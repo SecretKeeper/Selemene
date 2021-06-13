@@ -32,22 +32,77 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "4:808974293185640242",
+      "lastPropertyId": "8:3810367178149596732",
+      "name": "Conversation",
+      "properties": [
+        {
+          "id": "1:177596767743711594",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:585241376155590242",
+          "name": "user_id",
+          "type": 6,
+          "flags": 4
+        },
+        {
+          "id": "3:2198651822782623232",
+          "name": "username",
+          "type": 9
+        },
+        {
+          "id": "4:8607418988960124286",
+          "name": "user_image",
+          "type": 9
+        },
+        {
+          "id": "5:5442804784596337074",
+          "name": "last_message",
+          "type": 9
+        },
+        {
+          "id": "6:8997032157910354453",
+          "name": "last_message_time",
+          "type": 9
+        },
+        {
+          "id": "7:7983427054511185153",
+          "name": "unread_messages",
+          "type": 5,
+          "flags": 4
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "2:7257094491745078530",
+  "lastEntityId": "4:808974293185640242",
   "lastIndexId": "0:0",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [
-    6833154543266809745
+    6833154543266809745,
+    6105850433133106128
   ],
   "retiredIndexUids": [],
   "retiredPropertyUids": [
     5650450695584153606,
     1787496311101039328,
-    3415821724701794443
+    3415821724701794443,
+    6643253506758623258,
+    4669279281802160725,
+    5257641620078984524,
+    3169110143415244759,
+    4320836256248567049,
+    2212710082066029500,
+    4399066998122579410,
+    3810367178149596732
   ],
   "retiredRelationUids": [],
   "version": 1
