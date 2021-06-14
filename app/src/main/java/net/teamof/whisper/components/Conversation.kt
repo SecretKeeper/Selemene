@@ -25,7 +25,7 @@ fun MessagePortal(
     navController: NavController
 ) {
     Card(
-        onClick = { navController.navigate("Messaging/${data.user_id}") },
+        onClick = { navController.navigate("Messaging/${data.channel}") },
         modifier = Modifier
             .fillMaxWidth()
     ) {
@@ -74,7 +74,7 @@ fun MessagePortal(
                     fontWeight = FontWeight.Normal,
                     modifier = Modifier.padding(bottom = 7.dp)
                 )
-                if (data.unread_messages != 0) Text(
+                if (data.unread_messages > 0) Text(
                     text = data.unread_messages.toString(),
                     fontSize = 13.sp
                 )
