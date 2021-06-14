@@ -12,7 +12,5 @@ data class Contact(
     @Index @Unique val user_id: Long,
     val username: String,
     val user_image: String,
-    val status: String,
-    val is_online: Boolean,
-    var selected: Boolean
+    val status: String
 )
