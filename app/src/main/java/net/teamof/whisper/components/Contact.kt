@@ -37,7 +37,7 @@ fun Contact(
     conversationsViewModel: ConversationsViewModel = viewModel()
 ) {
 
-    var checked by rememberSaveable(data.selected) { mutableStateOf(data.selected) }
+    var checked by rememberSaveable { mutableStateOf(false) }
     val currentUserId = userViewModel.userId.observeAsState()
 
     Card(
