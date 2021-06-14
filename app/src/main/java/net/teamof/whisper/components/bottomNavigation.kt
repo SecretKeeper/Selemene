@@ -19,7 +19,7 @@ sealed class NavItem(
     val enabled: Boolean
 ) {
     object Messages : NavItem(
-        "messages",
+        "conversations",
         R.drawable.ic_flash,
         true
     )
