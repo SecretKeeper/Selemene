@@ -83,6 +83,10 @@ dependencies {
     // ObjectBox Browser Debug
     debugImplementation "io.objectbox:objectbox-android-objectbrowser:$objectbox_version"
     releaseImplementation "io.objectbox:objectbox-android:$objectbox_version"
+
+    // Pretty Time
+    implementation 'org.ocpsoft.prettytime:prettytime:4.0.4.Final'
+
 }
 
 // Should be defined here or will Duplicate class error according to https://docs.objectbox.io/data-browser
