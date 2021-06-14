@@ -28,11 +28,20 @@ class MessagesViewModel(private val channel: String) : ViewModel() {
         _messages.value = (_messages.value)?.let { mutableListOf(*it.toTypedArray(), message) }
     }
 
+    fun getLastMessage(): Message? {
+        val query =
+            messageBox.query().equal(Message_.channel, channel).orderDesc(Message_.id).build()
+        val result = query.findFirst()
+        query.close()
+
+        return result
+    }
+
     private fun loadMessages(): MutableList<Message> {
         val query = messageBox.query().equal(Message_.channel, channel).build()
         val results = query.find()
         query.close()
-        
+
         return results
     }
 
