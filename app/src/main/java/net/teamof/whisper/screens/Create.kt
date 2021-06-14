@@ -2,10 +2,10 @@ package net.teamof.whisper.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import net.teamof.whisper.R
 
+@ExperimentalMaterialApi
 @Composable
 fun Create(navController: NavController) {
     Column(
@@ -29,10 +30,8 @@ fun Create(navController: NavController) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White)
-                .clickable {
-                    navController.navigate("CreateGroup")
-                }
+                .background(Color.White),
+            onClick = { navController.navigate("Contacts/Messaging") }
         ) {
             Column(Modifier.padding(40.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                 Image(
