@@ -9,22 +9,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import net.teamof.whisper.components.MessagePortal
+import net.teamof.whisper.components.Conversation
 import net.teamof.whisper.models.Conversation
 
 @ExperimentalMaterialApi
 @Composable
-fun Messages(
+fun Conversations(
     navController: NavController,
-    messages: List<Conversation>
+    conversations: List<Conversation>
 ) {
     Column(
         Modifier
             .padding(bottom = 70.dp)
             .verticalScroll(rememberScrollState())
     ) {
-        messages.forEachIndexed { _, message ->
-            MessagePortal(message, navController)
+        conversations.forEachIndexed { _, conversation ->
+            Conversation(conversation, navController)
         }
     }
 }
