@@ -1,5 +1,6 @@
 package net.teamof.whisper.components.messaging
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.slideInVertically
@@ -18,24 +19,30 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.bumptech.glide.request.RequestOptions
-import com.google.accompanist.glide.rememberGlidePainter
+import coil.transform.CircleCropTransformation
+import com.google.accompanist.coil.rememberCoilPainter
+import kotlinx.coroutines.DelicateCoroutinesApi
 import net.teamof.whisper.R
 import net.teamof.whisper.ui.theme.fontFamily
+import net.teamof.whisper.viewModel.ConversationsViewModel
 
+@SuppressLint("CoroutineCreationDuringComposition")
+@DelicateCoroutinesApi
 @ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @Composable
 fun MessagingHeader(
     navController: NavController,
+    channel: String,
     selection: MutableState<Boolean>,
-    username: String
+    conversationsViewModel: ConversationsViewModel = viewModel(),
 ) {
 
     val interactionSource = remember { MutableInteractionSource() }
     val expanded = remember { mutableStateOf(false) }
-
+    val conversation = conversationsViewModel.getConversation(channel)
 
     Column(Modifier.height(75.dp)) {
         AnimatedVisibility(visible = !selection.value) {
@@ -65,9 +72,9 @@ fun MessagingHeader(
                         }
                 ) {
                     Image(
-                        painter = rememberGlidePainter(request = "https://c4.wallpaperflare.com/wallpaper/607/463/825/world-of-warcraft-jaina-proudmoore-magic-mazert-young-turquoise-hd-wallpaper-preview.jpg",
+                        painter = rememberCoilPainter(request = "https://c4.wallpaperflare.com/wallpaper/607/463/825/world-of-warcraft-jaina-proudmoore-magic-mazert-young-turquoise-hd-wallpaper-preview.jpg",
                             requestBuilder = {
-                                apply(RequestOptions().circleCrop())
+                                transformations(CircleCropTransformation())
                             }
                         ),
                         contentDescription = null,
@@ -79,13 +86,15 @@ fun MessagingHeader(
                         Modifier
                             .padding(start = 15.dp)
                     ) {
-                        Text(
-                            text = username,
-                            fontFamily = fontFamily,
-                            fontWeight = FontWeight.Medium,
-                            fontSize = 15.sp,
-                            modifier = Modifier.padding(bottom = 5.dp)
-                        )
+                        if (conversation != null) {
+                            Text(
+                                text = conversation.username,
+                                fontFamily = fontFamily,
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 15.sp,
+                                modifier = Modifier.padding(bottom = 5.dp)
+                            )
+                        }
                         Text(
                             text = "Last seen recently",
                             fontSize = 12.sp,
@@ -110,7 +119,9 @@ fun MessagingHeader(
                         expanded = expanded.value,
                         onDismissRequest = { expanded.value = false }
                     ) {
-                        DropdownMenuItem(onClick = { /* Handle refresh! */ }) {
+                        DropdownMenuItem(onClick = {
+
+                        }) {
                             Text("Refresh")
                         }
                         DropdownMenuItem(onClick = { /* Handle settings! */ }) {
