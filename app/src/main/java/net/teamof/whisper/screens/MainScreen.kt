@@ -26,7 +26,7 @@ import net.teamof.whisper.viewModel.ConversationsViewModel
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
-    val disabledNavScreens = listOf("Messaging/{user_id}", "Profile", "Contacts/{action}")
+    val disabledNavScreens = listOf("Messaging/{channel}", "Profile", "Contacts/{action}")
 
 
     WhisperTheme {
@@ -62,14 +62,16 @@ private fun MainScreenNavigationConfigurations(
     conversationsViewModel: ConversationsViewModel = viewModel(),
 ) {
 
-    val messages: List<Conversation> by conversationsViewModel.conversations.observeAsState(listOf())
+    val conversations: List<Conversation> by conversationsViewModel.conversations.observeAsState(
+        listOf()
+    )
 
     NavHost(
         navController = navController,
-        startDestination = "Messages"
+        startDestination = "Conversations"
     ) {
-        composable("Messages") {
-            Messages(navController, messages)
+        composable("Conversations") {
+            Conversations(navController, conversations)
         }
         composable(
             "Messaging"
