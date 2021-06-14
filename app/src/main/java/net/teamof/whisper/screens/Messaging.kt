@@ -25,6 +25,7 @@ import net.teamof.whisper.models.Message
 import net.teamof.whisper.viewModel.MessagesViewModel
 import net.teamof.whisper.viewModel.MessagesViewModelFactory
 
+
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @ExperimentalAnimationApi
@@ -32,9 +33,11 @@ import net.teamof.whisper.viewModel.MessagesViewModelFactory
 @Composable
 fun Messaging(
     navController: NavController,
-    user_id: String,
-    messagesViewModel: MessagesViewModel = viewModel(factory = MessagesViewModelFactory(1))
+    channel: String,
 ) {
+
+    val messagesViewModel: MessagesViewModel =
+        viewModel(factory = MessagesViewModelFactory(channel))
 
     val messages: List<Message> by messagesViewModel.messages.observeAsState(listOf())
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
@@ -54,7 +57,7 @@ fun Messaging(
     ) {
 
         Column {
-            MessagingHeader(navController, selection, user_id)
+            MessagingHeader(navController, channel, selection)
             Column(Modifier.weight(1f)) {
                 Column(
                     Modifier.verticalScroll(
@@ -71,7 +74,7 @@ fun Messaging(
                     }
                 }
             }
-            MessagingFooter(bottomSheetState, messagesViewModel)
+            MessagingFooter(bottomSheetState, messagesViewModel, channel)
         }
     }
 }

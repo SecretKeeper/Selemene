@@ -26,8 +26,8 @@ import net.teamof.whisper.viewModel.ConversationsViewModel
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
+    val disabledNavScreens = listOf("Messaging/{user_id}", "Profile", "Contacts/{action}")
 
-    val disabledNavScreens = listOf("Messaging/{username}", "Profile", "Contacts/{action}")
 
     WhisperTheme {
         Scaffold(
@@ -59,9 +59,9 @@ fun MainScreen() {
 @Composable
 private fun MainScreenNavigationConfigurations(
     navController: NavHostController,
-    conversationsViewModel: ConversationsViewModel = viewModel()
+    conversationsViewModel: ConversationsViewModel = viewModel(),
 ) {
-    
+
     val messages: List<Conversation> by conversationsViewModel.conversations.observeAsState(listOf())
 
     NavHost(
@@ -73,15 +73,19 @@ private fun MainScreenNavigationConfigurations(
         }
         composable(
             "Messaging"
-                .plus("/{user_id}")
+                .plus("/{channel}")
         ) { backStackEntry ->
-            Messaging(navController, user_id = backStackEntry.arguments?.getString("user_id")!!)
+            Messaging(
+                navController,
+                channel = backStackEntry.arguments?.getString("channel")!!
+            )
         }
         composable("Feeds") { Feeds() }
         composable("Create") { Create(navController) }
         composable("Contacts/{action}") { backStackEntry ->
             backStackEntry.arguments?.getString("action")?.let {
                 Contacts(
+                    navController,
                     action = it
                 )
             }

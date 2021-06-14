@@ -9,12 +9,12 @@ import net.teamof.whisper.ObjectBox
 import net.teamof.whisper.models.Message
 import net.teamof.whisper.models.Message_
 
-class MessagesViewModel(channel: Long) : ViewModel() {
+class MessagesViewModel(private val channel: String) : ViewModel() {
 
     private val messageBox: Box<Message> = ObjectBox.store.boxFor(Message::class.java)
 
     private val _messages: MutableLiveData<MutableList<Message>> by lazy {
-        MutableLiveData<MutableList<Message>>(loadMessages(channel))
+        MutableLiveData<MutableList<Message>>(loadMessages())
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -28,11 +28,11 @@ class MessagesViewModel(channel: Long) : ViewModel() {
         _messages.value = (_messages.value)?.let { mutableListOf(*it.toTypedArray(), message) }
     }
 
-    private fun loadMessages(user_id: Long): MutableList<Message> {
-        val query = messageBox.query().equal(Message_.user_id, user_id).build()
+    private fun loadMessages(): MutableList<Message> {
+        val query = messageBox.query().equal(Message_.channel, channel).build()
         val results = query.find()
         query.close()
-
+        
         return results
     }
 
