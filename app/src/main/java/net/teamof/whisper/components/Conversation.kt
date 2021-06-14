@@ -20,7 +20,7 @@ import net.teamof.whisper.ui.theme.fontFamily
 
 @ExperimentalMaterialApi
 @Composable
-fun MessagePortal(
+fun Conversation(
     data: Conversation,
     navController: NavController
 ) {
