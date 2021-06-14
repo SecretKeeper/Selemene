@@ -13,13 +13,13 @@ class ConversationsViewModel : ViewModel() {
         ObjectBox.store.boxFor(Conversation::class.java)
 
     private val _conversations: MutableLiveData<MutableList<Conversation>> by lazy {
-        MutableLiveData<MutableList<Conversation>>(loadConversations())
+        MutableLiveData<MutableList<Conversation>>(conversationBox.all)
     }
 
     val conversations: MutableLiveData<MutableList<Conversation>> = _conversations
 
-    private fun loadConversations(): MutableList<Conversation> {
-        return conversationBox.all
+    private fun refreshConversations() {
+        _conversations.value = conversationBox.all
     }
 
     private fun isConversationExist(conversation: Conversation): Long {
@@ -42,15 +42,21 @@ class ConversationsViewModel : ViewModel() {
     fun createConversation(conversation: Conversation) {
 
         if (isConversationExist(conversation) == 0L) {
-            conversationBox.put(conversation)
-            loadConversations()
+            saveConversation(conversation) {
+                refreshConversations()
+            }
         }
 
     }
 
+    private fun saveConversation(conversation: Conversation, refresh: () -> Unit) {
+        conversationBox.put(conversation)
+        refresh()
+    }
+
     fun deleteConversation() {
         conversationBox.removeAll()
-        loadConversations()
+        refreshConversations()
     }
 
     fun deleteConversation(conversation: Array<Conversation>) {
