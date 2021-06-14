@@ -7,7 +7,8 @@ import io.objectbox.annotation.Id
 data class Message(
     @Id
     var id: Long = 0,
-    var user_id: Long,
-    val content: String,
+    var channel: String = "",
+    var user_id: Long = 0,
+    var content: String = "",
     var created_at: String
 )
