@@ -8,6 +8,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -16,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
@@ -100,13 +102,21 @@ fun Message(
                 text = data.content,
                 color = if (isOwnMessage) Color.White else Color.Black,
                 fontSize = 14.sp,
-                lineHeight = 20.sp,
+                lineHeight = 22.sp,
                 fontFamily = fontFamily,
-                fontWeight = FontWeight.Medium,
+                fontWeight = FontWeight.Normal,
                 modifier = Modifier
                     .padding(vertical = 15.dp)
+                    .clip(
+                        shape = RoundedCornerShape(
+                            topStart = 25.dp,
+                            topEnd = 25.dp,
+                            bottomStart = 25.dp,
+                            bottomEnd = 2.dp
+                        )
+                    )
                     .background(if (isOwnMessage) MaterialTheme.colors.primary else Color.LightGray)
-                    .padding(vertical = 5.dp, horizontal = 10.dp)
+                    .padding(vertical = 10.dp, horizontal = 15.dp)
             )
         }
     }
