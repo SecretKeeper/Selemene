@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "2:7257094491745078530",
-      "lastPropertyId": "5:5996965878727520925",
+      "lastPropertyId": "6:6467444232437884461",
       "name": "Message",
       "properties": [
         {
@@ -26,21 +26,21 @@
           "type": 9
         },
         {
-          "id": "4:770951373316328949",
-          "name": "created_at",
-          "type": 9
-        },
-        {
           "id": "5:5996965878727520925",
           "name": "channel",
           "type": 9
+        },
+        {
+          "id": "6:6467444232437884461",
+          "name": "created_at",
+          "type": 10
         }
       ],
       "relations": []
     },
     {
       "id": "4:808974293185640242",
-      "lastPropertyId": "11:7037025407675147134",
+      "lastPropertyId": "12:3175549723710853210",
       "name": "Conversation",
       "properties": [
         {
@@ -83,7 +83,7 @@
           "flags": 2080
         },
         {
-          "id": "11:7037025407675147134",
+          "id": "12:3175549723710853210",
           "name": "unread_messages",
           "type": 5,
           "flags": 4
@@ -134,9 +134,6 @@
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
-  "newUidPool": [
-    3175549723710853210
-  ],
   "retiredEntityUids": [
     6833154543266809745,
     6105850433133106128
@@ -157,7 +154,9 @@
     6892806099178343090,
     671346873587713887,
     5693254922688459463,
-    7983427054511185153
+    7983427054511185153,
+    7037025407675147134,
+    770951373316328949
   ],
   "retiredRelationUids": [],
   "version": 1
