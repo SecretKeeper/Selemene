@@ -50,7 +50,7 @@ fun MessagingHeader(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(vertical = 15.dp, horizontal = 10.dp)
             ) {
-                IconButton(onClick = { navController.navigateUp() }) {
+                IconButton(onClick = { navController.navigate("Conversations") }) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_chevron_left),
                         contentDescription = null,
@@ -71,17 +71,19 @@ fun MessagingHeader(
                             navController.navigate("profile")
                         }
                 ) {
-                    Image(
-                        painter = rememberCoilPainter(request = "https://c4.wallpaperflare.com/wallpaper/607/463/825/world-of-warcraft-jaina-proudmoore-magic-mazert-young-turquoise-hd-wallpaper-preview.jpg",
-                            requestBuilder = {
-                                transformations(CircleCropTransformation())
-                            }
-                        ),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .width(50.dp)
-                            .height(50.dp)
-                    )
+                    if (conversation != null) {
+                        Image(
+                            painter = rememberCoilPainter(request = conversation.user_image,
+                                requestBuilder = {
+                                    transformations(CircleCropTransformation())
+                                }
+                            ),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .width(50.dp)
+                                .height(50.dp)
+                        )
+                    }
                     Column(
                         Modifier
                             .padding(start = 15.dp)

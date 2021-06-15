@@ -31,7 +31,6 @@ import net.teamof.whisper.R
 import net.teamof.whisper.models.Message
 import net.teamof.whisper.ui.theme.fontFamily
 import net.teamof.whisper.viewModel.MessagesViewModel
-import java.text.SimpleDateFormat
 import java.util.*
 
 @SuppressLint("SimpleDateFormat")
@@ -117,14 +116,11 @@ fun MessagingFooter(
             IconButton(onClick = {
                 if (text.value.isNotEmpty()) {
 
-                    val sdf = SimpleDateFormat("yyyy/M/dd-hh:mm:ss")
-                    val currentDate = sdf.format(Date())
-
                     val message = Message(
                         user_id = 1,
                         channel = channel,
                         content = text.value,
-                        created_at = currentDate
+                        created_at = Date()
                     )
 
                     messagesViewModel.sendMessage(message)
