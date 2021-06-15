@@ -13,6 +13,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -25,20 +26,26 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import net.teamof.whisper.R
 import net.teamof.whisper.models.Message
 import net.teamof.whisper.ui.theme.fontFamily
+import net.teamof.whisper.viewModel.UserViewModel
 
 @ExperimentalAnimationApi
 @Composable
 fun Message(
     data: Message,
     selection: Boolean,
-    enableSelectionMode: () -> Unit
+    enableSelectionMode: () -> Unit,
+    userViewModel: UserViewModel = viewModel()
 ) {
 
-    val isOwnMessage = data.user_id == 1L
+    val currentUserId = userViewModel.userId.observeAsState().value
+    val isOwnMessage = data.user_id == currentUserId
     val messageSelected = remember { mutableStateOf(false) }
+
+    println("Current user id $currentUserId")
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -115,7 +122,7 @@ fun Message(
                             bottomEnd = 2.dp
                         )
                     )
-                    .background(if (isOwnMessage) MaterialTheme.colors.primary else Color.LightGray)
+                    .background(if (isOwnMessage) MaterialTheme.colors.primary else Color(0xfff7f8f7))
                     .padding(vertical = 10.dp, horizontal = 15.dp)
             )
         }
