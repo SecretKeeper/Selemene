@@ -8,14 +8,17 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
@@ -23,20 +26,26 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import net.teamof.whisper.R
 import net.teamof.whisper.models.Message
 import net.teamof.whisper.ui.theme.fontFamily
+import net.teamof.whisper.viewModel.UserViewModel
 
 @ExperimentalAnimationApi
 @Composable
 fun Message(
     data: Message,
     selection: Boolean,
-    enableSelectionMode: () -> Unit
+    enableSelectionMode: () -> Unit,
+    userViewModel: UserViewModel = viewModel()
 ) {
 
-    val isOwnMessage = data.user_id == 1L
+    val currentUserId = userViewModel.userId.observeAsState().value
+    val isOwnMessage = data.user_id == currentUserId
     val messageSelected = remember { mutableStateOf(false) }
+
+    println("Current user id $currentUserId")
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -100,13 +109,21 @@ fun Message(
                 text = data.content,
                 color = if (isOwnMessage) Color.White else Color.Black,
                 fontSize = 14.sp,
-                lineHeight = 20.sp,
+                lineHeight = 22.sp,
                 fontFamily = fontFamily,
-                fontWeight = FontWeight.Medium,
+                fontWeight = FontWeight.Normal,
                 modifier = Modifier
                     .padding(vertical = 15.dp)
-                    .background(if (isOwnMessage) MaterialTheme.colors.primary else Color.LightGray)
-                    .padding(vertical = 5.dp, horizontal = 10.dp)
+                    .clip(
+                        shape = RoundedCornerShape(
+                            topStart = 25.dp,
+                            topEnd = 25.dp,
+                            bottomStart = 25.dp,
+                            bottomEnd = 2.dp
+                        )
+                    )
+                    .background(if (isOwnMessage) MaterialTheme.colors.primary else Color(0xfff7f8f7))
+                    .padding(vertical = 10.dp, horizontal = 15.dp)
             )
         }
     }
