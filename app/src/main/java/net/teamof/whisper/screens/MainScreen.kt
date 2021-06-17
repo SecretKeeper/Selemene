@@ -15,15 +15,25 @@ import androidx.navigation.compose.rememberNavController
 import net.teamof.whisper.components.BottomAppBar
 import net.teamof.whisper.components.FloatingActionButton
 import net.teamof.whisper.ui.theme.WhisperTheme
+import net.teamof.whisper.utils.EchoWebSocketListener
+import okhttp3.OkHttpClient
+import okhttp3.Request
 
 @ExperimentalAnimationApi
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @Composable
-fun MainScreen() {
+fun MainScreen(
+) {
     val navController = rememberNavController()
     val disabledNavScreens = listOf("Messaging/{channel}", "Profile", "Contacts/{action}")
 
+    val listener = EchoWebSocketListener()
+    val httpClient = OkHttpClient()
+    val request = Request.Builder().url("ws://10.0.2.2:3334/ws").build()
+    val websocket = httpClient.newWebSocket(request, listener)
+
+    httpClient.dispatcher().executorService().shutdown()
 
     WhisperTheme {
         Scaffold(
