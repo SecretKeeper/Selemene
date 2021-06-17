@@ -17,5 +17,6 @@ data class Message(
     @Serializable(with = DateAsStringSerializer::class)
     var created_at: Date = Date(),
     @Serializable(with = DateAsStringSerializer::class)
-    var updated_at: Date? = null
+    var updated_at: Date? = null,
+    var type: String? = "message",
 )
