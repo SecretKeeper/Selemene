@@ -3,10 +3,14 @@ package net.teamof.whisper.utils
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import net.teamof.whisper.models.Message
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import okio.ByteString
+import java.util.*
 
 
 @OptIn(DelicateCoroutinesApi::class)
@@ -22,7 +26,16 @@ class EchoWebSocketListener :
 
     override fun onOpen(_webSocket: WebSocket, response: Response) {
         webSocket = _webSocket
-        _webSocket.send("Hello From Kotlin")
+        val data = Message(
+            1,
+            "Sylvanas Channel",
+            2,
+            "Sylvanas",
+            Date(),
+        )
+        _webSocket.send(
+            Json.encodeToString(data)
+        )
     }
 
     override fun onMessage(webSocket: WebSocket, text: String) {
