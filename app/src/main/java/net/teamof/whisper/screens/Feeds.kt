@@ -10,14 +10,12 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import net.teamof.whisper.components.Feed
-import net.teamof.whisper.models.Comment
 import net.teamof.whisper.models.Feed
 import net.teamof.whisper.viewModel.FeedsViewModel
 
 @Composable
-fun Feeds(feedsViewModel: FeedsViewModel = viewModel()) {
+fun Feeds(feedsViewModel: FeedsViewModel) {
 
     val feeds: List<Feed> by feedsViewModel.feeds.observeAsState(listOf())
 
