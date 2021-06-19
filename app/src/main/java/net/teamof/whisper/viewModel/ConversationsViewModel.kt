@@ -2,12 +2,15 @@ package net.teamof.whisper.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.objectbox.Box
 import net.teamof.whisper.ObjectBox
 import net.teamof.whisper.models.Conversation
 import net.teamof.whisper.models.Conversation_
+import javax.inject.Inject
 
-class ConversationsViewModel : ViewModel() {
+@HiltViewModel
+class ConversationsViewModel @Inject constructor() : ViewModel() {
 
     private val conversationBox: Box<Conversation> =
         ObjectBox.store.boxFor(Conversation::class.java)
