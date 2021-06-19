@@ -4,13 +4,19 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.objectbox.Box
 import net.teamof.whisper.ObjectBox
 import net.teamof.whisper.models.Message
 import net.teamof.whisper.models.Message_
+import javax.inject.Inject
 
-class MessagesViewModel(private val channel: String) : ViewModel() {
-
+@HiltViewModel
+class MessagesViewModel @Inject constructor(
+    private val channel: String
+) :
+    ViewModel() {
+    
     private val messageBox: Box<Message> = ObjectBox.store.boxFor(Message::class.java)
 
     private val _messages: MutableLiveData<MutableList<Message>> by lazy {
