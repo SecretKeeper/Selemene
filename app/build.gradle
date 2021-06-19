@@ -57,7 +57,7 @@ dependencies {
     implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
-    implementation 'androidx.activity:activity-compose:1.3.0-beta01'
+    implementation 'androidx.activity:activity-compose:1.3.0-beta02'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
@@ -74,8 +74,11 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
 
+    // Hilt and Navigation
+    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0-alpha03'
+
     // Datastore
-    implementation("androidx.datastore:datastore-preferences:1.0.0-beta01")
+    implementation("androidx.datastore:datastore-preferences:1.0.0-beta02")
 
     // Navigation Compose
     implementation "androidx.navigation:navigation-compose:2.4.0-alpha02"
