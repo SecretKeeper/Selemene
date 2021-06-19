@@ -12,11 +12,13 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
+import dagger.hilt.android.AndroidEntryPoint
 import net.teamof.whisper.screens.MainScreen
 
 val Context.dataStore: DataStore<Preferences>
         by preferencesDataStore(name = "datastore")
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     @ExperimentalAnimationApi

@@ -9,7 +9,10 @@ import net.teamof.whisper.ObjectBox
 import net.teamof.whisper.models.Message
 import net.teamof.whisper.models.Message_
 
-class MessagesViewModel(private val channel: String) : ViewModel() {
+class MessagesViewModel constructor(
+    private val channel: String
+) :
+    ViewModel() {
 
     private val messageBox: Box<Message> = ObjectBox.store.boxFor(Message::class.java)
 
