@@ -15,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.transform.CircleCropTransformation
 import com.google.accompanist.coil.rememberCoilPainter
@@ -27,12 +28,12 @@ import org.ocpsoft.prettytime.PrettyTime
 @Composable
 fun Conversation(
     conversation: Conversation,
-    navController: NavController
+    navController: NavController,
+    messagesViewModel: MessagesViewModel = viewModel()
 ) {
 
     val cachedConversation = remember(conversation) { mutableStateOf(conversation) }
-    val messagesViewModel = MessagesViewModel(conversation.channel)
-    val lastMessage = messagesViewModel.getLastMessage()
+    val lastMessage = messagesViewModel.getLastMessage(conversation.channel)
 
     Card(
         onClick = { navController.navigate("Messaging/${cachedConversation.value.channel}") },
