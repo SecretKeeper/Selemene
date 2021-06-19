@@ -9,18 +9,14 @@ import net.teamof.whisper.ObjectBox
 import net.teamof.whisper.models.Message
 import net.teamof.whisper.models.Message_
 
-class MessagesViewModel constructor(
-    private val channel: String
-) :
-    ViewModel() {
+class MessagesViewModel : ViewModel() {
 
     private val messageBox: Box<Message> = ObjectBox.store.boxFor(Message::class.java)
 
     private val _messages: MutableLiveData<MutableList<Message>> by lazy {
-        MutableLiveData<MutableList<Message>>(loadMessages())
+        MutableLiveData<MutableList<Message>>()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     val messages: MutableLiveData<MutableList<Message>> = _messages
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -31,7 +27,7 @@ class MessagesViewModel constructor(
         _messages.value = (_messages.value)?.let { mutableListOf(*it.toTypedArray(), message) }
     }
 
-    fun getLastMessage(): Message? {
+    fun getLastMessage(channel: String): Message? {
         val query =
             messageBox.query().equal(Message_.channel, channel).orderDesc(Message_.id).build()
         val result = query.findFirst()
@@ -40,12 +36,14 @@ class MessagesViewModel constructor(
         return result
     }
 
-    private fun loadMessages(): MutableList<Message> {
-        val query = messageBox.query().equal(Message_.channel, channel).build()
-        val results = query.find()
+    fun getMessagesByChannel(channel: String) {
+        val query =
+            messageBox.query().equal(Message_.channel, channel).order(Message_.created_at)
+                .build()
+        val result = query.find()
         query.close()
 
-        return results
+        _messages.value = result
     }
 
 }
