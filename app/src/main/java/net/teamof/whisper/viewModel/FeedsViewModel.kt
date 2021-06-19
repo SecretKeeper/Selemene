@@ -3,11 +3,13 @@ package net.teamof.whisper.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import net.teamof.whisper.models.Comment
 import net.teamof.whisper.models.Feed
+import javax.inject.Inject
 
-class FeedsViewModel : ViewModel() {
-
+@HiltViewModel
+class FeedsViewModel @Inject constructor() : ViewModel() {
     private val _feeds = MutableLiveData(
         listOf(
             Feed(
