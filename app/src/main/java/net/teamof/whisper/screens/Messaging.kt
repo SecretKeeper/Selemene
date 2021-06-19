@@ -23,7 +23,6 @@ import net.teamof.whisper.components.messaging.MessagingFooter
 import net.teamof.whisper.components.messaging.MessagingHeader
 import net.teamof.whisper.models.Message
 import net.teamof.whisper.viewModel.MessagesViewModel
-import net.teamof.whisper.viewModel.MessagesViewModelFactory
 
 
 @ExperimentalFoundationApi
@@ -34,11 +33,10 @@ import net.teamof.whisper.viewModel.MessagesViewModelFactory
 fun Messaging(
     navController: NavController,
     channel: String,
+    messagesViewModel: MessagesViewModel = viewModel()
 ) {
 
-    val messagesViewModel: MessagesViewModel =
-        viewModel(factory = MessagesViewModelFactory(channel))
-
+    messagesViewModel.getMessagesByChannel(channel)
     val messages: List<Message> by messagesViewModel.messages.observeAsState(listOf())
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
 
