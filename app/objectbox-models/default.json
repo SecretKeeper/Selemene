@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "2:7257094491745078530",
-      "lastPropertyId": "7:1604630531612991706",
+      "lastPropertyId": "8:5427986465695470770",
       "name": "Message",
       "properties": [
         {
@@ -39,6 +39,11 @@
           "id": "7:1604630531612991706",
           "name": "updated_at",
           "type": 10
+        },
+        {
+          "id": "8:5427986465695470770",
+          "name": "type",
+          "type": 9
         }
       ],
       "relations": []
