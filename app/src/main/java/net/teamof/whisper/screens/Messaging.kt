@@ -14,7 +14,6 @@ import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import net.teamof.whisper.components.Message
@@ -33,7 +32,7 @@ import net.teamof.whisper.viewModel.MessagesViewModel
 fun Messaging(
     navController: NavController,
     channel: String,
-    messagesViewModel: MessagesViewModel = viewModel()
+    messagesViewModel: MessagesViewModel
 ) {
 
     messagesViewModel.getMessagesByChannel(channel)
