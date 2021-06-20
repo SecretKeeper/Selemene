@@ -4,12 +4,18 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.objectbox.Box
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import net.teamof.whisper.ObjectBox
 import net.teamof.whisper.models.Message
 import net.teamof.whisper.models.Message_
+import okhttp3.WebSocket
+import javax.inject.Inject
 
-class MessagesViewModel : ViewModel() {
+@HiltViewModel
+class MessagesViewModel @Inject constructor(private val WebSocket: WebSocket) : ViewModel() {
 
     private val messageBox: Box<Message> = ObjectBox.store.boxFor(Message::class.java)
 
@@ -25,6 +31,8 @@ class MessagesViewModel : ViewModel() {
         messageBox.put((message))
 
         _messages.value = (_messages.value)?.let { mutableListOf(*it.toTypedArray(), message) }
+
+        WebSocket.send(Json.encodeToString(message))
     }
 
     fun getLastMessage(channel: String): Message? {
