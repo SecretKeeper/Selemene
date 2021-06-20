@@ -118,8 +118,8 @@ fun Message(
                         shape = RoundedCornerShape(
                             topStart = 25.dp,
                             topEnd = 25.dp,
-                            bottomStart = 25.dp,
-                            bottomEnd = 2.dp
+                            bottomStart = if (isOwnMessage) 25.dp else 2.dp,
+                            bottomEnd = if (isOwnMessage) 2.dp else 25.dp
                         )
                     )
                     .background(if (isOwnMessage) MaterialTheme.colors.primary else Color(0xfff7f8f7))
