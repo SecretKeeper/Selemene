@@ -10,17 +10,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import net.teamof.whisper.components.Conversation
 import net.teamof.whisper.models.Conversation
 import net.teamof.whisper.viewModel.ConversationsViewModel
+import net.teamof.whisper.viewModel.MessagesViewModel
 
 @ExperimentalMaterialApi
 @Composable
 fun Conversations(
     navController: NavController,
-    conversationsViewModel: ConversationsViewModel = viewModel(),
+    conversationsViewModel: ConversationsViewModel,
+    messagesViewModel: MessagesViewModel
 ) {
 
     val conversations: List<Conversation> by conversationsViewModel.conversations.observeAsState(
@@ -33,7 +34,11 @@ fun Conversations(
             .verticalScroll(rememberScrollState())
     ) {
         conversations.forEachIndexed { _, conversation ->
-            Conversation(conversation, navController)
+            Conversation(
+                conversation,
+                navController,
+                messagesViewModel.getLastMessage(conversation.channel)
+            )
         }
     }
 }
