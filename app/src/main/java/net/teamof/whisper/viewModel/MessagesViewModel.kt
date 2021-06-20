@@ -15,7 +15,7 @@ import okhttp3.WebSocket
 import javax.inject.Inject
 
 @HiltViewModel
-class MessagesViewModel @Inject constructor(private val WebSocket: WebSocket) : ViewModel() {
+class MessagesViewModel @Inject constructor(private val WebSocket: WebSocket?) : ViewModel() {
 
     private val messageBox: Box<Message> = ObjectBox.store.boxFor(Message::class.java)
 
@@ -32,7 +32,7 @@ class MessagesViewModel @Inject constructor(private val WebSocket: WebSocket) : 
 
         _messages.value = (_messages.value)?.let { mutableListOf(*it.toTypedArray(), message) }
 
-        WebSocket.send(Json.encodeToString(message))
+        WebSocket?.send(Json.encodeToString(message))
     }
 
     fun getLastMessage(channel: String): Message? {
