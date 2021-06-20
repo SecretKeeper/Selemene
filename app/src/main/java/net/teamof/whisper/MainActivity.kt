@@ -14,12 +14,17 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.AndroidEntryPoint
 import net.teamof.whisper.screens.MainScreen
+import okhttp3.WebSocket
+import javax.inject.Inject
 
 val Context.dataStore: DataStore<Preferences>
         by preferencesDataStore(name = "datastore")
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var WebSocket: WebSocket
 
     @ExperimentalAnimationApi
     @ExperimentalFoundationApi
