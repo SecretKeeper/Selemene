@@ -17,7 +17,9 @@ import net.teamof.whisper.components.BottomAppBar
 import net.teamof.whisper.components.FloatingActionButton
 import net.teamof.whisper.ui.theme.WhisperTheme
 import net.teamof.whisper.utils.EchoWebSocketListener
+import net.teamof.whisper.viewModel.ConversationsViewModel
 import net.teamof.whisper.viewModel.FeedsViewModel
+import net.teamof.whisper.viewModel.MessagesViewModel
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
@@ -67,23 +69,28 @@ fun MainScreen(
 @Composable
 private fun MainScreenNavigationConfigurations(navController: NavHostController) {
 
+    val messagesViewModel = hiltViewModel<MessagesViewModel>()
+    val conversationsViewModel = hiltViewModel<ConversationsViewModel>()
+
     NavHost(
         navController = navController,
         startDestination = "Conversations"
     ) {
         composable("Conversations") {
-            Conversations(navController)
+            Conversations(navController, conversationsViewModel, messagesViewModel)
         }
         composable(
             "Messaging"
                 .plus("/{channel}")
         ) { backStackEntry ->
+
             Messaging(
                 navController,
-                channel = backStackEntry.arguments?.getString("channel")!!
+                channel = backStackEntry.arguments?.getString("channel")!!,
+                messagesViewModel
             )
         }
-        composable("Feeds") { backStackEntry ->
+        composable("Feeds") {
             val feedsViewModel = hiltViewModel<FeedsViewModel>()
             Feeds(feedsViewModel)
         }
