@@ -15,13 +15,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.transform.CircleCropTransformation
 import com.google.accompanist.coil.rememberCoilPainter
 import net.teamof.whisper.models.Conversation
+import net.teamof.whisper.models.Message
 import net.teamof.whisper.ui.theme.fontFamily
-import net.teamof.whisper.viewModel.MessagesViewModel
 import org.ocpsoft.prettytime.PrettyTime
 
 @ExperimentalMaterialApi
@@ -29,11 +28,10 @@ import org.ocpsoft.prettytime.PrettyTime
 fun Conversation(
     conversation: Conversation,
     navController: NavController,
-    messagesViewModel: MessagesViewModel = viewModel()
+    lastMessage: Message?
 ) {
 
     val cachedConversation = remember(conversation) { mutableStateOf(conversation) }
-    val lastMessage = messagesViewModel.getLastMessage(conversation.channel)
 
     Card(
         onClick = { navController.navigate("Messaging/${cachedConversation.value.channel}") },
