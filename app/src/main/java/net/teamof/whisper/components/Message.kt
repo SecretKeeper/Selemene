@@ -45,8 +45,6 @@ fun Message(
     val isOwnMessage = data.user_id == currentUserId
     val messageSelected = remember { mutableStateOf(false) }
 
-    println("Current user id $currentUserId")
-
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
