@@ -12,6 +12,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import net.teamof.whisper.R
+import net.teamof.whisper.ui.theme.BottomNavigationHeight
+import net.teamof.whisper.ui.theme.BottomNavigationIconSize
 
 sealed class NavItem(
     val route: String,
@@ -65,12 +67,12 @@ fun BottomAppBar(navController: NavController) {
         backgroundColor = Color(red = 245, green = 245, blue = 253),
         elevation = 0.dp,
         contentPadding = PaddingValues(horizontal = 0.dp, vertical = 0.dp),
-        modifier = Modifier.height(65.dp)
+        modifier = Modifier.height(BottomNavigationHeight)
     ) {
         BottomNavigation(
             backgroundColor = Color(red = 245, green = 245, blue = 253),
             elevation = 0.dp,
-            modifier = Modifier.height(65.dp)
+            modifier = Modifier.height(BottomNavigationHeight)
         ) {
 
             val currentRoute = navController.currentBackStackEntry?.destination?.route
@@ -106,16 +108,16 @@ fun FloatingActionButton(navController: NavController) {
         },
         backgroundColor = MaterialTheme.colors.primary,
         modifier = Modifier
-            .offset(Dp(0F), Dp(33F))
-            .size(45.dp),
+            .offset(Dp(0F), Dp(30F))
+            .size(40.dp),
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_add),
             contentDescription = null,
             tint = Color.White,
             modifier = Modifier
-                .width(25.dp)
-                .height(25.dp)
+                .width(BottomNavigationIconSize)
+                .height(BottomNavigationIconSize)
         )
     }
 }
