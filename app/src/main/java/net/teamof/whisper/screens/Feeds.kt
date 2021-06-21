@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import net.teamof.whisper.components.Feed
 import net.teamof.whisper.models.Feed
+import net.teamof.whisper.ui.theme.BottomNavigationHeight
 import net.teamof.whisper.viewModel.FeedsViewModel
 
 @Composable
@@ -22,7 +23,7 @@ fun Feeds(feedsViewModel: FeedsViewModel) {
     LazyColumn(
         Modifier
             .background(Color(red = 245, green = 245, blue = 253))
-            .padding(top = 70.dp, bottom = 70.dp, start = 15.dp, end = 15.dp)
+            .padding(top = 70.dp, bottom = BottomNavigationHeight, start = 15.dp, end = 15.dp)
     ) {
         itemsIndexed(feeds) { _, item ->
             Feed(item)
