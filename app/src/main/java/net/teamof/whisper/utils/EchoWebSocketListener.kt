@@ -28,11 +28,14 @@ class EchoWebSocketListener :
         webSocket = _webSocket
         val data = Message(
             1,
+            "message",
             "Sylvanas Channel",
             2,
             "Sylvanas",
             Date(),
+            Date(),
         )
+        println(Json.encodeToString(data))
         _webSocket.send(
             Json.encodeToString(data)
         )
