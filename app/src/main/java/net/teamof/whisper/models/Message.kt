@@ -2,6 +2,7 @@ package net.teamof.whisper.models
 
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
+import kotlinx.serialization.Required
 import kotlinx.serialization.Serializable
 import net.teamof.whisper.utils.DateAsStringSerializer
 import java.util.*
@@ -11,6 +12,8 @@ import java.util.*
 data class Message(
     @Id
     var id: Long = 0,
+    @Required
+    var type: String = "message",
     var channel: String = "",
     var user_id: Long = 0,
     var content: String = "",
@@ -18,5 +21,4 @@ data class Message(
     var created_at: Date = Date(),
     @Serializable(with = DateAsStringSerializer::class)
     var updated_at: Date? = null,
-    var type: String? = "message",
 )

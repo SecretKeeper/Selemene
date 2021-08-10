@@ -33,8 +33,6 @@ class EchoWebSocketListener :
         val conversationsArray = arrayListOf<String>()
         conversationBox.all.map { conversation -> conversationsArray.add(conversation.channel) }
 
-
-
         webSocket.send(
             Json.encodeToString(
                 WSSubscribeChannels(

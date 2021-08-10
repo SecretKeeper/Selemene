@@ -9,10 +9,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import net.teamof.whisper.components.Conversation
 import net.teamof.whisper.models.Conversation
+import net.teamof.whisper.ui.theme.BottomNavigationHeight
 import net.teamof.whisper.viewModel.ConversationsViewModel
 import net.teamof.whisper.viewModel.MessagesViewModel
 
@@ -30,7 +30,7 @@ fun Conversations(
 
     Column(
         Modifier
-            .padding(bottom = 70.dp)
+            .padding(bottom = BottomNavigationHeight)
             .verticalScroll(rememberScrollState())
     ) {
         conversations.forEachIndexed { _, conversation ->
