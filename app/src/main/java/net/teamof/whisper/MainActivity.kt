@@ -24,7 +24,7 @@ val Context.dataStore: DataStore<Preferences>
 class MainActivity : ComponentActivity() {
 
     @Inject
-    lateinit var WebSocket: WebSocket
+    lateinit var webSocket: WebSocket
 
     @ExperimentalAnimationApi
     @ExperimentalFoundationApi
