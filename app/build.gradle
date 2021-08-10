@@ -82,7 +82,7 @@ dependencies {
     implementation 'androidx.hilt:hilt-navigation-compose:1.0.0-alpha03'
 
     // Datastore
-    implementation("androidx.datastore:datastore-preferences:1.0.0-rc02")
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     // Navigation Compose
     implementation "androidx.navigation:navigation-compose:2.4.0-alpha05"
