@@ -1,16 +1,18 @@
 package net.teamof.whisper.utils
 
+import io.objectbox.Box
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import net.teamof.whisper.models.Message
+import net.teamof.whisper.ObjectBox
+import net.teamof.whisper.models.Conversation
+import net.teamof.whisper.models.WSSubscribeChannels
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import okio.ByteString
-import java.util.*
 
 
 @OptIn(DelicateCoroutinesApi::class)
@@ -19,26 +21,28 @@ class EchoWebSocketListener :
 
     private val webSocketMessageParser = WebSocketMessageParser()
 
+    private val conversationBox: Box<Conversation> =
+        ObjectBox.store.boxFor(Conversation::class.java)
+
     companion object {
         var webSocket: WebSocket? = null
         val NORMAL_CLOSURE_STATUS = 1000
     }
 
-    override fun onOpen(_webSocket: WebSocket, response: Response) {
-        webSocket = _webSocket
-        val data = Message(
-            1,
-            "message",
-            "Sylvanas Channel",
-            2,
-            "Sylvanas",
-            Date(),
-            Date(),
+    override fun onOpen(webSocket: WebSocket, response: Response) {
+        val conversationsArray = arrayListOf<String>()
+        conversationBox.all.map { conversation -> conversationsArray.add(conversation.channel) }
+
+        webSocket.send(
+            Json.encodeToString(
+                WSSubscribeChannels(
+                    8,
+                    "subscribe-channels",
+                    conversationsArray
+                )
+            )
         )
-        println(Json.encodeToString(data))
-        _webSocket.send(
-            Json.encodeToString(data)
-        )
+
     }
 
     override fun onMessage(webSocket: WebSocket, text: String) {
