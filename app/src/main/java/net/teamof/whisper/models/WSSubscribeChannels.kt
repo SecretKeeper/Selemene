@@ -1,8 +1,8 @@
 package net.teamof.whisper.models
 
-import kotlinx.serialization.Serializable
+import com.squareup.moshi.JsonClass
 
-@Serializable
+@JsonClass(generateAdapter = true)
 class WSSubscribeChannels(
     val userId: Long,
     val type: String,
