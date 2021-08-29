@@ -4,13 +4,13 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.squareup.moshi.Moshi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.objectbox.Box
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import net.teamof.whisper.ObjectBox
 import net.teamof.whisper.models.Message
 import net.teamof.whisper.models.Message_
+import net.teamof.whisper.utils.DateMoshiAdapter
 import okhttp3.WebSocket
 import javax.inject.Inject
 
@@ -18,6 +18,9 @@ import javax.inject.Inject
 class MessagesViewModel @Inject constructor(private val WebSocket: WebSocket?) : ViewModel() {
 
     private val messageBox: Box<Message> = ObjectBox.store.boxFor(Message::class.java)
+
+    private val moshiMessageAdapter =
+        Moshi.Builder().add(DateMoshiAdapter::class.java).build().adapter(Message::class.java)
 
     private val _messages: MutableLiveData<MutableList<Message>> by lazy {
         MutableLiveData<MutableList<Message>>()
@@ -32,7 +35,7 @@ class MessagesViewModel @Inject constructor(private val WebSocket: WebSocket?) :
 
         _messages.value = (_messages.value)?.let { mutableListOf(*it.toTypedArray(), message) }
 
-        WebSocket?.send(Json.encodeToString(message))
+        WebSocket?.send(moshiMessageAdapter.toJson(message))
     }
 
     fun getLastMessage(channel: String): Message? {
