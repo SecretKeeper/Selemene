@@ -16,6 +16,6 @@ data class Message(
     @Json(name = "userId")
     var user_id: Long = 0,
     var content: String = "",
-    var created_at: Date? = Date(),
+    var created_at: Date = Date(),
     var updated_at: Date? = null,
 )
