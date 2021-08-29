@@ -1,24 +1,21 @@
 package net.teamof.whisper.models
 
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
-import kotlinx.serialization.Required
-import kotlinx.serialization.Serializable
-import net.teamof.whisper.utils.DateAsStringSerializer
 import java.util.*
 
 @Entity
-@Serializable
+@JsonClass(generateAdapter = true)
 data class Message(
     @Id
     var id: Long = 0,
-    @Required
     var type: String = "message",
     var channel: String = "",
+    @Json(name = "userId")
     var user_id: Long = 0,
     var content: String = "",
-    @Serializable(with = DateAsStringSerializer::class)
     var created_at: Date = Date(),
-    @Serializable(with = DateAsStringSerializer::class)
     var updated_at: Date? = null,
 )

@@ -1,11 +1,10 @@
 package net.teamof.whisper.utils
 
+import com.squareup.moshi.Moshi
 import io.objectbox.Box
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import net.teamof.whisper.ObjectBox
 import net.teamof.whisper.models.Conversation
 import net.teamof.whisper.models.WSSubscribeChannels
@@ -18,6 +17,8 @@ import okio.ByteString
 @OptIn(DelicateCoroutinesApi::class)
 class EchoWebSocketListener :
     WebSocketListener() {
+
+    private val moshi = Moshi.Builder().add(DateMoshiAdapter()).build()
 
     private val webSocketMessageParser = WebSocketMessageParser()
 
@@ -32,9 +33,12 @@ class EchoWebSocketListener :
     override fun onOpen(webSocket: WebSocket, response: Response) {
         val conversationsArray = arrayListOf<String>()
         conversationBox.all.map { conversation -> conversationsArray.add(conversation.channel) }
+        val webSocketSubscribeChannelAdapter = moshi.adapter(WSSubscribeChannels::class.java)
+
+
 
         webSocket.send(
-            Json.encodeToString(
+            webSocketSubscribeChannelAdapter.toJson(
                 WSSubscribeChannels(
                     8,
                     "subscribe-channels",
