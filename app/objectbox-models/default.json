@@ -94,7 +94,7 @@
     },
     {
       "id": "3:3128264116680711531",
-      "lastPropertyId": "7:1378642706731205244",
+      "lastPropertyId": "9:2262417395547335001",
       "name": "Message",
       "properties": [
         {
@@ -107,12 +107,6 @@
           "id": "2:3705537365674406439",
           "name": "channel",
           "type": 9
-        },
-        {
-          "id": "3:5583732498012580917",
-          "name": "user_id",
-          "type": 6,
-          "flags": 4
         },
         {
           "id": "4:8273373174561413203",
@@ -133,6 +127,12 @@
           "id": "7:1378642706731205244",
           "name": "type",
           "type": 9
+        },
+        {
+          "id": "9:2262417395547335001",
+          "name": "user_id",
+          "type": 6,
+          "flags": 4
         }
       ],
       "relations": []
@@ -146,7 +146,10 @@
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
   "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredPropertyUids": [
+    5583732498012580917,
+    6563532819976462949
+  ],
   "retiredRelationUids": [],
   "version": 1
 }
