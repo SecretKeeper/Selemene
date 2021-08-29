@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.objectbox.Box
 import net.teamof.whisper.ObjectBox
@@ -12,6 +13,7 @@ import net.teamof.whisper.models.Message
 import net.teamof.whisper.models.Message_
 import net.teamof.whisper.utils.DateMoshiAdapter
 import okhttp3.WebSocket
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,7 +22,10 @@ class MessagesViewModel @Inject constructor(private val WebSocket: WebSocket?) :
     private val messageBox: Box<Message> = ObjectBox.store.boxFor(Message::class.java)
 
     private val moshiMessageAdapter =
-        Moshi.Builder().add(DateMoshiAdapter::class.java).build().adapter(Message::class.java)
+        Moshi.Builder()
+            .add(Date::class.java, DateMoshiAdapter().nullSafe())
+            .addLast(KotlinJsonAdapterFactory())
+            .build().adapter(Message::class.java)
 
     private val _messages: MutableLiveData<MutableList<Message>> by lazy {
         MutableLiveData<MutableList<Message>>()
