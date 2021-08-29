@@ -4,10 +4,8 @@ import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
 import io.objectbox.annotation.Index
 import io.objectbox.annotation.Unique
-import kotlinx.serialization.Serializable
 
 @Entity
-@Serializable
 data class Contact(
     @Id
     var id: Long = 0,
