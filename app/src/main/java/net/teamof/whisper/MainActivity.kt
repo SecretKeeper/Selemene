@@ -14,8 +14,6 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.AndroidEntryPoint
 import net.teamof.whisper.screens.MainScreen
-import okhttp3.WebSocket
-import javax.inject.Inject
 
 val Context.dataStore: DataStore<Preferences>
         by preferencesDataStore(name = "datastore")
@@ -23,12 +21,11 @@ val Context.dataStore: DataStore<Preferences>
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    @Inject
-    lateinit var webSocket: WebSocket
-
-    @ExperimentalAnimationApi
-    @ExperimentalFoundationApi
-    @ExperimentalMaterialApi
+    @OptIn(
+        ExperimentalAnimationApi::class,
+        ExperimentalFoundationApi::class,
+        ExperimentalMaterialApi::class
+    )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
