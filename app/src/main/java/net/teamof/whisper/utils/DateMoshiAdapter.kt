@@ -5,6 +5,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class DateMoshiAdapter : JsonAdapter<Date>() {
+
+    companion object {
+        const val SERVER_FORMAT = ("yyyy-MM-dd HH:mm:ss.SSS")
+    }
+
     private val dateFormat = SimpleDateFormat(SERVER_FORMAT, Locale.getDefault())
 
     @FromJson
@@ -26,9 +31,5 @@ class DateMoshiAdapter : JsonAdapter<Date>() {
                 writer.value(value.toString())
             }
         }
-    }
-
-    companion object {
-        const val SERVER_FORMAT = ("yyyy-MM-dd'T'HH:mm") // define your server format here
     }
 }
