@@ -117,7 +117,7 @@ fun MessagingFooter(
                 if (text.value.isNotEmpty()) {
 
                     val message = Message(
-                        user_id = 1,
+                        user_id = 6,
                         channel = channel,
                         content = text.value,
                         created_at = Date()
