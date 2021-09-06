@@ -35,14 +35,14 @@ import net.teamof.whisper.viewModel.ConversationsViewModel
 @Composable
 fun MessagingHeader(
     navController: NavController,
-    channel: String,
+    to_user_id: Long,
     selection: MutableState<Boolean>,
     conversationsViewModel: ConversationsViewModel = viewModel(),
 ) {
 
     val interactionSource = remember { MutableInteractionSource() }
     val expanded = remember { mutableStateOf(false) }
-    val conversation = conversationsViewModel.getConversation(channel)
+    val conversation = conversationsViewModel.getConversation(to_user_id)
 
     Column(Modifier.height(75.dp)) {
         AnimatedVisibility(visible = !selection.value) {
