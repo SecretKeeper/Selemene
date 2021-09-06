@@ -27,7 +27,7 @@ import net.teamof.whisper.viewModel.MessagesViewModel
 fun MainScreen(
 ) {
     val navController = rememberNavController()
-    val disabledNavScreens = listOf("Messaging/{channel}", "Profile", "Contacts/{action}")
+    val disabledNavScreens = listOf("Messaging/{to_user_id}", "Profile", "Contacts/{action}")
 
     WhisperTheme {
         Scaffold(
@@ -71,12 +71,12 @@ private fun MainScreenNavigationConfigurations(navController: NavHostController)
         }
         composable(
             "Messaging"
-                .plus("/{channel}")
+                .plus("/{to_user_id}")
         ) { backStackEntry ->
 
             Messaging(
                 navController,
-                channel = backStackEntry.arguments?.getString("channel")!!,
+                to_user_id = backStackEntry.arguments?.getLong("to_user_id")!!,
                 messagesViewModel
             )
         }
