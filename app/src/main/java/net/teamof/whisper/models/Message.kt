@@ -11,8 +11,8 @@ data class Message(
     @Id
     var id: Long = 0,
     var type: String = "message",
-    var channel: String = "",
     var user_id: Long = 0,
+    var to_user_id: Long = 0,
     var content: String = "",
     var created_at: Date = Date(),
     var updated_at: Date? = null,
