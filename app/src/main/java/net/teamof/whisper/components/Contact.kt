@@ -25,7 +25,6 @@ import net.teamof.whisper.models.Contact
 import net.teamof.whisper.models.Conversation
 import net.teamof.whisper.viewModel.ConversationsViewModel
 import net.teamof.whisper.viewModel.UserViewModel
-import java.util.*
 
 @ExperimentalMaterialApi
 @Composable
@@ -49,20 +48,15 @@ fun Contact(
             when (action) {
                 "CreateGroup" -> checked = !checked
                 "Messaging" -> {
-                    val channelUUID: String = UUID.nameUUIDFromBytes(
-                        (currentUserId.value.toString() + data.user_id).toByteArray()
-                    ).toString()
-
                     conversationsViewModel.createConversation(
                         Conversation(
-                            channel = channelUUID,
-                            user_id = data.user_id,
+                            to_user_id = data.user_id,
                             username = data.username,
                             user_image = data.user_image,
                         )
                     )
 
-                    navController.navigate("Messaging/$channelUUID")
+                    navController.navigate("Messaging/${data.user_id}")
                 }
             }
         }) {
