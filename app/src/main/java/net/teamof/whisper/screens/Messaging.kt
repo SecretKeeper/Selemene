@@ -15,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.launch
 import net.teamof.whisper.components.Message
 import net.teamof.whisper.components.messaging.MessagingAttachSource
@@ -24,6 +25,7 @@ import net.teamof.whisper.models.Message
 import net.teamof.whisper.viewModel.MessagesViewModel
 
 
+@OptIn(DelicateCoroutinesApi::class)
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @ExperimentalAnimationApi
@@ -31,11 +33,11 @@ import net.teamof.whisper.viewModel.MessagesViewModel
 @Composable
 fun Messaging(
     navController: NavController,
-    channel: String,
+    to_user_id: Long,
     messagesViewModel: MessagesViewModel
 ) {
 
-    messagesViewModel.getMessagesByChannel(channel)
+    messagesViewModel.getMessagesByChannel(to_user_id)
     val messages: List<Message> by messagesViewModel.messages.observeAsState(listOf())
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
 
@@ -54,7 +56,7 @@ fun Messaging(
     ) {
 
         Column {
-            MessagingHeader(navController, channel, selection)
+            MessagingHeader(navController, to_user_id, selection)
             Column(Modifier.weight(1f)) {
                 Column(
                     Modifier.verticalScroll(
@@ -71,7 +73,7 @@ fun Messaging(
                     }
                 }
             }
-            MessagingFooter(bottomSheetState, messagesViewModel, channel)
+            MessagingFooter(bottomSheetState, messagesViewModel)
         }
     }
 }
