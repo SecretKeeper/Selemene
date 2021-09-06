@@ -39,8 +39,7 @@ import java.util.*
 @Composable
 fun MessagingFooter(
     bottomSheetState: ModalBottomSheetState,
-    messagesViewModel: MessagesViewModel,
-    channel: String
+    messagesViewModel: MessagesViewModel
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -118,7 +117,7 @@ fun MessagingFooter(
 
                     val message = Message(
                         user_id = 6,
-                        channel = channel,
+                        to_user_id = 7,
                         content = text.value,
                         created_at = Date()
                     )
