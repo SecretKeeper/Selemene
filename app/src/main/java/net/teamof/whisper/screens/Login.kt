@@ -6,6 +6,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -17,21 +18,28 @@ import net.teamof.whisper.viewModel.UserViewModel
 @Composable()
 fun LoginScreen(userViewModel: UserViewModel, navController: NavController) {
 
+    val currentUserId = userViewModel.getUserID().observeAsState()
+
     val composableScope = rememberCoroutineScope()
-    val setUserId = remember { mutableStateOf(0) }
+    val setUserId =
+        remember { mutableStateOf(if (currentUserId.value != null) currentUserId.value else 0) }
 
     Column {
         Text(text = "It's Login Form")
+        Text(text = currentUserId.value.toString())
         TextField(
             value = setUserId.value.toString(),
-            onValueChange = { setUserId.value = it.toInt() },
+            onValueChange = { setUserId.value = it.toLong() },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number
             ),
         )
         TextButton(onClick = {
-            composableScope.launch { userViewModel.setUserID(setUserId.value.toLong()) }
-            navController.navigate("Conversations")
+            composableScope.launch { setUserId.value?.let { userViewModel.setUserID(it) } }
+            navController.navigate("Conversations") {
+                launchSingleTop = true
+                popUpTo("Login") { inclusive = true }
+            }
         }) {
             Text(text = "Go to first destination")
         }
