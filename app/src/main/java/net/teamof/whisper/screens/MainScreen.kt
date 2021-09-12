@@ -7,6 +7,7 @@ import androidx.compose.material.FabPosition
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -19,6 +20,7 @@ import net.teamof.whisper.ui.theme.WhisperTheme
 import net.teamof.whisper.viewModel.ConversationsViewModel
 import net.teamof.whisper.viewModel.FeedsViewModel
 import net.teamof.whisper.viewModel.MessagesViewModel
+import net.teamof.whisper.viewModel.UserViewModel
 
 @ExperimentalAnimationApi
 @ExperimentalFoundationApi
@@ -59,13 +61,20 @@ fun MainScreen(
 @Composable
 private fun MainScreenNavigationConfigurations(navController: NavHostController) {
 
+    val userViewModel = hiltViewModel<UserViewModel>()
     val messagesViewModel = hiltViewModel<MessagesViewModel>()
     val conversationsViewModel = hiltViewModel<ConversationsViewModel>()
 
+    val currentUserId = userViewModel.getUserID()
+        .observeAsState().value
+
     NavHost(
         navController = navController,
-        startDestination = "Conversations"
+        startDestination = if (currentUserId == null) "Login" else "Conversations"
     ) {
+        composable("Login") {
+            LoginScreen(userViewModel, navController)
+        }
         composable("Conversations") {
             Conversations(navController, conversationsViewModel, messagesViewModel)
         }
