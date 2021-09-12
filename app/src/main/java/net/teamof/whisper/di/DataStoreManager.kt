@@ -7,11 +7,12 @@ import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Singleton
 
 private val Context.dataStore by preferencesDataStore("settings")
 
+@Singleton
 class DataStoreManager @Inject constructor(@ApplicationContext private val context: Context) {
 
     private val settingsDataStore = context.dataStore
@@ -23,13 +24,10 @@ class DataStoreManager @Inject constructor(@ApplicationContext private val conte
             preferences[longPreferencesKey("user_id")] ?: 0
         }
 
-        Timber.d("FROM VIEWMODEL $id")
-
         return id
     }
 
     suspend fun setUserId(userId: Long) {
-        Timber.d("F from Datacenters: $userId")
         settingsDataStore.edit { datastore ->
             datastore[longPreferencesKey("user_id")] = userId
         }
