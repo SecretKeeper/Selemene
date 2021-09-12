@@ -41,7 +41,7 @@ fun Message(
     userViewModel: UserViewModel = viewModel()
 ) {
 
-    val currentUserId = userViewModel.userId.observeAsState().value
+    val currentUserId = userViewModel.getUserID().observeAsState().value
     val isOwnMessage = data.user_id == currentUserId
     val messageSelected = remember { mutableStateOf(false) }
 
