@@ -2,6 +2,7 @@ package net.teamof.whisper.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.tinder.scarlet.WebSocket
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,6 +12,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import net.teamof.whisper.ObjectBox
+import net.teamof.whisper.di.DataStoreManager
 import net.teamof.whisper.models.Message
 import net.teamof.whisper.models.Message_
 import net.teamof.whisper.models.WSSubscribeChannels
@@ -21,10 +23,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MessagesViewModel
-@Inject constructor(private val scarletMessagingService: ScarletMessagingService) :
+@Inject constructor(
+    private val scarletMessagingService: ScarletMessagingService,
+    dataStoreManager: DataStoreManager
+) :
     ViewModel() {
 
     init {
+
+        val loggedUserId = dataStoreManager.getUserId().asLiveData()
+
         scarletMessagingService.observeWebSocket()
             .flowOn(Dispatchers.IO)
             .onEach { event ->
@@ -33,7 +41,7 @@ class MessagesViewModel
                         WSSubscribeChannels(
                             8,
                             "subscribe-channels",
-                            arrayListOf("OK", "Qwerty")
+                            arrayListOf(loggedUserId.value.toString())
                         )
                     )
                 }
