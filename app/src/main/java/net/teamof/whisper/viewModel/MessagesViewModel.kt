@@ -2,9 +2,7 @@ package net.teamof.whisper.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.tinder.scarlet.WebSocket
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.objectbox.Box
 import kotlinx.coroutines.Dispatchers
@@ -12,10 +10,8 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import net.teamof.whisper.ObjectBox
-import net.teamof.whisper.di.DataStoreManager
 import net.teamof.whisper.models.Message
 import net.teamof.whisper.models.Message_
-import net.teamof.whisper.models.WSSubscribeChannels
 import net.teamof.whisper.utils.ScarletMessagingService
 import timber.log.Timber
 import java.util.*
@@ -24,30 +20,11 @@ import javax.inject.Inject
 @HiltViewModel
 class MessagesViewModel
 @Inject constructor(
-    private val scarletMessagingService: ScarletMessagingService,
-    dataStoreManager: DataStoreManager
+    private val scarletMessagingService: ScarletMessagingService
 ) :
     ViewModel() {
 
     init {
-
-        val loggedUserId = dataStoreManager.getUserId().asLiveData()
-
-        scarletMessagingService.observeWebSocket()
-            .flowOn(Dispatchers.IO)
-            .onEach { event ->
-                if (event is WebSocket.Event.OnConnectionOpened<*>) {
-                    scarletMessagingService.sendSubscribe(
-                        WSSubscribeChannels(
-                            8,
-                            "subscribe-channels",
-                            arrayListOf(loggedUserId.value.toString())
-                        )
-                    )
-                }
-            }
-            .launchIn(viewModelScope)
-
         scarletMessagingService.observeMessage()
             .flowOn(Dispatchers.IO)
             .onEach {
@@ -55,7 +32,6 @@ class MessagesViewModel
                 Timber.d("WTF A MESSAGE FROM SERVER = $it")
             }
             .launchIn(viewModelScope)
-
     }
 
     private val messageBox: Box<Message> = ObjectBox.store.boxFor(Message::class.java)
