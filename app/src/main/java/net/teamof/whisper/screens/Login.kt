@@ -16,7 +16,10 @@ import kotlinx.coroutines.launch
 import net.teamof.whisper.viewModel.UserViewModel
 
 @Composable()
-fun LoginScreen(userViewModel: UserViewModel, navController: NavController) {
+fun LoginScreen(
+    userViewModel: UserViewModel,
+    navController: NavController
+) {
 
     val currentUserId = userViewModel.getUserID().observeAsState()
 
@@ -35,7 +38,11 @@ fun LoginScreen(userViewModel: UserViewModel, navController: NavController) {
             ),
         )
         TextButton(onClick = {
-            composableScope.launch { setUserId.value?.let { userViewModel.setUserID(it) } }
+
+            composableScope.launch {
+                setUserId.value?.let { userViewModel.authenticate(it) }
+            }
+
             navController.navigate("Conversations") {
                 launchSingleTop = true
                 popUpTo("Login") { inclusive = true }
