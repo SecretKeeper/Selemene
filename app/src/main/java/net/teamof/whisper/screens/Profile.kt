@@ -25,8 +25,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
-import com.google.accompanist.coil.rememberCoilPainter
 import kotlinx.coroutines.launch
 import net.teamof.whisper.R
 import net.teamof.whisper.ui.theme.fontFamily
@@ -43,6 +44,7 @@ val gridImages = listOf(
 )
 
 
+@OptIn(ExperimentalCoilApi::class)
 @ExperimentalAnimationApi
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
@@ -141,8 +143,8 @@ fun Profile(navController: NavController) {
                         Divider(modifier = Modifier.padding(vertical = 15.dp))
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Image(
-                                painter = rememberCoilPainter(request = "https://upload.wikimedia.org/wikipedia/en/thumb/d/d3/Starbucks_Corporation_Logo_2011.svg/1200px-Starbucks_Corporation_Logo_2011.svg.png",
-                                    requestBuilder = { transformations(CircleCropTransformation()) }),
+                                painter = rememberImagePainter(data = "https://upload.wikimedia.org/wikipedia/en/thumb/d/d3/Starbucks_Corporation_Logo_2011.svg/1200px-Starbucks_Corporation_Logo_2011.svg.png",
+                                    builder = { transformations(CircleCropTransformation()) }),
                                 contentDescription = null,
                                 modifier = Modifier
                                     .width(90.dp)
@@ -314,8 +316,8 @@ fun Profile(navController: NavController) {
                         LazyRow() {
                             itemsIndexed(gridImages) { _, image ->
                                 Image(
-                                    painter = rememberCoilPainter(request = image,
-                                        requestBuilder = { transformations(CircleCropTransformation()) }),
+                                    painter = rememberImagePainter(data = image,
+                                        builder = { transformations(CircleCropTransformation()) }),
                                     contentDescription = null,
                                     modifier = Modifier
                                         .width(100.dp)
@@ -355,7 +357,7 @@ fun Profile(navController: NavController) {
         sheetPeekHeight = ((heightDp * 42) / 100).dp,
     ) {
         Image(
-            painter = rememberCoilPainter(request = "https://uupload.ir/files/2fk9_6087f98a3cd34_(2).jpg"),
+            painter = rememberImagePainter(data = "https://uupload.ir/files/2fk9_6087f98a3cd34_(2).jpg"),
             contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth()
