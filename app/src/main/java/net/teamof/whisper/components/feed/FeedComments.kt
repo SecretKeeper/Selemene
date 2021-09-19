@@ -11,8 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
-import com.google.accompanist.coil.rememberCoilPainter
 import net.teamof.whisper.models.Comment
 import net.teamof.whisper.ui.theme.fontFamily
 
@@ -23,6 +24,7 @@ fun FeedComments(comments: List<Comment>) {
     }
 }
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun Comment(
     data: Comment
@@ -40,8 +42,8 @@ fun Comment(
                 .padding(vertical = 10.dp, horizontal = 10.dp)
         ) {
             Image(
-                painter = rememberCoilPainter(request = data.user_image,
-                    requestBuilder = {
+                painter = rememberImagePainter(data = data.user_image,
+                    builder = {
                         transformations(CircleCropTransformation())
                     }
                 ),

@@ -16,13 +16,15 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
-import com.google.accompanist.coil.rememberCoilPainter
 import net.teamof.whisper.models.Conversation
 import net.teamof.whisper.models.Message
 import net.teamof.whisper.ui.theme.fontFamily
 import org.ocpsoft.prettytime.PrettyTime
 
+@OptIn(ExperimentalCoilApi::class)
 @ExperimentalMaterialApi
 @Composable
 fun Conversation(
@@ -45,8 +47,8 @@ fun Conversation(
                 .padding(vertical = 10.dp, horizontal = 10.dp)
         ) {
             Image(
-                painter = rememberCoilPainter(request = cachedConversation.value.user_image,
-                    requestBuilder = {
+                painter = rememberImagePainter(data = cachedConversation.value.user_image,
+                    builder = {
                         transformations(CircleCropTransformation())
                     }
                 ),

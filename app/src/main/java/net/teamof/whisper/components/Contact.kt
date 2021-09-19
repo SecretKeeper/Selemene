@@ -17,13 +17,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
-import com.google.accompanist.coil.rememberCoilPainter
 import net.teamof.whisper.R
 import net.teamof.whisper.models.Contact
 import net.teamof.whisper.models.Conversation
 import net.teamof.whisper.viewModel.ConversationsViewModel
 
+@OptIn(ExperimentalCoilApi::class)
 @ExperimentalMaterialApi
 @Composable
 fun Contact(
@@ -63,8 +65,8 @@ fun Contact(
                 .padding(vertical = 10.dp, horizontal = 10.dp)
         ) {
             Image(
-                painter = rememberCoilPainter(request = data.user_image,
-                    requestBuilder = {
+                painter = rememberImagePainter(data = data.user_image,
+                    builder = {
                         transformations(CircleCropTransformation())
                     }
                 ),

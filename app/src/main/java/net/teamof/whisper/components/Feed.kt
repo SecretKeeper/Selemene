@@ -14,14 +14,16 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
-import com.google.accompanist.coil.rememberCoilPainter
 import net.teamof.whisper.R
 import net.teamof.whisper.components.feed.FeedActions
 import net.teamof.whisper.components.feed.FeedComments
 import net.teamof.whisper.models.Feed
 import net.teamof.whisper.ui.theme.fontFamily
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun Feed(
     data: Feed
@@ -45,8 +47,8 @@ fun Feed(
                     .padding(vertical = 10.dp, horizontal = 10.dp)
             ) {
                 Image(
-                    painter = rememberCoilPainter(request = data.image,
-                        requestBuilder = {
+                    painter = rememberImagePainter(data = data.image,
+                        builder = {
                             transformations(CircleCropTransformation())
                         }
                     ),
@@ -145,8 +147,8 @@ fun Feed(
             }
             data.image?.let {
                 Image(
-                    painter = rememberCoilPainter(
-                        request = data.image,
+                    painter = rememberImagePainter(
+                        data = data.image,
                     ),
                     contentDescription = null,
                     modifier = Modifier

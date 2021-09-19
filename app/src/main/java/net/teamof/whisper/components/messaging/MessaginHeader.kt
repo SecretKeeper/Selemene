@@ -21,13 +21,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
-import com.google.accompanist.coil.rememberCoilPainter
 import kotlinx.coroutines.DelicateCoroutinesApi
 import net.teamof.whisper.R
 import net.teamof.whisper.ui.theme.fontFamily
 import net.teamof.whisper.viewModel.ConversationsViewModel
 
+@OptIn(ExperimentalCoilApi::class)
 @SuppressLint("CoroutineCreationDuringComposition")
 @DelicateCoroutinesApi
 @ExperimentalAnimationApi
@@ -73,8 +75,8 @@ fun MessagingHeader(
                 ) {
                     if (conversation != null) {
                         Image(
-                            painter = rememberCoilPainter(request = conversation.user_image,
-                                requestBuilder = {
+                            painter = rememberImagePainter(data = conversation.user_image,
+                                builder = {
                                     transformations(CircleCropTransformation())
                                 }
                             ),
