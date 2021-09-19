@@ -10,18 +10,20 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberImagePainter
 import coil.size.Scale
-import com.google.accompanist.coil.rememberCoilPainter
 
+@OptIn(ExperimentalCoilApi::class)
 @ExperimentalFoundationApi
 @Composable
 fun BottomSheetGalleryTab(images: List<GalleryImage>) {
     LazyVerticalGrid(cells = GridCells.Adaptive(minSize = 130.dp)) {
         itemsIndexed(images) { _, image ->
             Image(
-                painter = rememberCoilPainter(
-                    request = image.contentUri,
-                    requestBuilder = { scale(Scale.FILL) }),
+                painter = rememberImagePainter(
+                    data = image.contentUri,
+                    builder = { scale(Scale.FILL) }),
                 contentDescription = null,
                 modifier = Modifier
                     .width(130.dp)
