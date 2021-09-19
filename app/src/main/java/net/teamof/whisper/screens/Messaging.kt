@@ -76,7 +76,7 @@ fun Messaging(
                     }
                 }
             }
-            MessagingFooter(bottomSheetState, messagesViewModel, userViewModel)
+            MessagingFooter(bottomSheetState, messagesViewModel, userViewModel, to_user_id.toLong())
         }
     }
 }
