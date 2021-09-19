@@ -23,6 +23,7 @@ import net.teamof.whisper.components.messaging.MessagingFooter
 import net.teamof.whisper.components.messaging.MessagingHeader
 import net.teamof.whisper.models.Message
 import net.teamof.whisper.viewModel.MessagesViewModel
+import net.teamof.whisper.viewModel.UserViewModel
 
 
 @OptIn(DelicateCoroutinesApi::class)
@@ -33,11 +34,12 @@ import net.teamof.whisper.viewModel.MessagesViewModel
 @Composable
 fun Messaging(
     navController: NavController,
-    to_user_id: Long,
-    messagesViewModel: MessagesViewModel
+    to_user_id: String,
+    messagesViewModel: MessagesViewModel,
+    userViewModel: UserViewModel
 ) {
 
-    messagesViewModel.getMessagesByChannel(to_user_id)
+    messagesViewModel.getMessagesByChannel(to_user_id.toLong())
     val messages: List<Message> by messagesViewModel.messages.observeAsState(listOf())
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
 
@@ -56,7 +58,7 @@ fun Messaging(
     ) {
 
         Column {
-            MessagingHeader(navController, to_user_id, selection)
+            MessagingHeader(navController, to_user_id.toLong(), selection)
             Column(Modifier.weight(1f)) {
                 Column(
                     Modifier.verticalScroll(
@@ -66,6 +68,7 @@ fun Messaging(
                 ) {
                     messages.forEach { message ->
                         Message(
+                            userViewModel,
                             message,
                             selection.value,
                             enableSelectionMode = { selection.value = true },
@@ -73,7 +76,7 @@ fun Messaging(
                     }
                 }
             }
-            MessagingFooter(bottomSheetState, messagesViewModel)
+            MessagingFooter(bottomSheetState, messagesViewModel, userViewModel)
         }
     }
 }
