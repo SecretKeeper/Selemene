@@ -41,7 +41,7 @@
     },
     {
       "id": "2:6108935241912101859",
-      "lastPropertyId": "8:6054160153167946938",
+      "lastPropertyId": "11:2812684478443624395",
       "name": "Conversation",
       "properties": [
         {
@@ -49,19 +49,6 @@
           "name": "id",
           "type": 6,
           "flags": 1
-        },
-        {
-          "id": "2:2860788047181631663",
-          "name": "channel",
-          "indexId": "2:3298268397516222208",
-          "type": 9,
-          "flags": 2080
-        },
-        {
-          "id": "3:8276834637445320201",
-          "name": "user_id",
-          "type": 6,
-          "flags": 4
         },
         {
           "id": "4:3896057094681697249",
@@ -88,13 +75,19 @@
           "name": "unread_messages",
           "type": 5,
           "flags": 4
+        },
+        {
+          "id": "11:2812684478443624395",
+          "name": "to_user_id",
+          "type": 6,
+          "flags": 4
         }
       ],
       "relations": []
     },
     {
       "id": "3:3128264116680711531",
-      "lastPropertyId": "11:4432241726793490916",
+      "lastPropertyId": "13:4291245952645482341",
       "name": "Message",
       "properties": [
         {
@@ -102,11 +95,6 @@
           "name": "id",
           "type": 6,
           "flags": 1
-        },
-        {
-          "id": "2:3705537365674406439",
-          "name": "channel",
-          "type": 9
         },
         {
           "id": "4:8273373174561413203",
@@ -133,6 +121,12 @@
           "id": "11:4432241726793490916",
           "name": "updated_at",
           "type": 10
+        },
+        {
+          "id": "12:671810160197366465",
+          "name": "to_user_id",
+          "type": 6,
+          "flags": 4
         }
       ],
       "relations": []
@@ -145,12 +139,20 @@
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
-  "retiredIndexUids": [],
+  "retiredIndexUids": [
+    3298268397516222208
+  ],
   "retiredPropertyUids": [
     5583732498012580917,
     6563532819976462949,
     4100124851985914017,
-    3146547021960886320
+    3146547021960886320,
+    3705537365674406439,
+    4291245952645482341,
+    2860788047181631663,
+    8276834637445320201,
+    1371654557804509791,
+    7084430223924185774
   ],
   "retiredRelationUids": [],
   "version": 1

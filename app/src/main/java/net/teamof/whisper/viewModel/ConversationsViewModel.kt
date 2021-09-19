@@ -27,15 +27,15 @@ class ConversationsViewModel @Inject constructor() : ViewModel() {
 
     private fun isConversationExist(conversation: Conversation): Long {
         val query =
-            conversationBox.query().equal(Conversation_.channel, conversation.channel).build()
+            conversationBox.query().equal(Conversation_.to_user_id, conversation.to_user_id).build()
         val result = query.count()
         query.close();
 
         return result
     }
 
-    fun getConversation(channel: String): Conversation? {
-        val query = conversationBox.query().equal(Conversation_.channel, channel).build()
+    fun getConversation(to_user_id: Long): Conversation? {
+        val query = conversationBox.query().equal(Conversation_.to_user_id, to_user_id).build()
         val result = query.findFirst()
         query.close()
 

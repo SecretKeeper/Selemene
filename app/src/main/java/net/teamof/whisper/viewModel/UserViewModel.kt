@@ -1,29 +1,54 @@
 package net.teamof.whisper.viewModel
 
-import android.annotation.SuppressLint
-import android.app.Application
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.longPreferencesKey
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.map
-import net.teamof.whisper.dataStore
+import dagger.hilt.android.lifecycle.HiltViewModel
+import io.objectbox.Box
+import net.teamof.whisper.ObjectBox
+import net.teamof.whisper.di.DataStoreManager
+import net.teamof.whisper.models.Conversation
+import net.teamof.whisper.models.WSSubscribeChannels
+import net.teamof.whisper.utils.ScarletMessagingService
+import javax.inject.Inject
 
-class UserViewModel(application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class UserViewModel @Inject constructor(
+    private val scarletMessagingService: ScarletMessagingService,
+    private val dataStoreManager: DataStoreManager
+) :
+    ViewModel() {
 
-    @SuppressLint("StaticFieldLeak")
-    private val context = application.applicationContext
-    
-    val userId = context.dataStore.data.map { preferences
-        ->
-        preferences[longPreferencesKey("user_id")]
-    }.asLiveData(viewModelScope.coroutineContext)
+    private val conversationBox: Box<Conversation> =
+        ObjectBox.store.boxFor(Conversation::class.java)
 
-    suspend fun setUserId(userId: Long) {
-        context.dataStore.edit { preferences ->
-            preferences[longPreferencesKey("user_id")] = userId
-        }
+    fun getUserID(): LiveData<Long> {
+        return dataStoreManager.getUserId().asLiveData()
+    }
+
+    suspend fun setUserID(userID: Long) {
+        dataStoreManager.setUserId(userID)
+    }
+
+    suspend fun authenticate(userID: Long) {
+        setUserID(userID)
+        sendSubscribeChannels(userID)
+    }
+
+    private fun sendSubscribeChannels(userID: Long) {
+
+        val channels = arrayListOf<String>()
+        val existsChannels = conversationBox.all
+
+        existsChannels.map { conversation -> channels.add(conversation.to_user_id.toString()) }
+
+        scarletMessagingService.sendSubscribe(
+            WSSubscribeChannels(
+                userID,
+                "subscribe-channels",
+                channels
+            )
+        )
     }
 
 }
