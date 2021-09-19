@@ -41,7 +41,8 @@ import java.util.*
 fun MessagingFooter(
     bottomSheetState: ModalBottomSheetState,
     messagesViewModel: MessagesViewModel,
-    userViewModel: UserViewModel
+    userViewModel: UserViewModel,
+    toUserID: Long
 ) {
     val currentUserId = userViewModel.getUserID().value ?: 0
     val scope = rememberCoroutineScope()
@@ -120,7 +121,7 @@ fun MessagingFooter(
 
                     val message = Message(
                         user_id = currentUserId,
-                        to_user_id = 7,
+                        to_user_id = toUserID,
                         content = text.value,
                         created_at = Date()
                     )
