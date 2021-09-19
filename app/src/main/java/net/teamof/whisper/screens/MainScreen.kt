@@ -14,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navigation
 import net.teamof.whisper.components.BottomAppBar
 import net.teamof.whisper.components.FloatingActionButton
 import net.teamof.whisper.ui.theme.WhisperTheme
@@ -29,7 +30,8 @@ import net.teamof.whisper.viewModel.UserViewModel
 fun MainScreen(
 ) {
     val navController = rememberNavController()
-    val disabledNavScreens = listOf("Messaging/{to_user_id}", "Profile", "Contacts/{action}")
+    val disabledNavScreens =
+        listOf("Login", "Messaging/{to_user_id}", "Profile", "Contacts/{action}")
 
     WhisperTheme {
         Scaffold(
@@ -47,7 +49,7 @@ fun MainScreen(
                 ) FloatingActionButton(navController)
             },
             isFloatingActionButtonDocked = true,
-            floatingActionButtonPosition = FabPosition.Center
+            floatingActionButtonPosition = FabPosition.Center,
         ) {
             MainScreenNavigationConfigurations(navController)
         }
@@ -70,41 +72,47 @@ private fun MainScreenNavigationConfigurations(navController: NavHostController)
 
     NavHost(
         navController = navController,
-        startDestination = if (currentUserId == null) "Login" else "Conversations"
+        startDestination = if (currentUserId == 0L) "Authentication" else "AppsDirection"
     ) {
-        composable("Login") {
-            LoginScreen(userViewModel, navController)
-        }
-        composable("Conversations") {
-            Conversations(navController, conversationsViewModel, messagesViewModel)
-        }
-        composable(
-            "Messaging"
-                .plus("/{to_user_id}")
-        ) { backStackEntry ->
 
-            Messaging(
-                navController,
-                to_user_id = backStackEntry.arguments?.getLong("to_user_id")!!,
-                messagesViewModel
-            )
-        }
-        composable("Feeds") {
-            val feedsViewModel = hiltViewModel<FeedsViewModel>()
-            Feeds(feedsViewModel)
-        }
-        composable("Create") { Create(navController) }
-        composable("Contacts/{action}") { backStackEntry ->
-            backStackEntry.arguments?.getString("action")?.let {
-                Contacts(
-                    navController,
-                    action = it
-                )
+        navigation("Login", "Authentication") {
+            composable("Login") {
+                LoginScreen(userViewModel, navController)
             }
         }
-        composable("Profile") { Profile(navController) }
-        composable("CreateGroup") { CreateGroup(navController) }
-        composable("Activities") { Activities() }
+
+        navigation("Conversations", "AppsDirection") {
+            composable("Conversations") {
+                Conversations(navController, conversationsViewModel, messagesViewModel)
+            }
+            composable("Feeds") {
+                val feedsViewModel = hiltViewModel<FeedsViewModel>()
+                Feeds(feedsViewModel)
+            }
+            composable(
+                "Messaging"
+                    .plus("/{to_user_id}")
+            ) { backStackEntry ->
+
+                Messaging(
+                    navController,
+                    to_user_id = backStackEntry.arguments?.getString("to_user_id")!!,
+                    messagesViewModel
+                )
+            }
+            composable("Create") { Create(navController) }
+            composable("Contacts/{action}") { backStackEntry ->
+                backStackEntry.arguments?.getString("action")?.let {
+                    Contacts(
+                        navController,
+                        action = it
+                    )
+                }
+            }
+            composable("Profile") { Profile(navController) }
+            composable("CreateGroup") { CreateGroup(navController) }
+            composable("Activities") { Activities() }
+        }
     }
 }
 
