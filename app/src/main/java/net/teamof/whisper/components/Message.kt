@@ -26,7 +26,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import net.teamof.whisper.R
 import net.teamof.whisper.models.Message
 import net.teamof.whisper.ui.theme.fontFamily
@@ -35,10 +34,10 @@ import net.teamof.whisper.viewModel.UserViewModel
 @ExperimentalAnimationApi
 @Composable
 fun Message(
+    userViewModel: UserViewModel,
     data: Message,
     selection: Boolean,
-    enableSelectionMode: () -> Unit,
-    userViewModel: UserViewModel = viewModel()
+    enableSelectionMode: () -> Unit
 ) {
 
     val currentUserId = userViewModel.getUserID().observeAsState().value
