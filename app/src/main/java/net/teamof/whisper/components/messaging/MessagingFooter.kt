@@ -31,6 +31,7 @@ import net.teamof.whisper.R
 import net.teamof.whisper.models.Message
 import net.teamof.whisper.ui.theme.fontFamily
 import net.teamof.whisper.viewModel.MessagesViewModel
+import net.teamof.whisper.viewModel.UserViewModel
 import java.util.*
 
 @SuppressLint("SimpleDateFormat")
@@ -39,8 +40,10 @@ import java.util.*
 @Composable
 fun MessagingFooter(
     bottomSheetState: ModalBottomSheetState,
-    messagesViewModel: MessagesViewModel
+    messagesViewModel: MessagesViewModel,
+    userViewModel: UserViewModel
 ) {
+    val currentUserId = userViewModel.getUserID().value ?: 0
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val text = remember { mutableStateOf("") }
@@ -116,7 +119,7 @@ fun MessagingFooter(
                 if (text.value.isNotEmpty()) {
 
                     val message = Message(
-                        user_id = 6,
+                        user_id = currentUserId,
                         to_user_id = 7,
                         content = text.value,
                         created_at = Date()
