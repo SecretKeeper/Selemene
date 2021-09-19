@@ -10,12 +10,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
-import com.google.accompanist.coil.rememberCoilPainter
 import net.teamof.whisper.models.Activity
 import net.teamof.whisper.ui.theme.fontFamily
 
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun Activity(data: Activity) {
     Row(
@@ -25,8 +27,8 @@ fun Activity(data: Activity) {
             .padding(vertical = 10.dp, horizontal = 10.dp)
     ) {
         Image(
-            painter = rememberCoilPainter(request = data.image,
-                requestBuilder = {
+            painter = rememberImagePainter(data = data.image,
+                builder = {
                     transformations(CircleCropTransformation())
                 }
             ),
