@@ -34,7 +34,7 @@ fun Conversation(
     val cachedConversation = remember(conversation) { mutableStateOf(conversation) }
 
     Card(
-        onClick = { navController.navigate("Messaging/${cachedConversation.value.channel}") },
+        onClick = { navController.navigate("Messaging/${cachedConversation.value.to_user_id}") },
         modifier = Modifier
             .fillMaxWidth()
     ) {

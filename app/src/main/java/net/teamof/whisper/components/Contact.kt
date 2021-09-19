@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -24,8 +23,6 @@ import net.teamof.whisper.R
 import net.teamof.whisper.models.Contact
 import net.teamof.whisper.models.Conversation
 import net.teamof.whisper.viewModel.ConversationsViewModel
-import net.teamof.whisper.viewModel.UserViewModel
-import java.util.*
 
 @ExperimentalMaterialApi
 @Composable
@@ -33,12 +30,10 @@ fun Contact(
     navController: NavController,
     data: Contact,
     action: String,
-    userViewModel: UserViewModel = viewModel(),
     conversationsViewModel: ConversationsViewModel = viewModel()
 ) {
 
     var checked by rememberSaveable { mutableStateOf(false) }
-    val currentUserId = userViewModel.userId.observeAsState()
 
     Card(
         elevation = 0.dp,
@@ -49,20 +44,15 @@ fun Contact(
             when (action) {
                 "CreateGroup" -> checked = !checked
                 "Messaging" -> {
-                    val channelUUID: String = UUID.nameUUIDFromBytes(
-                        (currentUserId.value.toString() + data.user_id).toByteArray()
-                    ).toString()
-
                     conversationsViewModel.createConversation(
                         Conversation(
-                            channel = channelUUID,
-                            user_id = data.user_id,
+                            to_user_id = data.user_id,
                             username = data.username,
                             user_image = data.user_image,
                         )
                     )
 
-                    navController.navigate("Messaging/$channelUUID")
+                    navController.navigate("Messaging/${data.user_id}")
                 }
             }
         }) {

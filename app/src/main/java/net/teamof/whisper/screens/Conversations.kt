@@ -37,7 +37,7 @@ fun Conversations(
             Conversation(
                 conversation,
                 navController,
-                messagesViewModel.getLastMessage(conversation.channel)
+                messagesViewModel.getLastMessage(conversation.to_user_id)
             )
         }
     }
