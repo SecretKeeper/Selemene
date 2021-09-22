@@ -30,9 +30,9 @@ class UserViewModel @Inject constructor(
         dataStoreManager.setUserId(userID)
     }
 
-    suspend fun authenticate(userID: Long) {
-        setUserID(userID)
-        sendSubscribeChannels(userID)
+    suspend fun authenticate(username: String, password: String) {
+//        setUserID(userID)
+//        sendSubscribeChannels(userID)
     }
 
     private fun sendSubscribeChannels(userID: Long) {
