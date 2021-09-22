@@ -99,7 +99,7 @@ fun LoginScreen(
                     text = "Forgot Password?",
                     textAlign = TextAlign.Center,
                     modifier = Modifier
-                        .padding(vertical = 6.dp)
+                        .padding(vertical = 20.dp)
                         .fillMaxWidth()
                 )
             }
