@@ -16,11 +16,17 @@ import androidx.compose.ui.unit.dp
 import net.teamof.whisper.ui.theme.fontFamily
 
 @Composable
-fun TextField(text: String, value: String, setValue: (String) -> Unit, type: String = "text") {
+fun TextField(
+    text: String,
+    value: String,
+    onChange: (Any) -> Unit,
+    type: String = "text",
+    isError: Boolean = false
+) {
     androidx.compose.material.TextField(
         label = { Text(text) },
         value = value,
-        onValueChange = { setValue(it) },
+        onValueChange = { onChange(it) },
         keyboardOptions = KeyboardOptions(
             keyboardType = when (type) {
                 "text" -> KeyboardType.Text
@@ -38,6 +44,7 @@ fun TextField(text: String, value: String, setValue: (String) -> Unit, type: Str
             unfocusedIndicatorColor = Color.Transparent,
             disabledIndicatorColor = Color.Transparent
         ),
+        isError = isError,
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 25.dp)
