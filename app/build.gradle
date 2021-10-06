@@ -117,6 +117,9 @@ dependencies {
     debugImplementation "io.objectbox:objectbox-android-objectbrowser:$objectbox_version"
     releaseImplementation "io.objectbox:objectbox-android:$objectbox_version"
 
+    // Auth0 JWT Decode Android
+    implementation 'com.auth0.android:jwtdecode:2.0.0'
+
     // Pretty Time
     implementation 'org.ocpsoft.prettytime:prettytime:4.0.4.Final'
 
