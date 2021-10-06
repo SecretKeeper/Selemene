@@ -26,7 +26,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class AppModule {
 
-    private val baseWebSocketAddress = "ws://10.0.2.2:3334/ws"
+    private val baseWebSocketAddress = "ws://10.0.2.2:3335/ws"
 
     private val baseGateWayAddress = "http://10.0.2.2:3334"
 
@@ -73,7 +73,7 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideAuthAPI(retrofit: Retrofit) = retrofit.create(AuthAPI::class.java)
+    fun provideAuthAPI(retrofit: Retrofit): AuthAPI = retrofit.create(AuthAPI::class.java)
 
     @Provides
     fun provideScarletMessagingService(scarlet: Scarlet): ScarletMessagingService {
