@@ -105,6 +105,7 @@ private fun MainScreenNavigationConfigurations(navController: NavHostController)
             composable("Contacts/{action}") { backStackEntry ->
                 backStackEntry.arguments?.getString("action")?.let {
                     Contacts(
+                        userViewModel,
                         navController,
                         action = it
                     )
