@@ -8,6 +8,9 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,9 +20,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import kotlinx.coroutines.launch
 import net.teamof.whisper.R
 import net.teamof.whisper.components.Contact
 import net.teamof.whisper.models.Contact
+import net.teamof.whisper.viewModel.UserViewModel
 
 val contacts = listOf(
     Contact(
@@ -98,10 +103,16 @@ val contacts = listOf(
 @SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun Contacts(navController: NavController, action: String) {
+fun Contacts(
+    userViewModel: UserViewModel,
+    navController: NavController,
+    action: String
+) {
 
+    val composableScope = rememberCoroutineScope()
     val grouped = contacts.groupBy { it.username[0] }
-
+    val searchValue = remember { mutableStateOf("") }
+    val resultSearchUsers = remember { mutableListOf<Contact>() }
     LazyColumn {
 
         if (action == "CreateGroup")
@@ -138,8 +149,14 @@ fun Contacts(navController: NavController, action: String) {
 
         item {
             TextField(
-                value = "",
-                onValueChange = { /*...*/ },
+                value = searchValue.value,
+                onValueChange = {
+                    searchValue.value = it
+                    composableScope.launch {
+                        userViewModel.searchUsers(it)
+                    }
+
+                },
                 colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = Color(235, 235, 235),
                     disabledIndicatorColor = Color.Transparent,
@@ -153,18 +170,25 @@ fun Contacts(navController: NavController, action: String) {
             )
         }
 
-        grouped.forEach { (initial, contactsForInitial) ->
-            stickyHeader {
-                Text(
-                    text = initial.toString(),
-                    modifier = Modifier.padding(vertical = 10.dp, horizontal = 20.dp),
-                    fontSize = 20.sp
-                )
-            }
+        if (searchValue.value.isEmpty())
 
-            itemsIndexed(contactsForInitial) { _, contact ->
+            grouped.forEach { (initial, contactsForInitial) ->
+                stickyHeader {
+                    Text(
+                        text = initial.toString(),
+                        modifier = Modifier.padding(vertical = 10.dp, horizontal = 20.dp),
+                        fontSize = 20.sp
+                    )
+                }
+
+                itemsIndexed(contactsForInitial) { _, contact ->
+                    Contact(navController, contact, action)
+                }
+            }
+        else
+            itemsIndexed(resultSearchUsers) { _, contact ->
                 Contact(navController, contact, action)
             }
-        }
+
     }
 }
