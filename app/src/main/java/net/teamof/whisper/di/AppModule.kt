@@ -13,6 +13,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import net.teamof.whisper.Whisper
 import net.teamof.whisper.api.AuthAPI
+import net.teamof.whisper.api.SearchAPI
 import net.teamof.whisper.sockets.FlowStreamAdapter
 import net.teamof.whisper.utils.DateMoshiAdapter
 import net.teamof.whisper.utils.ScarletMessagingService
@@ -74,6 +75,10 @@ class AppModule {
     @Singleton
     @Provides
     fun provideAuthAPI(retrofit: Retrofit): AuthAPI = retrofit.create(AuthAPI::class.java)
+
+    @Singleton
+    @Provides
+    fun provideSearchAPI(retrofit: Retrofit): SearchAPI = retrofit.create(SearchAPI::class.java)
 
     @Provides
     fun provideScarletMessagingService(scarlet: Scarlet): ScarletMessagingService {
