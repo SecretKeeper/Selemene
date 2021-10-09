@@ -14,11 +14,17 @@ import kotlinx.coroutines.withContext
 import net.teamof.whisper.ObjectBox
 import net.teamof.whisper.api.AuthAPI
 import net.teamof.whisper.api.LoginRequest
+import net.teamof.whisper.api.SearchAPI
+import net.teamof.whisper.api.SearchUsersRequest
 import net.teamof.whisper.di.DataStoreManager
+import net.teamof.whisper.models.Contact
 import net.teamof.whisper.models.Conversation
 import net.teamof.whisper.models.WSSubscribeChannels
 import net.teamof.whisper.utils.ScarletMessagingService
 import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
@@ -28,7 +34,8 @@ import kotlin.concurrent.schedule
 class UserViewModel @Inject constructor(
     private val scarletMessagingService: ScarletMessagingService,
     private val dataStoreManager: DataStoreManager,
-    private val authAPI: AuthAPI
+    private val authAPI: AuthAPI,
+    private val searchAPI: SearchAPI
 ) :
     ViewModel() {
 
@@ -108,6 +115,35 @@ class UserViewModel @Inject constructor(
                 channels
             )
         )
+    }
+
+    fun searchUsers(input: String) {
+
+
+        val response = searchAPI.searchUsers(SearchUsersRequest(input))
+
+        response.enqueue(object : Callback<List<Contact>> {
+            override fun onResponse(
+                call: Call<List<Contact>>,
+                response: Response<List<Contact>>
+            ) {
+                Timber.d(response.body().toString())
+            }
+
+            override fun onFailure(call: Call<List<Contact>>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+
+        })
+
+//            response.withContext(Dispatchers.Main) {
+//                if (response.isSuccessful) {
+//                    val jsonRes = JSONObject(response.body()?.string())
+//                    Timber.d(response.body()?.string())
+//                }
+//            }
+
+
     }
 
 }
