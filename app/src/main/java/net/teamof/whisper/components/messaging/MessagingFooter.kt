@@ -129,10 +129,7 @@ fun MessagingFooter(
                     messagesViewModel.sendMessage(message)
 
                     text.value = ""
-
                 }
-
-
             }) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_send),
