@@ -79,7 +79,6 @@ class UserViewModel @Inject constructor(
                     Timber.d(jwt.getClaim("userId").asString())
                     jwt.getClaim("userId").asLong()?.let { setUserID(it) }
                     jwt.getClaim("userId").asLong()?.let { sendSubscribeChannels(it) }
-
 //                    navController.navigate("Conversations") {
 //                        launchSingleTop = true
 //                        popUpTo("Login") { inclusive = true }
@@ -117,8 +116,7 @@ class UserViewModel @Inject constructor(
         )
     }
 
-    fun searchUsers(input: String) {
-
+    fun searchUsers(input: String, fetchedUsers: (List<Contact>) -> Unit) {
 
         val response = searchAPI.searchUsers(SearchUsersRequest(input))
 
@@ -127,23 +125,15 @@ class UserViewModel @Inject constructor(
                 call: Call<List<Contact>>,
                 response: Response<List<Contact>>
             ) {
+                response.body()?.let { fetchedUsers(it) }
                 Timber.d(response.body().toString())
             }
 
             override fun onFailure(call: Call<List<Contact>>, t: Throwable) {
-                TODO("Not yet implemented")
+                Timber.d(t)
             }
 
         })
-
-//            response.withContext(Dispatchers.Main) {
-//                if (response.isSuccessful) {
-//                    val jsonRes = JSONObject(response.body()?.string())
-//                    Timber.d(response.body()?.string())
-//                }
-//            }
-
-
     }
 
 }

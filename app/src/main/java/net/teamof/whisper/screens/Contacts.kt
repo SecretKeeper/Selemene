@@ -112,7 +112,7 @@ fun Contacts(
     val composableScope = rememberCoroutineScope()
     val grouped = contacts.groupBy { it.username[0] }
     val searchValue = remember { mutableStateOf("") }
-    val resultSearchUsers = remember { mutableListOf<Contact>() }
+    var resultSearchUsers = remember { mutableListOf<Contact>() }
     LazyColumn {
 
         if (action == "CreateGroup")
@@ -150,12 +150,14 @@ fun Contacts(
         item {
             TextField(
                 value = searchValue.value,
-                onValueChange = {
+                onValueChange = { it ->
                     searchValue.value = it
                     composableScope.launch {
-                        userViewModel.searchUsers(it)
+                        userViewModel.searchUsers(it) {
+                            resultSearchUsers =
+                                it as MutableList<Contact>
+                        }
                     }
-
                 },
                 colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = Color(235, 235, 235),
