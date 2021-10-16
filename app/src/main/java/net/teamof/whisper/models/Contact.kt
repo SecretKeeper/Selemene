@@ -13,6 +13,6 @@ data class Contact(
     var id: Long = 0,
     @Index @Unique val user_id: Long,
     val username: String,
-    val user_image: String,
+    val avatar: String,
     val status: String = "None"
 )
