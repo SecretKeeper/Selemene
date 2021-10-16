@@ -26,10 +26,8 @@ class DateMoshiAdapter : JsonAdapter<Date>() {
 
     @ToJson
     override fun toJson(writer: JsonWriter, value: Date?) {
-        if (value != null) {
-            synchronized(dateFormat) {
-                writer.value(value.toString())
-            }
+        synchronized(dateFormat) {
+            writer.value(value?.toString())
         }
     }
 }
