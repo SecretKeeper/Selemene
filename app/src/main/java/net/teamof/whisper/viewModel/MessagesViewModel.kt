@@ -14,7 +14,6 @@ import net.teamof.whisper.models.Message
 import net.teamof.whisper.models.Message_
 import net.teamof.whisper.utils.ScarletMessagingService
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -45,8 +44,6 @@ class MessagesViewModel
     fun sendMessage(message: Message) {
 
         saveMessage(message)
-
-        message.updated_at = Date()
 
         scarletMessagingService.sendMessage(message)
     }
