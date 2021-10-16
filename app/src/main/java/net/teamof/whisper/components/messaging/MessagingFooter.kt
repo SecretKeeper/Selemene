@@ -32,7 +32,6 @@ import net.teamof.whisper.models.Message
 import net.teamof.whisper.ui.theme.fontFamily
 import net.teamof.whisper.viewModel.MessagesViewModel
 import net.teamof.whisper.viewModel.UserViewModel
-import java.util.*
 
 @SuppressLint("SimpleDateFormat")
 @RequiresApi(Build.VERSION_CODES.O)
@@ -114,7 +113,6 @@ fun MessagingFooter(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent
                 )
-
             )
             IconButton(onClick = {
                 if (text.value.isNotEmpty()) {
@@ -123,7 +121,6 @@ fun MessagingFooter(
                         user_id = currentUserId,
                         to_user_id = toUserID,
                         content = text.value,
-                        created_at = Date()
                     )
 
                     messagesViewModel.sendMessage(message)
