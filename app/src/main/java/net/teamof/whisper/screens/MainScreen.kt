@@ -31,7 +31,7 @@ fun MainScreen(
 ) {
     val navController = rememberNavController()
     val disabledNavScreens =
-        listOf("Login", "Messaging/{to_user_id}", "Profile", "Contacts/{action}")
+        listOf("Login", "Register", "Messaging/{to_user_id}", "Profile", "Contacts/{action}")
 
     WhisperTheme {
         Scaffold(
@@ -77,6 +77,9 @@ private fun MainScreenNavigationConfigurations(navController: NavHostController)
 
         navigation("Login", "Authentication") {
             composable("Login") {
+                LoginScreen(userViewModel, navController)
+            }
+            composable("Register") {
                 LoginScreen(userViewModel, navController)
             }
         }
