@@ -125,10 +125,10 @@ fun LoginScreen(
             }
             TextButton(
                 onClick = {
-//                    navController.navigate("Conversations") {
-//                        launchSingleTop = true
-//                        popUpTo("Login") { inclusive = true }
-//                    }
+                    navController.navigate("Conversations") {
+                        launchSingleTop = true
+                        popUpTo("Login") { inclusive = true }
+                    }
                 }) {
                 Text(
                     text = "Forgot Password?",
@@ -142,9 +142,8 @@ fun LoginScreen(
 
         TextButton(
             onClick = {
-//                navController.navigate("Conversations") {
+//                navController.navigate("Register") {
 //                    launchSingleTop = true
-//                    popUpTo("Login") { inclusive = true }
 //                }
             }) {
             Text(
