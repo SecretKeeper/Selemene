@@ -18,9 +18,7 @@ import net.teamof.whisper.api.SearchAPI
 import net.teamof.whisper.api.SearchUsersRequest
 import net.teamof.whisper.di.DataStoreManager
 import net.teamof.whisper.models.Contact
-import net.teamof.whisper.models.Conversation
-import net.teamof.whisper.models.WSSubscribeChannels
-import net.teamof.whisper.utils.ScarletMessagingService
+import net.teamof.whisper.models.OBKeyValue
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -32,22 +30,20 @@ import kotlin.concurrent.schedule
 
 @HiltViewModel
 class UserViewModel @Inject constructor(
-    private val scarletMessagingService: ScarletMessagingService,
     private val dataStoreManager: DataStoreManager,
     private val authAPI: AuthAPI,
     private val searchAPI: SearchAPI
 ) :
     ViewModel() {
 
-    private val conversationBox: Box<Conversation> =
-        ObjectBox.store.boxFor(Conversation::class.java)
+    private val OBKeyValueBox: Box<OBKeyValue> = ObjectBox.store.boxFor(OBKeyValue::class.java)
 
     fun getUserID(): LiveData<Long> {
         return dataStoreManager.getUserId().asLiveData()
     }
 
-    suspend fun setUserID(userID: Long) {
-        dataStoreManager.setUserId(userID)
+    private suspend fun setUserID(user_id: Long) {
+        dataStoreManager.setUserId(user_id)
     }
 
     suspend fun authenticate(
@@ -76,9 +72,11 @@ class UserViewModel @Inject constructor(
                     buttonText("Signing In...")
                     val jsonRes = JSONObject(response.body()?.string())
                     val jwt = JWT(jsonRes.getString("token"))
-                    Timber.d(jwt.getClaim("userId").asString())
-                    jwt.getClaim("userId").asLong()?.let { setUserID(it) }
-                    jwt.getClaim("userId").asLong()?.let { sendSubscribeChannels(it) }
+                    Timber.d(jwt.getClaim("user_id").asString())
+                    jwt.getClaim("user_id").asLong()?.let { setUserID(it) }
+                    jwt.getClaim("user_id").asString()
+                        ?.let { OBKeyValueBox.put(OBKeyValue(key = "user_id", value = it)) }
+
 //                    navController.navigate("Conversations") {
 //                        launchSingleTop = true
 //                        popUpTo("Login") { inclusive = true }
@@ -95,25 +93,7 @@ class UserViewModel @Inject constructor(
                     }
                 }
             }
-
         }
-
-    }
-
-    private fun sendSubscribeChannels(userID: Long) {
-
-        val channels = arrayListOf<String>()
-        val existsChannels = conversationBox.all
-
-        existsChannels.map { conversation -> channels.add(conversation.to_user_id.toString()) }
-
-        scarletMessagingService.sendSubscribe(
-            WSSubscribeChannels(
-                userID,
-                "subscribe-channels",
-                channels
-            )
-        )
     }
 
     fun searchUsers(input: String, fetchedUsers: (List<Contact>) -> Unit) {
