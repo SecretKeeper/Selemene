@@ -43,7 +43,7 @@ fun MessagingFooter(
     userViewModel: UserViewModel,
     toUserID: Long
 ) {
-    val currentUserId = userViewModel.getUserID().value ?: 0
+    val currentUserId = userViewModel.getUserID()
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val text = remember { mutableStateOf("") }
