@@ -7,7 +7,6 @@ import androidx.compose.material.FabPosition
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -68,7 +67,6 @@ private fun MainScreenNavigationConfigurations(navController: NavHostController)
     val conversationsViewModel = hiltViewModel<ConversationsViewModel>()
 
     val currentUserId = userViewModel.getUserID()
-        .observeAsState().value
 
     NavHost(
         navController = navController,
