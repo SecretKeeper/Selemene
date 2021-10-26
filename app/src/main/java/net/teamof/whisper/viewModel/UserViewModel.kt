@@ -1,12 +1,11 @@
 package net.teamof.whisper.viewModel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.navigation.NavController
 import com.auth0.android.jwt.JWT
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.objectbox.Box
+import io.objectbox.kotlin.boxFor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,6 +18,7 @@ import net.teamof.whisper.api.SearchUsersRequest
 import net.teamof.whisper.di.DataStoreManager
 import net.teamof.whisper.models.Contact
 import net.teamof.whisper.models.OBKeyValue
+import net.teamof.whisper.models.OBKeyValue_
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -36,10 +36,15 @@ class UserViewModel @Inject constructor(
 ) :
     ViewModel() {
 
-    private val OBKeyValueBox: Box<OBKeyValue> = ObjectBox.store.boxFor(OBKeyValue::class.java)
+    private val oBKeyValueBox: Box<OBKeyValue> = ObjectBox.store.boxFor()
 
-    fun getUserID(): LiveData<Long> {
-        return dataStoreManager.getUserId().asLiveData()
+    fun getUserID(): Long {
+        val userId = oBKeyValueBox.query().run {
+            equal(OBKeyValue_.key, "user_id")
+            build()
+        }.use { it.findFirst() }
+
+        return userId?.value?.toLong() ?: 0L
     }
 
     private suspend fun setUserID(user_id: Long) {
@@ -75,7 +80,7 @@ class UserViewModel @Inject constructor(
                     Timber.d(jwt.getClaim("user_id").asString())
                     jwt.getClaim("user_id").asLong()?.let { setUserID(it) }
                     jwt.getClaim("user_id").asString()
-                        ?.let { OBKeyValueBox.put(OBKeyValue(key = "user_id", value = it)) }
+                        ?.let { oBKeyValueBox.put(OBKeyValue(key = "user_id", value = it)) }
 
 //                    navController.navigate("Conversations") {
 //                        launchSingleTop = true
