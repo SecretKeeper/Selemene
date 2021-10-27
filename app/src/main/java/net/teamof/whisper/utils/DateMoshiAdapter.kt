@@ -7,7 +7,7 @@ import java.util.*
 class DateMoshiAdapter : JsonAdapter<Date>() {
 
     companion object {
-        const val SERVER_FORMAT = ("yyyy-MM-dd HH:mm:ss.SSS")
+        const val SERVER_FORMAT = ("yyyy-MM-dd HH:mm:ss:SSS")
     }
 
     private val dateFormat = SimpleDateFormat(SERVER_FORMAT, Locale.getDefault())
@@ -26,10 +26,8 @@ class DateMoshiAdapter : JsonAdapter<Date>() {
 
     @ToJson
     override fun toJson(writer: JsonWriter, value: Date?) {
-        if (value != null) {
-            synchronized(dateFormat) {
-                writer.value(value.toString())
-            }
+        synchronized(dateFormat) {
+            writer.value(value?.toString())
         }
     }
 }

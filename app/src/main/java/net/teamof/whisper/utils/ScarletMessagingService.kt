@@ -4,7 +4,6 @@ import com.tinder.scarlet.WebSocket
 import com.tinder.scarlet.ws.Receive
 import com.tinder.scarlet.ws.Send
 import kotlinx.coroutines.flow.Flow
-
 import net.teamof.whisper.models.Message
 import net.teamof.whisper.models.WSSubscribeChannels
 

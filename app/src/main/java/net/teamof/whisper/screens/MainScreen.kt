@@ -7,7 +7,6 @@ import androidx.compose.material.FabPosition
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -31,7 +30,7 @@ fun MainScreen(
 ) {
     val navController = rememberNavController()
     val disabledNavScreens =
-        listOf("Login", "Messaging/{to_user_id}", "Profile", "Contacts/{action}")
+        listOf("Login", "Register", "Messaging/{to_user_id}", "Profile", "Contacts/{action}")
 
     WhisperTheme {
         Scaffold(
@@ -68,7 +67,6 @@ private fun MainScreenNavigationConfigurations(navController: NavHostController)
     val conversationsViewModel = hiltViewModel<ConversationsViewModel>()
 
     val currentUserId = userViewModel.getUserID()
-        .observeAsState().value
 
     NavHost(
         navController = navController,
@@ -77,6 +75,9 @@ private fun MainScreenNavigationConfigurations(navController: NavHostController)
 
         navigation("Login", "Authentication") {
             composable("Login") {
+                LoginScreen(userViewModel, navController)
+            }
+            composable("Register") {
                 LoginScreen(userViewModel, navController)
             }
         }
@@ -105,6 +106,7 @@ private fun MainScreenNavigationConfigurations(navController: NavHostController)
             composable("Contacts/{action}") { backStackEntry ->
                 backStackEntry.arguments?.getString("action")?.let {
                     Contacts(
+                        userViewModel,
                         navController,
                         action = it
                     )

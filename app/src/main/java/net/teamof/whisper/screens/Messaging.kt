@@ -39,7 +39,7 @@ fun Messaging(
     userViewModel: UserViewModel
 ) {
 
-    messagesViewModel.getMessagesByChannel(to_user_id.toLong())
+    messagesViewModel.getConversationMessages(to_user_id.toLong())
     val messages: List<Message> by messagesViewModel.messages.observeAsState(listOf())
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
 

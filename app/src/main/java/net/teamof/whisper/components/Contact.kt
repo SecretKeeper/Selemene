@@ -50,7 +50,7 @@ fun Contact(
                         Conversation(
                             to_user_id = data.user_id,
                             username = data.username,
-                            user_image = data.user_image,
+                            user_image = data.avatar,
                         )
                     )
 
@@ -65,7 +65,7 @@ fun Contact(
                 .padding(vertical = 10.dp, horizontal = 10.dp)
         ) {
             Image(
-                painter = rememberImagePainter(data = data.user_image,
+                painter = rememberImagePainter(data = data.avatar,
                     builder = {
                         transformations(CircleCropTransformation())
                     }
