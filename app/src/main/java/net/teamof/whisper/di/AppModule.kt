@@ -14,6 +14,7 @@ import dagger.hilt.components.SingletonComponent
 import net.teamof.whisper.Whisper
 import net.teamof.whisper.api.AuthAPI
 import net.teamof.whisper.api.SearchAPI
+import net.teamof.whisper.repositories.MessageRepository
 import net.teamof.whisper.sockets.FlowStreamAdapter
 import net.teamof.whisper.utils.DateMoshiAdapter
 import net.teamof.whisper.utils.ScarletMessagingService
@@ -84,4 +85,8 @@ class AppModule {
     fun provideScarletMessagingService(scarlet: Scarlet): ScarletMessagingService {
         return scarlet.create()
     }
+
+    @Singleton
+    @Provides
+    fun provideMessageRepository() = MessageRepository()
 }
