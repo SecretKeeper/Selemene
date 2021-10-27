@@ -19,7 +19,7 @@
           "name": "user_id",
           "indexId": "1:8105897799467650916",
           "type": 6,
-          "flags": 44
+          "flags": 40
         },
         {
           "id": "3:3369419796759302758",
@@ -73,14 +73,12 @@
         {
           "id": "8:6054160153167946938",
           "name": "unread_messages",
-          "type": 5,
-          "flags": 4
+          "type": 5
         },
         {
           "id": "11:2812684478443624395",
           "name": "to_user_id",
-          "type": 6,
-          "flags": 4
+          "type": 6
         }
       ],
       "relations": []
@@ -109,8 +107,7 @@
         {
           "id": "9:2262417395547335001",
           "name": "user_id",
-          "type": 6,
-          "flags": 4
+          "type": 6
         },
         {
           "id": "10:508201749487108379",
@@ -125,8 +122,7 @@
         {
           "id": "12:671810160197366465",
           "name": "to_user_id",
-          "type": 6,
-          "flags": 4
+          "type": 6
         }
       ],
       "relations": []
@@ -156,13 +152,15 @@
       "relations": []
     }
   ],
-  "lastEntityId": "4:6609467155507644033",
+  "lastEntityId": "5:9140733072167311526",
   "lastIndexId": "2:3298268397516222208",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
-  "retiredEntityUids": [],
+  "retiredEntityUids": [
+    9140733072167311526
+  ],
   "retiredIndexUids": [
     3298268397516222208
   ],
@@ -177,7 +175,11 @@
     8276834637445320201,
     1371654557804509791,
     7084430223924185774,
-    3486332265251591640
+    3486332265251591640,
+    1494507184102751714,
+    6723436365272317572,
+    5739247370111225509,
+    8590986862344883962
   ],
   "retiredRelationUids": [],
   "version": 1
