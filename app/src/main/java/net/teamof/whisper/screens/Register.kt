@@ -19,7 +19,7 @@ import net.teamof.whisper.ui.theme.fontFamily
 import net.teamof.whisper.viewModel.UserViewModel
 
 @Composable()
-fun LoginScreen(
+fun RegisterScreen(
     userViewModel: UserViewModel,
     navController: NavController
 ) {
@@ -125,10 +125,10 @@ fun LoginScreen(
             }
             TextButton(
                 onClick = {
-                    navController.navigate("Conversations") {
-                        launchSingleTop = true
-                        popUpTo("Login") { inclusive = true }
-                    }
+//                    navController.navigate("Conversations") {
+//                        launchSingleTop = true
+//                        popUpTo("Login") { inclusive = true }
+//                    }
                 }) {
                 Text(
                     text = "Forgot Password?",
@@ -142,9 +142,10 @@ fun LoginScreen(
 
         TextButton(
             onClick = {
-//                navController.navigate("Register") {
-//                    launchSingleTop = true
-//                }
+                navController.navigate("Conversations") {
+                    launchSingleTop = true
+                    popUpTo("Login") { inclusive = true }
+                }
             }) {
             Text(
                 text = "Does not have an account yet?",

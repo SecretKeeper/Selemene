@@ -13,7 +13,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -40,7 +39,7 @@ fun Message(
     enableSelectionMode: () -> Unit
 ) {
 
-    val currentUserId = userViewModel.getUserID().observeAsState().value
+    val currentUserId = userViewModel.getUserID()
     val isOwnMessage = data.user_id == currentUserId
     val messageSelected = remember { mutableStateOf(false) }
 

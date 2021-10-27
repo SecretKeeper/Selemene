@@ -6,8 +6,8 @@
         <type value="RUNNING_DEVICE_TARGET" />
         <deviceKey>
           <Key>
-            <type value="SERIAL_NUMBER" />
-            <value value="db3bcaae" />
+            <type value="VIRTUAL_DEVICE_PATH" />
+            <value value="C:\Users\Secret Keeper\.android\avd\Pixel_5_API_31_2.avd" />
           </Key>
         </deviceKey>
       </Target>
@@ -16,7 +16,7 @@
         <deviceKey>
           <Key>
             <type value="VIRTUAL_DEVICE_PATH" />
-            <value value="C:\Users\OF\.android\avd\Pixel_5_API_24.avd" />
+            <value value="C:\Users\Secret Keeper\.android\avd\Pixel_5_API_31.avd" />
           </Key>
         </deviceKey>
       </Target>

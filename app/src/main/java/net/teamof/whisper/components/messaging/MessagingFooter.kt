@@ -32,7 +32,6 @@ import net.teamof.whisper.models.Message
 import net.teamof.whisper.ui.theme.fontFamily
 import net.teamof.whisper.viewModel.MessagesViewModel
 import net.teamof.whisper.viewModel.UserViewModel
-import java.util.*
 
 @SuppressLint("SimpleDateFormat")
 @RequiresApi(Build.VERSION_CODES.O)
@@ -44,7 +43,7 @@ fun MessagingFooter(
     userViewModel: UserViewModel,
     toUserID: Long
 ) {
-    val currentUserId = userViewModel.getUserID().value ?: 0
+    val currentUserId = userViewModel.getUserID()
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val text = remember { mutableStateOf("") }
@@ -114,7 +113,6 @@ fun MessagingFooter(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent
                 )
-
             )
             IconButton(onClick = {
                 if (text.value.isNotEmpty()) {
@@ -123,16 +121,12 @@ fun MessagingFooter(
                         user_id = currentUserId,
                         to_user_id = toUserID,
                         content = text.value,
-                        created_at = Date()
                     )
 
                     messagesViewModel.sendMessage(message)
 
                     text.value = ""
-
                 }
-
-
             }) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_send),

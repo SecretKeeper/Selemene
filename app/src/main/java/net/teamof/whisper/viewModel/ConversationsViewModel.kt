@@ -10,7 +10,7 @@ import net.teamof.whisper.models.Conversation_
 import javax.inject.Inject
 
 @HiltViewModel
-class ConversationsViewModel @Inject constructor() : ViewModel() {
+open class ConversationsViewModel @Inject constructor() : ViewModel() {
 
     private val conversationBox: Box<Conversation> =
         ObjectBox.store.boxFor(Conversation::class.java)
@@ -21,7 +21,7 @@ class ConversationsViewModel @Inject constructor() : ViewModel() {
 
     val conversations: MutableLiveData<MutableList<Conversation>> = _conversations
 
-    private fun refreshConversations() {
+    fun refreshConversations() {
         _conversations.value = conversationBox.all
     }
 
