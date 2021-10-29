@@ -1,16 +1,24 @@
 package net.teamof.whisper.components
 
+import BackPressHandler
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -19,25 +27,60 @@ import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
+import net.teamof.whisper.R
 import net.teamof.whisper.models.Conversation
 import net.teamof.whisper.models.Message
 import net.teamof.whisper.ui.theme.fontFamily
+import net.teamof.whisper.viewModel.ConversationActionsViewModel
 import org.ocpsoft.prettytime.PrettyTime
 
-@OptIn(ExperimentalCoilApi::class)
+@ExperimentalCoilApi
+@ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @Composable
 fun Conversation(
     conversation: Conversation,
     navController: NavController,
-    lastMessage: Message?
+    conversationActionsViewModel: ConversationActionsViewModel,
+    lastMessage: Message?,
 ) {
 
     val cachedConversation = remember(conversation) { mutableStateOf(conversation) }
+    val selectedConversationsState: List<Long> by conversationActionsViewModel.selectedConversations.observeAsState(
+        listOf()
+    )
+    val showConversationActions: Boolean by conversationActionsViewModel.showActionsState.observeAsState(
+        false
+    )
+
+    animateDpAsState(if (cachedConversation.value.id in selectedConversationsState) 5.dp else 0.dp)
+
+    if (showConversationActions) {
+        BackPressHandler {
+            conversationActionsViewModel.hideActions()
+        }
+    }
+
 
     Card(
-        onClick = { navController.navigate("Messaging/${cachedConversation.value.to_user_id}") },
+        shape = RoundedCornerShape(0.dp),
         modifier = Modifier
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onTap = {
+                        if (!showConversationActions)
+                            navController.navigate("Messaging/${cachedConversation.value.to_user_id}")
+                        else
+                            if (cachedConversation.value.id in selectedConversationsState)
+                                conversationActionsViewModel.unselectConversation(cachedConversation.value.id)
+                            else
+                                conversationActionsViewModel.selectConversation(cachedConversation.value.id)
+                    },
+                    onLongPress = {
+                        conversationActionsViewModel.showActions(cachedConversation.value.id)
+                    }
+                )
+            }
             .fillMaxWidth()
     ) {
         Row(
@@ -46,17 +89,29 @@ fun Conversation(
                 .fillMaxWidth()
                 .padding(vertical = 10.dp, horizontal = 10.dp)
         ) {
-            Image(
-                painter = rememberImagePainter(data = cachedConversation.value.user_image,
-                    builder = {
-                        transformations(CircleCropTransformation())
-                    }
-                ),
-                contentDescription = null,
-                modifier = Modifier
-                    .width(60.dp)
-                    .height(60.dp)
-            )
+            Box {
+                if (cachedConversation.value.id in selectedConversationsState)
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_checkmark_conversation),
+                        tint = Color.Unspecified,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .width(22.dp)
+                    )
+
+                Image(
+                    painter = rememberImagePainter(data = cachedConversation.value.user_image,
+                        builder = {
+                            transformations(CircleCropTransformation())
+                        }
+                    ),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .width(60.dp)
+                        .height(60.dp)
+                )
+            }
+
             Column(
                 Modifier
                     .weight(2f)
@@ -99,7 +154,6 @@ fun Conversation(
                         fontSize = 13.sp
                     )
                 }
-
             }
         }
     }
