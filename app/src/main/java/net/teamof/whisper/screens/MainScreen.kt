@@ -15,12 +15,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import net.teamof.whisper.components.BottomAppBar
-import net.teamof.whisper.components.FloatingActionButton
 import net.teamof.whisper.ui.theme.WhisperTheme
-import net.teamof.whisper.viewModel.ConversationsViewModel
-import net.teamof.whisper.viewModel.FeedsViewModel
-import net.teamof.whisper.viewModel.MessagesViewModel
-import net.teamof.whisper.viewModel.UserViewModel
+import net.teamof.whisper.viewModel.*
 
 @ExperimentalAnimationApi
 @ExperimentalFoundationApi
@@ -31,26 +27,20 @@ fun MainScreen(
     val navController = rememberNavController()
     val disabledNavScreens =
         listOf("Login", "Register", "Messaging/{to_user_id}", "Profile", "Contacts/{action}")
+    val conversationsActionsViewModel = hiltViewModel<ConversationActionsViewModel>()
 
     WhisperTheme {
         Scaffold(
             bottomBar = {
                 if (!disabledNavScreens.contains(currentRoute(navController))) BottomAppBar(
-                    navController
+                    navController,
+                    conversationsActionsViewModel
                 )
-            },
-            floatingActionButton = {
-                if (!disabledNavScreens.contains(
-                        currentRoute(
-                            navController
-                        )
-                    )
-                ) FloatingActionButton(navController)
             },
             isFloatingActionButtonDocked = true,
             floatingActionButtonPosition = FabPosition.Center,
         ) {
-            MainScreenNavigationConfigurations(navController)
+            MainScreenNavigationConfigurations(navController, conversationsActionsViewModel)
         }
     }
 }
@@ -60,7 +50,10 @@ fun MainScreen(
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi
 @Composable
-private fun MainScreenNavigationConfigurations(navController: NavHostController) {
+private fun MainScreenNavigationConfigurations(
+    navController: NavHostController,
+    conversationsActionsViewModel: ConversationActionsViewModel
+) {
 
     val userViewModel = hiltViewModel<UserViewModel>()
     val messagesViewModel = hiltViewModel<MessagesViewModel>()
@@ -84,7 +77,12 @@ private fun MainScreenNavigationConfigurations(navController: NavHostController)
 
         navigation("Conversations", "AppsDirection") {
             composable("Conversations") {
-                Conversations(navController, conversationsViewModel, messagesViewModel)
+                Conversations(
+                    navController,
+                    conversationsViewModel,
+                    messagesViewModel,
+                    conversationsActionsViewModel
+                )
             }
             composable("Feeds") {
                 val feedsViewModel = hiltViewModel<FeedsViewModel>()
