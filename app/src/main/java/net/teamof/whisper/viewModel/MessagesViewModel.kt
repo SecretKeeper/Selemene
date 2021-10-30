@@ -98,14 +98,15 @@ class MessagesViewModel
     }
 
     fun getLastMessage(to_user_id: Long): Message? {
-        val lastMessage =
-            messageBox.query().run {
-                equal(Message_.to_user_id, to_user_id)
+        if (currentUserId != null)
+            return messageBox.query().run {
+                (Message_.to_user_id equal to_user_id
+                        or (Message_.user_id equal currentUserId.value))
                 orderDesc(Message_.id)
                 build()
             }.use { it.findFirst() }
 
-        return lastMessage
+        return null
     }
 
     fun getConversationMessages(to_user_id: Long) {
