@@ -1,9 +1,8 @@
 package net.teamof.whisper.viewModel
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 
-class ConversationActionsViewModel : ViewModel() {
+class ConversationActionsViewModel : ConversationsViewModel() {
 
     private val _showActionsState: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>(false)
@@ -45,5 +44,10 @@ class ConversationActionsViewModel : ViewModel() {
     fun unselectConversation(conversation_id: Long) {
         _selectedConversations.value =
             _selectedConversations.value?.filter { it != conversation_id }
+    }
+
+    fun deleteSelectedConversations() {
+        if (_selectedConversations.value != null)
+            deleteConversation(_selectedConversations.value!!)
     }
 }
