@@ -164,7 +164,9 @@ fun ConversationActionsView(conversationActionsViewModel: ConversationActionsVie
                         .width(24.dp)
                 )
             }
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = {
+                conversationActionsViewModel.deleteSelectedConversations()
+            }) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_trash),
                     contentDescription = null,
