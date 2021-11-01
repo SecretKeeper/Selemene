@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
+import coil.annotation.ExperimentalCoilApi
 import net.teamof.whisper.components.BottomAppBar
 import net.teamof.whisper.ui.theme.WhisperTheme
 import net.teamof.whisper.viewModel.*
@@ -46,6 +47,7 @@ fun MainScreen(
 }
 
 
+@ExperimentalCoilApi
 @ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi
@@ -80,7 +82,6 @@ private fun MainScreenNavigationConfigurations(
                 Conversations(
                     navController,
                     conversationsViewModel,
-                    messagesViewModel,
                     conversationsActionsViewModel
                 )
             }
