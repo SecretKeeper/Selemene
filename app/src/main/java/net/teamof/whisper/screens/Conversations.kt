@@ -17,7 +17,6 @@ import net.teamof.whisper.models.Conversation
 import net.teamof.whisper.ui.theme.BottomNavigationHeight
 import net.teamof.whisper.viewModel.ConversationActionsViewModel
 import net.teamof.whisper.viewModel.ConversationsViewModel
-import net.teamof.whisper.viewModel.MessagesViewModel
 
 @ExperimentalCoilApi
 @ExperimentalAnimationApi
@@ -26,7 +25,6 @@ import net.teamof.whisper.viewModel.MessagesViewModel
 fun Conversations(
     navController: NavController,
     conversationsViewModel: ConversationsViewModel,
-    messagesViewModel: MessagesViewModel,
     conversationActionsViewModel: ConversationActionsViewModel
 ) {
 
@@ -43,8 +41,7 @@ fun Conversations(
             Conversation(
                 conversation,
                 navController,
-                conversationActionsViewModel,
-                messagesViewModel.getLastMessage(conversation.to_user_id),
+                conversationActionsViewModel
             )
         }
     }
