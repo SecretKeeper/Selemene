@@ -29,7 +29,6 @@ import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import net.teamof.whisper.R
 import net.teamof.whisper.models.Conversation
-import net.teamof.whisper.models.Message
 import net.teamof.whisper.ui.theme.fontFamily
 import net.teamof.whisper.viewModel.ConversationActionsViewModel
 import org.ocpsoft.prettytime.PrettyTime
@@ -41,8 +40,7 @@ import org.ocpsoft.prettytime.PrettyTime
 fun Conversation(
     conversation: Conversation,
     navController: NavController,
-    conversationActionsViewModel: ConversationActionsViewModel,
-    lastMessage: Message?,
+    conversationActionsViewModel: ConversationActionsViewModel
 ) {
 
     val cachedConversation = remember(conversation) { mutableStateOf(conversation) }
@@ -127,19 +125,17 @@ fun Conversation(
                             .weight(1f)
                             .padding(bottom = 10.dp)
                     )
-                    if (lastMessage != null) {
-                        Text(
-                            text = PrettyTime().format(lastMessage.created_at),
-                            fontSize = 12.sp,
-                            fontFamily = fontFamily,
-                            fontWeight = FontWeight.Normal,
-                            modifier = Modifier.padding(bottom = 7.dp)
-                        )
-                    }
+                    Text(
+                        text = PrettyTime().format(conversation.last_message_time),
+                        fontSize = 12.sp,
+                        fontFamily = fontFamily,
+                        fontWeight = FontWeight.Normal,
+                        modifier = Modifier.padding(bottom = 7.dp)
+                    )
                 }
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
-                        text = lastMessage?.content ?: "There is no message",
+                        text = conversation.last_message,
                         fontSize = 13.sp,
                         fontFamily = fontFamily,
                         fontWeight = FontWeight.Normal,
