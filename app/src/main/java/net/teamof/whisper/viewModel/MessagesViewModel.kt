@@ -1,12 +1,14 @@
 package net.teamof.whisper.viewModel
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.tinder.scarlet.WebSocket
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.objectbox.Box
+import io.objectbox.android.AndroidScheduler
+import io.objectbox.android.ObjectBoxLiveData
 import io.objectbox.kotlin.equal
 import io.objectbox.kotlin.or
+import io.objectbox.query.Query
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
@@ -43,25 +45,34 @@ class MessagesViewModel
             .flowOn(Dispatchers.IO)
             .onEach {
                 saveMessage(it)
-                Timber.d("WTF A MESSAGE FROM SERVER = $it")
+                updateConversation(it.user_id, it)
             }
             .launchIn(viewModelScope)
     }
 
-    private val OBKeyValueBox: Box<OBKeyValue> = ObjectBox.store.boxFor(OBKeyValue::class.java)
+    private val oBKeyValueBox: Box<OBKeyValue> = ObjectBox.store.boxFor(OBKeyValue::class.java)
 
     private val messageBox: Box<Message> = ObjectBox.store.boxFor(Message::class.java)
 
-    private val currentUserId = OBKeyValueBox.query().run {
+    private val currentUserId = oBKeyValueBox.query().run {
         equal(OBKeyValue_.key, "user_id")
         build()
     }.use { it.findFirst() }
 
-    private val _messages: MutableLiveData<MutableList<Message>> by lazy {
-        MutableLiveData<MutableList<Message>>()
-    }
+    private var _messages: ObjectBoxLiveData<Message> =
+        ObjectBoxLiveData(fetchAndObserveMessages())
 
-    val messages: MutableLiveData<MutableList<Message>> = _messages
+    val messages: ObjectBoxLiveData<Message> = _messages
+
+    private fun fetchAndObserveMessages(): Query<Message>? {
+        val query = messageBox.query().build()
+
+        query.subscribe().on(AndroidScheduler.mainThread()).observer {
+            refreshConversations()
+        }
+
+        return query
+    }
 
     private fun sendSubscribeChannels() {
 
@@ -84,7 +95,12 @@ class MessagesViewModel
 
         messageRepository.saveMessage(message)
 
-        _messages.value = (_messages.value)?.let { mutableListOf(*it.toTypedArray(), message) }
+        _messages = ObjectBoxLiveData(messageBox.query().run {
+            (Message_.to_user_id equal message.to_user_id
+                    or (Message_.user_id equal message.user_id))
+            orderDesc(Message_.id)
+            build()
+        })
 
         scarletMessagingService.sendMessage(message)
     }
@@ -92,35 +108,23 @@ class MessagesViewModel
     private fun saveMessage(message: Message) {
         messageRepository.saveMessage((message))
 
-        refreshConversations()
-
-        _messages.value = (_messages.value)?.let { mutableListOf(*it.toTypedArray(), message) }
-    }
-
-    fun getLastMessage(to_user_id: Long): Message? {
-        if (currentUserId != null)
-            return messageBox.query().run {
-                (Message_.to_user_id equal to_user_id
-                        or (Message_.user_id equal currentUserId.value))
-                orderDesc(Message_.id)
-                build()
-            }.use { it.findFirst() }
-
-        return null
+        _messages = ObjectBoxLiveData(messageBox.query().run {
+            (Message_.to_user_id equal message.to_user_id
+                    or (Message_.user_id equal message.user_id))
+            orderDesc(Message_.id)
+            build()
+        })
     }
 
     fun getConversationMessages(to_user_id: Long) {
         if (currentUserId != null) {
-
-            val messages =
+            ObjectBoxLiveData(
                 messageBox.query().run {
                     (Message_.to_user_id equal to_user_id
                             or (Message_.user_id equal currentUserId.value))
                     order(Message_.created_at)
                     build()
-                }.use { it.find() }
-
-            _messages.value = messages
+                })
         }
     }
 
