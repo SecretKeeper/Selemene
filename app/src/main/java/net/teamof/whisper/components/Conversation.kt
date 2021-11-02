@@ -92,15 +92,6 @@ fun Conversation(
                 .padding(vertical = 10.dp, horizontal = 10.dp)
         ) {
             Box {
-                if (cachedConversation.value.to_user_id in selectedConversationsState)
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_checkmark_conversation),
-                        tint = Color.Unspecified,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .width(22.dp)
-                    )
-
                 Image(
                     painter = rememberImagePainter(data = cachedConversation.value.user_image,
                         builder = {
@@ -112,6 +103,15 @@ fun Conversation(
                         .width(60.dp)
                         .height(60.dp)
                 )
+
+                if (cachedConversation.value.to_user_id in selectedConversationsState)
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_checkmark_conversation),
+                        tint = Color.Unspecified,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .width(22.dp)
+                    )
             }
 
             Column(
