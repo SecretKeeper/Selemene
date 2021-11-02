@@ -51,7 +51,7 @@ fun Conversation(
         false
     )
 
-    animateDpAsState(if (cachedConversation.value.id in selectedConversationsState) 5.dp else 0.dp)
+    animateDpAsState(if (cachedConversation.value.to_user_id in selectedConversationsState) 5.dp else 0.dp)
 
     if (showConversationActions) {
         BackPressHandler {
@@ -69,13 +69,17 @@ fun Conversation(
                         if (!showConversationActions)
                             navController.navigate("Messaging/${cachedConversation.value.to_user_id}")
                         else
-                            if (cachedConversation.value.id in selectedConversationsState)
-                                conversationActionsViewModel.unselectConversation(cachedConversation.value.id)
+                            if (cachedConversation.value.to_user_id in selectedConversationsState)
+                                conversationActionsViewModel.unselectConversationByToUserID(
+                                    cachedConversation.value.to_user_id
+                                )
                             else
-                                conversationActionsViewModel.selectConversation(cachedConversation.value.id)
+                                conversationActionsViewModel.selectConversationByToUserID(
+                                    cachedConversation.value.to_user_id
+                                )
                     },
                     onLongPress = {
-                        conversationActionsViewModel.showActions(cachedConversation.value.id)
+                        conversationActionsViewModel.showActions(cachedConversation.value.to_user_id)
                     }
                 )
             }
@@ -88,7 +92,7 @@ fun Conversation(
                 .padding(vertical = 10.dp, horizontal = 10.dp)
         ) {
             Box {
-                if (cachedConversation.value.id in selectedConversationsState)
+                if (cachedConversation.value.to_user_id in selectedConversationsState)
                     Icon(
                         imageVector = ImageVector.vectorResource(id = R.drawable.ic_checkmark_conversation),
                         tint = Color.Unspecified,

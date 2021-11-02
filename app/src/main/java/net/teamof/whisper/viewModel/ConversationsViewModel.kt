@@ -5,12 +5,15 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.objectbox.Box
 import io.objectbox.android.ObjectBoxLiveData
 import io.objectbox.kotlin.equal
+import io.objectbox.kotlin.oneOf
+import io.objectbox.kotlin.or
 import net.teamof.whisper.ObjectBox
 import net.teamof.whisper.api.UserProfileResponse
 import net.teamof.whisper.api.UsersAPI
 import net.teamof.whisper.models.Conversation
 import net.teamof.whisper.models.Conversation_
 import net.teamof.whisper.models.Message
+import net.teamof.whisper.models.Message_
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -25,6 +28,9 @@ open class ConversationsViewModel @Inject constructor() : ViewModel() {
 
     private val conversationBox: Box<Conversation> =
         ObjectBox.store.boxFor(Conversation::class.java)
+
+    private val messageBox: Box<Message> =
+        ObjectBox.store.boxFor(Message::class.java)
 
     private var _conversations: ObjectBoxLiveData<Conversation> =
         ObjectBoxLiveData(conversationBox.query().build())
@@ -115,13 +121,21 @@ open class ConversationsViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun deleteConversation(conversations: List<Long>) =
+    fun deleteConversationsByToUserID(user_ids: List<Long>) =
 
         conversationBox.query().run {
-            `in`(Conversation_.id, conversations.toLongArray())
+            `in`(Conversation_.to_user_id, user_ids.toLongArray())
             build()
-        }.use {
+        }.use { it ->
             it.remove()
             refreshConversations()
+            // Also remove history messages
+            messageBox.query().run {
+                (Message_.to_user_id oneOf user_ids.toLongArray()
+                        or (Message_.user_id oneOf user_ids.toLongArray()))
+                build()
+            }.use {
+                it.remove()
+            }
         }
 }

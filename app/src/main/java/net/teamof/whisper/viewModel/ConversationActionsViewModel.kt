@@ -32,22 +32,22 @@ class ConversationActionsViewModel : ConversationsViewModel() {
         _showActionsState.value = false
     }
 
-    fun selectConversation(conversation_id: Long) {
+    fun selectConversationByToUserID(user_id: Long) {
         _selectedConversations.value = (_selectedConversations.value)?.let {
             mutableListOf(
                 *it.toTypedArray(),
-                conversation_id
+                user_id
             )
         }
     }
 
-    fun unselectConversation(conversation_id: Long) {
+    fun unselectConversationByToUserID(user_id: Long) {
         _selectedConversations.value =
-            _selectedConversations.value?.filter { it != conversation_id }
+            _selectedConversations.value?.filter { it != user_id }
     }
 
     fun deleteSelectedConversations() {
         if (_selectedConversations.value != null)
-            deleteConversation(_selectedConversations.value!!)
+            deleteConversationsByToUserID(_selectedConversations.value!!)
     }
 }
