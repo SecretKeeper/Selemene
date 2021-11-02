@@ -15,10 +15,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import net.teamof.whisper.ObjectBox
 import net.teamof.whisper.di.WebSocketMessageTriggers
-import net.teamof.whisper.models.Message
-import net.teamof.whisper.models.Message_
-import net.teamof.whisper.models.OBKeyValue
-import net.teamof.whisper.models.OBKeyValue_
+import net.teamof.whisper.models.*
 import net.teamof.whisper.repositories.MessageRepository
 import net.teamof.whisper.utils.ScarletMessagingService
 import timber.log.Timber
@@ -52,7 +49,7 @@ class MessagesViewModel
             .flowOn(Dispatchers.IO)
             .onEach {
                 saveMessage(it)
-                updateConversation(it.user_id, it)
+                updateConversation(MessageSide.THEMSELVES, it)
             }
             .launchIn(viewModelScope)
     }
@@ -84,6 +81,8 @@ class MessagesViewModel
     fun sendMessage(message: Message) {
 
         messageRepository.saveMessage(message)
+
+        updateConversation(MessageSide.MYSELF, message)
 
         _messages = ObjectBoxLiveData(messageBox.query().run {
             (Message_.to_user_id equal message.to_user_id

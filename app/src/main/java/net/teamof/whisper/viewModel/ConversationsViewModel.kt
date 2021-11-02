@@ -10,10 +10,7 @@ import io.objectbox.kotlin.or
 import net.teamof.whisper.ObjectBox
 import net.teamof.whisper.api.UserProfileResponse
 import net.teamof.whisper.api.UsersAPI
-import net.teamof.whisper.models.Conversation
-import net.teamof.whisper.models.Conversation_
-import net.teamof.whisper.models.Message
-import net.teamof.whisper.models.Message_
+import net.teamof.whisper.models.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -66,10 +63,17 @@ open class ConversationsViewModel @Inject constructor() : ViewModel() {
         refresh()
     }
 
-    fun updateConversation(to_user_id: Long, newMessage: Message) {
-
-        if (isConversationExist(to_user_id) == 0L) {
-            val response = usersAPI.getUserProfile(newMessage.user_id)
+    fun updateConversation(side: MessageSide, newMessage: Message) {
+        Timber.d(newMessage.toString())
+        if (isConversationExist(
+                when (side) {
+                    MessageSide.THEMSELVES -> newMessage.user_id
+                    MessageSide.MYSELF -> newMessage.to_user_id
+                }
+            ) == 0L
+        ) {
+            val response =
+                usersAPI.getUserProfile(if (side == MessageSide.THEMSELVES) newMessage.user_id else newMessage.to_user_id)
 
             response.enqueue(object : Callback<UserProfileResponse> {
                 override fun onResponse(
@@ -79,7 +83,7 @@ open class ConversationsViewModel @Inject constructor() : ViewModel() {
                     response.body()?.let {
                         createConversation(
                             Conversation(
-                                to_user_id = newMessage.user_id,
+                                to_user_id = if (side == MessageSide.THEMSELVES) newMessage.user_id else newMessage.to_user_id,
                                 last_message = newMessage.content,
                                 last_message_time = newMessage.created_at,
                                 unread_messages = 0,
@@ -88,7 +92,6 @@ open class ConversationsViewModel @Inject constructor() : ViewModel() {
                             )
                         )
                     }
-                    Timber.d(response.body().toString())
                 }
 
                 override fun onFailure(call: Call<UserProfileResponse>, t: Throwable) {
@@ -97,8 +100,9 @@ open class ConversationsViewModel @Inject constructor() : ViewModel() {
 
             })
         } else {
+            Timber.d("ITS EXECUTING!!!!")
             conversationBox.query().run {
-                (Conversation_.to_user_id equal to_user_id)
+                (Conversation_.to_user_id equal if (side == MessageSide.THEMSELVES) newMessage.user_id else newMessage.to_user_id)
                 build()
             }.use {
                 val result = it.findFirst()
