@@ -14,6 +14,7 @@ import dagger.hilt.components.SingletonComponent
 import net.teamof.whisper.Whisper
 import net.teamof.whisper.api.AuthAPI
 import net.teamof.whisper.api.SearchAPI
+import net.teamof.whisper.api.UsersAPI
 import net.teamof.whisper.repositories.MessageRepository
 import net.teamof.whisper.sockets.FlowStreamAdapter
 import net.teamof.whisper.utils.DateMoshiAdapter
@@ -81,10 +82,20 @@ class AppModule {
     @Provides
     fun provideSearchAPI(retrofit: Retrofit): SearchAPI = retrofit.create(SearchAPI::class.java)
 
+    @Singleton
+    @Provides
+    fun provideUsersAPI(retrofit: Retrofit): UsersAPI = retrofit.create(UsersAPI::class.java)
+
+    @Singleton
     @Provides
     fun provideScarletMessagingService(scarlet: Scarlet): ScarletMessagingService {
         return scarlet.create()
     }
+
+    @Singleton
+    @Provides
+    fun provideWebSocketMessageTriggers(scarletMessagingService: ScarletMessagingService): WebSocketMessageTriggers =
+        WebSocketMessageTriggers(scarletMessagingService)
 
     @Singleton
     @Provides
