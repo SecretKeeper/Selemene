@@ -6,14 +6,22 @@ import io.objectbox.Box
 import io.objectbox.android.ObjectBoxLiveData
 import io.objectbox.kotlin.equal
 import net.teamof.whisper.ObjectBox
+import net.teamof.whisper.api.UserProfileResponse
+import net.teamof.whisper.api.UsersAPI
 import net.teamof.whisper.models.Conversation
 import net.teamof.whisper.models.Conversation_
 import net.teamof.whisper.models.Message
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 open class ConversationsViewModel @Inject constructor() : ViewModel() {
+
+    @Inject
+    lateinit var usersAPI: UsersAPI
 
     private val conversationBox: Box<Conversation> =
         ObjectBox.store.boxFor(Conversation::class.java)
@@ -55,17 +63,33 @@ open class ConversationsViewModel @Inject constructor() : ViewModel() {
     fun updateConversation(to_user_id: Long, newMessage: Message) {
 
         if (isConversationExist(to_user_id) == 0L) {
-            Timber.d("We Created a new conversation Sorry! ${isConversationExist(to_user_id)}")
-            createConversation(
-                Conversation(
-                    to_user_id = newMessage.to_user_id,
-                    last_message = newMessage.content,
-                    last_message_time = newMessage.created_at,
-                    unread_messages = 0,
-                    username = "The Trick is Working",
-                    user_image = "https://cdn-icons-png.flaticon.com/128/924/924874.png"
-                )
-            )
+            val response = usersAPI.getUserProfile(newMessage.user_id)
+
+            response.enqueue(object : Callback<UserProfileResponse> {
+                override fun onResponse(
+                    call: Call<UserProfileResponse>,
+                    response: Response<UserProfileResponse>
+                ) {
+                    response.body()?.let {
+                        createConversation(
+                            Conversation(
+                                to_user_id = newMessage.user_id,
+                                last_message = newMessage.content,
+                                last_message_time = newMessage.created_at,
+                                unread_messages = 0,
+                                username = it.username,
+                                user_image = it.avatar
+                            )
+                        )
+                    }
+                    Timber.d(response.body().toString())
+                }
+
+                override fun onFailure(call: Call<UserProfileResponse>, t: Throwable) {
+                    Timber.d(t)
+                }
+
+            })
         } else {
             conversationBox.query().run {
                 (Conversation_.to_user_id equal to_user_id)
