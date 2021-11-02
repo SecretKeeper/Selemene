@@ -14,7 +14,11 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import net.teamof.whisper.ObjectBox
-import net.teamof.whisper.models.*
+import net.teamof.whisper.di.WebSocketMessageTriggers
+import net.teamof.whisper.models.Message
+import net.teamof.whisper.models.Message_
+import net.teamof.whisper.models.OBKeyValue
+import net.teamof.whisper.models.OBKeyValue_
 import net.teamof.whisper.repositories.MessageRepository
 import net.teamof.whisper.utils.ScarletMessagingService
 import timber.log.Timber
@@ -28,11 +32,14 @@ class MessagesViewModel
 ) :
     ConversationsViewModel() {
 
+    @Inject
+    lateinit var webSocketMessageTriggers: WebSocketMessageTriggers
+
     init {
 
         scarletMessagingService.observeWebSocket().flowOn(Dispatchers.IO).onEach {
             when (it) {
-                is WebSocket.Event.OnConnectionOpened<*> -> sendSubscribeChannels()
+                is WebSocket.Event.OnConnectionOpened<*> -> webSocketMessageTriggers.sendSubscribeChannels()
                 is WebSocket.Event.OnConnectionClosing -> Timber.d("Socket Connection closing")
                 is WebSocket.Event.OnConnectionClosed -> Timber.d("Socket Connection closed")
                 is WebSocket.Event.OnConnectionFailed -> Timber.e(it.throwable)
@@ -74,23 +81,6 @@ class MessagesViewModel
         return query
     }
 
-    private fun sendSubscribeChannels() {
-
-        val channels = arrayListOf<String>()
-
-        if (currentUserId != null) {
-            channels.add(currentUserId.value)
-
-            scarletMessagingService.sendSubscribe(
-                WSSubscribeChannels(
-                    currentUserId.value,
-                    "subscribe-channels",
-                    channels
-                )
-            )
-        }
-    }
-
     fun sendMessage(message: Message) {
 
         messageRepository.saveMessage(message)
@@ -124,7 +114,8 @@ class MessagesViewModel
                             or (Message_.user_id equal currentUserId.value))
                     order(Message_.created_at)
                     build()
-                })
+                }
+            )
         }
     }
 
