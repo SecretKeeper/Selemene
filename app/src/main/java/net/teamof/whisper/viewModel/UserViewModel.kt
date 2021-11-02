@@ -16,6 +16,7 @@ import net.teamof.whisper.api.LoginRequest
 import net.teamof.whisper.api.SearchAPI
 import net.teamof.whisper.api.SearchUsersRequest
 import net.teamof.whisper.di.DataStoreManager
+import net.teamof.whisper.di.WebSocketMessageTriggers
 import net.teamof.whisper.models.Contact
 import net.teamof.whisper.models.OBKeyValue
 import net.teamof.whisper.models.OBKeyValue_
@@ -35,6 +36,9 @@ class UserViewModel @Inject constructor(
     private val searchAPI: SearchAPI
 ) :
     ViewModel() {
+
+    @Inject
+    lateinit var webSocketMessageTriggers: WebSocketMessageTriggers
 
     private val oBKeyValueBox: Box<OBKeyValue> = ObjectBox.store.boxFor()
 
@@ -80,12 +84,15 @@ class UserViewModel @Inject constructor(
                     Timber.d(jwt.getClaim("user_id").asString())
                     jwt.getClaim("user_id").asLong()?.let { setUserID(it) }
                     jwt.getClaim("user_id").asString()
-                        ?.let { oBKeyValueBox.put(OBKeyValue(key = "user_id", value = it)) }
+                        ?.let {
+                            oBKeyValueBox.put(OBKeyValue(key = "user_id", value = it))
+                            webSocketMessageTriggers.sendSubscribeChannels(it)
+                        }
 
-//                    navController.navigate("Conversations") {
-//                        launchSingleTop = true
-//                        popUpTo("Login") { inclusive = true }
-//                    }
+                    navController.navigate("Conversations") {
+                        launchSingleTop = true
+                        popUpTo("Login") { inclusive = true }
+                    }
                 } else {
                     buttonLoading(false)
                     buttonEnabled(false)
