@@ -15,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.launch
 import net.teamof.whisper.components.Message
@@ -26,6 +27,7 @@ import net.teamof.whisper.viewModel.MessagesViewModel
 import net.teamof.whisper.viewModel.UserViewModel
 
 
+@ExperimentalPermissionsApi
 @OptIn(DelicateCoroutinesApi::class)
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi

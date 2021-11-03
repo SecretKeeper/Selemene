@@ -12,6 +12,8 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
+import coil.annotation.ExperimentalCoilApi
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import dagger.hilt.android.AndroidEntryPoint
 import net.teamof.whisper.screens.MainScreen
 
@@ -24,7 +26,9 @@ class MainActivity : ComponentActivity() {
     @OptIn(
         ExperimentalAnimationApi::class,
         ExperimentalFoundationApi::class,
-        ExperimentalMaterialApi::class
+        ExperimentalMaterialApi::class,
+        ExperimentalCoilApi::class,
+        ExperimentalPermissionsApi::class
     )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

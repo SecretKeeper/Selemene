@@ -15,10 +15,13 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import coil.annotation.ExperimentalCoilApi
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import net.teamof.whisper.components.BottomAppBar
 import net.teamof.whisper.ui.theme.WhisperTheme
 import net.teamof.whisper.viewModel.*
 
+@ExperimentalCoilApi
+@ExperimentalPermissionsApi
 @ExperimentalAnimationApi
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
@@ -47,6 +50,7 @@ fun MainScreen(
 }
 
 
+@ExperimentalPermissionsApi
 @ExperimentalCoilApi
 @ExperimentalAnimationApi
 @ExperimentalMaterialApi
