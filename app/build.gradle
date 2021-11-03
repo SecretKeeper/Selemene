@@ -110,7 +110,10 @@ dependencies {
     // Material Design
     implementation "androidx.compose.material:material:$compose_version"
 
-    // Coin Compose
+    // Accompanist Permission
+    implementation "com.google.accompanist:accompanist-permissions:0.20.0"
+
+    // Coil Compose
     implementation("io.coil-kt:coil-compose:1.4.0")
 
     // ObjectBox Browser Debug

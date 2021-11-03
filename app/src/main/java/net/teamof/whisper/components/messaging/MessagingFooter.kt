@@ -2,10 +2,7 @@ package net.teamof.whisper.components.messaging
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.pm.PackageManager
 import android.os.Build
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -19,13 +16,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberPermissionState
 import kotlinx.coroutines.launch
 import net.teamof.whisper.R
 import net.teamof.whisper.models.Message
@@ -33,6 +30,7 @@ import net.teamof.whisper.ui.theme.fontFamily
 import net.teamof.whisper.viewModel.MessagesViewModel
 import net.teamof.whisper.viewModel.UserViewModel
 
+@ExperimentalPermissionsApi
 @SuppressLint("SimpleDateFormat")
 @RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalMaterialApi
@@ -45,12 +43,11 @@ fun MessagingFooter(
 ) {
     val currentUserId = userViewModel.getUserID()
     val scope = rememberCoroutineScope()
-    val context = LocalContext.current
     val text = remember { mutableStateOf("") }
-    val launcher =
-        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
-            if (isGranted) true else false
-        }
+
+    val cameraPermissionState = rememberPermissionState(
+        Manifest.permission.READ_EXTERNAL_STORAGE
+    )
 
     Column(Modifier.background(Color(red = 245, green = 245, blue = 253))) {
         Row(
@@ -64,18 +61,11 @@ fun MessagingFooter(
         ) {
             IconButton(
                 onClick = {
-                    scope.launch {
-                        when (PackageManager.PERMISSION_GRANTED) {
-                            ContextCompat.checkSelfPermission(
-                                context,
-                                Manifest.permission.READ_EXTERNAL_STORAGE
-                            ) -> {
-                                scope.launch { bottomSheetState.show() }
-                            }
-                            else -> {
-                                launcher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-                            }
-                        }
+                    when {
+                        cameraPermissionState.hasPermission -> scope.launch { bottomSheetState.show() }
+
+                        cameraPermissionState.shouldShowRationale ||
+                                !cameraPermissionState.permissionRequested -> cameraPermissionState.launchPermissionRequest()
                     }
                 },
                 Modifier
