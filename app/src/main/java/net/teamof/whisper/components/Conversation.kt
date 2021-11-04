@@ -2,7 +2,7 @@ package net.teamof.whisper.components
 
 import BackPressHandler
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
@@ -15,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
@@ -51,7 +52,8 @@ fun Conversation(
         false
     )
 
-    animateDpAsState(if (cachedConversation.value.to_user_id in selectedConversationsState) 5.dp else 0.dp)
+    val selectIconScaleState =
+        animateFloatAsState(if (cachedConversation.value.to_user_id in selectedConversationsState) 1f else 0.0f)
 
     if (showConversationActions) {
         BackPressHandler {
@@ -104,14 +106,14 @@ fun Conversation(
                         .height(60.dp)
                 )
 
-                if (cachedConversation.value.to_user_id in selectedConversationsState)
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_checkmark_conversation),
-                        tint = Color.Unspecified,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .width(22.dp)
-                    )
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_checkmark_conversation),
+                    tint = Color.Unspecified,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .width(22.dp)
+                        .scale(selectIconScaleState.value)
+                )
             }
 
             Column(
