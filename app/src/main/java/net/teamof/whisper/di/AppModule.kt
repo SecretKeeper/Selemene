@@ -4,8 +4,11 @@ import android.content.Context
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.tinder.scarlet.Scarlet
+import com.tinder.scarlet.lifecycle.android.AndroidLifecycle
 import com.tinder.scarlet.messageadapter.moshi.MoshiMessageAdapter
-import com.tinder.scarlet.websocket.okhttp.newWebSocketFactory
+import com.tinder.scarlet.retry.LinearBackoffStrategy
+import com.tinder.scarlet.websocket.ShutdownReason
+import com.tinder.scarlet.websocket.okhttp.OkHttpWebSocket
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,6 +23,7 @@ import net.teamof.whisper.sockets.FlowStreamAdapter
 import net.teamof.whisper.utils.DateMoshiAdapter
 import net.teamof.whisper.utils.ScarletMessagingService
 import okhttp3.OkHttpClient
+import okhttp3.Request
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.*
@@ -58,12 +62,23 @@ class AppModule {
         client: OkHttpClient,
         moshi: Moshi
     ): Scarlet {
-        return Scarlet.Builder()
-            .webSocketFactory(client.newWebSocketFactory(baseWebSocketAddress))
-            .addMessageAdapterFactory(MoshiMessageAdapter.Factory(moshi))
-            .addStreamAdapterFactory(FlowStreamAdapter.Factory())
-//            .lifecycle(AndroidLifecycle.ofApplicationForeground(application)) // when add this it does not work!
-            .build()
+        val protocol = OkHttpWebSocket(
+            client,
+            OkHttpWebSocket.SimpleRequestFactory(
+                { Request.Builder().url(baseWebSocketAddress).build() },
+                { ShutdownReason.GRACEFUL }
+            )
+        )
+
+        val scarletConfiguration = Scarlet.Configuration(
+            messageAdapterFactories = listOf(MoshiMessageAdapter.Factory(moshi)),
+            streamAdapterFactories = listOf(FlowStreamAdapter.Factory()),
+            backoffStrategy = LinearBackoffStrategy(500),
+            lifecycle = AndroidLifecycle.ofApplicationForeground(
+                application
+            )
+        )
+        return Scarlet(protocol, scarletConfiguration)
     }
 
     @Singleton
