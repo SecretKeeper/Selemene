@@ -23,6 +23,10 @@ android {
         }
     }
 
+    packagingOptions {
+        resources.excludes.add("META-INF/*")
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -75,12 +79,11 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2'
 
     // Scarlet
-    def scarlet_version = "0.1.12"
-    implementation "com.tinder.scarlet:scarlet:$scarlet_version"
-    implementation "com.tinder.scarlet:lifecycle-android:$scarlet_version"
-    implementation "com.tinder.scarlet:websocket-okhttp:$scarlet_version"
-    implementation "com.tinder.scarlet:message-adapter-moshi:$scarlet_version"
-    implementation "com.tinder.scarlet:stream-adapter-coroutines:$scarlet_version"
+    def scarlet_version = "0.2.4"
+    implementation "com.github.Tinder.Scarlet:scarlet:$scarlet_version"
+    implementation "com.github.Tinder.Scarlet:scarlet-lifecycle-android:$scarlet_version"
+    implementation "com.github.Tinder.Scarlet:scarlet-message-adapter-moshi:$scarlet_version"
+    implementation "com.github.tinder.scarlet:scarlet-protocol-websocket-okhttp:$scarlet_version"
 
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'

@@ -1,7 +1,7 @@
 package net.teamof.whisper.viewModel
 
 import androidx.lifecycle.viewModelScope
-import com.tinder.scarlet.WebSocket
+import com.tinder.scarlet.websocket.WebSocketEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.objectbox.Box
 import io.objectbox.android.AndroidScheduler
@@ -36,11 +36,11 @@ class MessagesViewModel
 
         scarletMessagingService.observeWebSocket().flowOn(Dispatchers.IO).onEach {
             when (it) {
-                is WebSocket.Event.OnConnectionOpened<*> -> webSocketMessageTriggers.sendSubscribeChannels()
-                is WebSocket.Event.OnConnectionClosing -> Timber.d("Socket Connection closing")
-                is WebSocket.Event.OnConnectionClosed -> Timber.d("Socket Connection closed")
-                is WebSocket.Event.OnConnectionFailed -> Timber.e(it.throwable)
-                is WebSocket.Event.OnMessageReceived -> Timber.d("Socket Message Received ${it.message}")
+                is WebSocketEvent.OnConnectionOpened -> webSocketMessageTriggers.sendSubscribeChannels()
+                is WebSocketEvent.OnConnectionClosing -> Timber.d("Socket Connection closing")
+                is WebSocketEvent.OnConnectionClosed -> Timber.d("Socket Connection closed")
+                is WebSocketEvent.OnConnectionFailed -> Timber.e(it.throwable)
+                is WebSocketEvent.OnMessageReceived -> Timber.d("Socket Message Received ${it.message}")
                 else -> Timber.d("Socket $it")
             }
         }.launchIn(viewModelScope)
