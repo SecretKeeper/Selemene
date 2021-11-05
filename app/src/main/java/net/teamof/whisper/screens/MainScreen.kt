@@ -115,6 +115,7 @@ private fun MainScreenNavigationConfigurations(
                     )
                 }
             }
+            composable("SelfProfile") { SelfProfile() }
             composable("Profile") { Profile(navController) }
             composable("CreateGroup") { CreateGroup(navController) }
             composable("Activities") { Activities() }

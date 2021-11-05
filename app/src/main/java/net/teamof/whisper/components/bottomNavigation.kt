@@ -46,8 +46,8 @@ sealed class NavItem(
         true
     )
 
-    object Settings : NavItem(
-        "messaging",
+    object SelfProfile : NavItem(
+        "SelfProfile",
         R.drawable.ic_settings,
         true
     )
@@ -66,7 +66,7 @@ fun BottomAppBar(
         NavItem.Feeds,
         NavItem.Create,
         NavItem.Activities,
-        NavItem.Settings
+        NavItem.SelfProfile
     )
 
     BottomAppBar(
