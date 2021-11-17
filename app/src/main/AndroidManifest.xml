@@ -22,6 +22,12 @@
         android:theme="@style/Theme.Whisper"
         android:usesCleartextTraffic="true"
         android:hardwareAccelerated="true">
+
+        <service
+            android:label="WhispersMessageListener"
+            android:name=".services.MessageListenerService"
+            android:enabled="true" />
+
         <activity
             android:name=".MainActivity"
             android:windowSoftInputMode="adjustResize"
