@@ -1,7 +1,5 @@
 package net.teamof.whisper.viewModel
 
-import androidx.lifecycle.viewModelScope
-import com.tinder.scarlet.websocket.WebSocketEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.objectbox.Box
 import io.objectbox.android.AndroidScheduler
@@ -9,50 +7,17 @@ import io.objectbox.android.ObjectBoxLiveData
 import io.objectbox.kotlin.equal
 import io.objectbox.kotlin.or
 import io.objectbox.query.Query
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import net.teamof.whisper.ObjectBox
-import net.teamof.whisper.di.WebSocketMessageTriggers
 import net.teamof.whisper.models.*
 import net.teamof.whisper.repositories.MessageRepository
-import net.teamof.whisper.utils.ScarletMessagingService
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class MessagesViewModel
 @Inject constructor(
-    private val scarletMessagingService: ScarletMessagingService,
     private val messageRepository: MessageRepository
 ) :
     ConversationsViewModel() {
-
-    @Inject
-    lateinit var webSocketMessageTriggers: WebSocketMessageTriggers
-
-    init {
-
-        scarletMessagingService.observeWebSocket().flowOn(Dispatchers.IO).onEach {
-            when (it) {
-                is WebSocketEvent.OnConnectionOpened -> webSocketMessageTriggers.sendSubscribeChannels()
-                is WebSocketEvent.OnConnectionClosing -> Timber.d("Socket Connection closing")
-                is WebSocketEvent.OnConnectionClosed -> Timber.d("Socket Connection closed")
-                is WebSocketEvent.OnConnectionFailed -> Timber.e(it.throwable)
-                is WebSocketEvent.OnMessageReceived -> Timber.d("Socket Message Received ${it.message}")
-                else -> Timber.d("Socket $it")
-            }
-        }.launchIn(viewModelScope)
-
-        scarletMessagingService.observeMessage()
-            .flowOn(Dispatchers.IO)
-            .onEach {
-                saveMessage(it)
-                updateConversation(MessageSide.THEMSELVES, it)
-            }
-            .launchIn(viewModelScope)
-    }
 
     private val oBKeyValueBox: Box<OBKeyValue> = ObjectBox.store.boxFor(OBKeyValue::class.java)
 
@@ -91,7 +56,7 @@ class MessagesViewModel
             build()
         })
 
-        scarletMessagingService.sendMessage(message)
+//        scarletMessagingService.sendMessage(message)
     }
 
     private fun saveMessage(message: Message) {
