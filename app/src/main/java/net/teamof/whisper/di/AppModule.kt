@@ -33,6 +33,7 @@ class AppModule {
         return context as Whisper
     }
 
+    @Singleton
     @Provides
     fun provideMoshi(): Moshi {
         return Moshi.Builder().add(Date::class.java, DateMoshiAdapter())
