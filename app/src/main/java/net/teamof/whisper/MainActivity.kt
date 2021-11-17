@@ -1,7 +1,9 @@
 package net.teamof.whisper
 
 import LocalBackPressedDispatcher
+import android.app.ActivityManager
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -16,6 +18,8 @@ import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import dagger.hilt.android.AndroidEntryPoint
 import net.teamof.whisper.screens.MainScreen
+import net.teamof.whisper.services.MessageListenerService
+
 
 val Context.dataStore: DataStore<Preferences>
         by preferencesDataStore(name = "datastore")
@@ -40,4 +44,23 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    private fun isMyServiceRunning(serviceClass: Class<*>): Boolean {
+        val manager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
+        for (service in manager.getRunningServices(Int.MAX_VALUE)) {
+            if (serviceClass.name == service.service.className) {
+                return true
+            }
+        }
+        return false
+    }
+
+
+    override fun onStart() {
+        super.onStart()
+
+        if (!isMyServiceRunning(MessageListenerService::class.java))
+            startService(Intent(this, MessageListenerService::class.java))
+    }
+
 }
