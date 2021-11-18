@@ -3,12 +3,6 @@ package net.teamof.whisper.di
 import android.content.Context
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import com.tinder.scarlet.Scarlet
-import com.tinder.scarlet.lifecycle.android.AndroidLifecycle
-import com.tinder.scarlet.messageadapter.moshi.MoshiMessageAdapter
-import com.tinder.scarlet.retry.LinearBackoffStrategy
-import com.tinder.scarlet.websocket.ShutdownReason
-import com.tinder.scarlet.websocket.okhttp.OkHttpWebSocket
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,11 +13,9 @@ import net.teamof.whisper.api.AuthAPI
 import net.teamof.whisper.api.SearchAPI
 import net.teamof.whisper.api.UsersAPI
 import net.teamof.whisper.repositories.MessageRepository
-import net.teamof.whisper.sockets.FlowStreamAdapter
 import net.teamof.whisper.utils.DateMoshiAdapter
-import net.teamof.whisper.utils.ScarletMessagingService
+import net.teamof.whisper.utils.MessageUpdater
 import okhttp3.OkHttpClient
-import okhttp3.Request
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.*
@@ -42,6 +34,7 @@ class AppModule {
         return context as Whisper
     }
 
+    @Singleton
     @Provides
     fun provideMoshi(): Moshi {
         return Moshi.Builder().add(Date::class.java, DateMoshiAdapter())
@@ -54,31 +47,6 @@ class AppModule {
 
         return OkHttpClient.Builder()
             .build()
-    }
-
-    @Provides
-    fun provideScarlet(
-        application: Whisper,
-        client: OkHttpClient,
-        moshi: Moshi
-    ): Scarlet {
-        val protocol = OkHttpWebSocket(
-            client,
-            OkHttpWebSocket.SimpleRequestFactory(
-                { Request.Builder().url(baseWebSocketAddress).build() },
-                { ShutdownReason.GRACEFUL }
-            )
-        )
-
-        val scarletConfiguration = Scarlet.Configuration(
-            messageAdapterFactories = listOf(MoshiMessageAdapter.Factory(moshi)),
-            streamAdapterFactories = listOf(FlowStreamAdapter.Factory()),
-            backoffStrategy = LinearBackoffStrategy(500),
-            lifecycle = AndroidLifecycle.ofApplicationForeground(
-                application
-            )
-        )
-        return Scarlet(protocol, scarletConfiguration)
     }
 
     @Singleton
@@ -103,16 +71,10 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideScarletMessagingService(scarlet: Scarlet): ScarletMessagingService {
-        return scarlet.create()
-    }
-
-    @Singleton
-    @Provides
-    fun provideWebSocketMessageTriggers(scarletMessagingService: ScarletMessagingService): WebSocketMessageTriggers =
-        WebSocketMessageTriggers(scarletMessagingService)
-
-    @Singleton
-    @Provides
     fun provideMessageRepository() = MessageRepository()
+
+    @Singleton
+    @Provides
+    fun provideMessageUpdater(messageRepository: MessageRepository) =
+        MessageUpdater(messageRepository)
 }

@@ -16,7 +16,6 @@ import net.teamof.whisper.api.LoginRequest
 import net.teamof.whisper.api.SearchAPI
 import net.teamof.whisper.api.SearchUsersRequest
 import net.teamof.whisper.di.DataStoreManager
-import net.teamof.whisper.di.WebSocketMessageTriggers
 import net.teamof.whisper.models.Contact
 import net.teamof.whisper.models.OBKeyValue
 import net.teamof.whisper.models.OBKeyValue_
@@ -36,9 +35,6 @@ class UserViewModel @Inject constructor(
     private val searchAPI: SearchAPI
 ) :
     ViewModel() {
-
-    @Inject
-    lateinit var webSocketMessageTriggers: WebSocketMessageTriggers
 
     private val oBKeyValueBox: Box<OBKeyValue> = ObjectBox.store.boxFor()
 
@@ -86,7 +82,7 @@ class UserViewModel @Inject constructor(
                     jwt.getClaim("user_id").asString()
                         ?.let {
                             oBKeyValueBox.put(OBKeyValue(key = "user_id", value = it))
-                            webSocketMessageTriggers.sendSubscribeChannels(it)
+//                            webSocketMessageTriggers.sendSubscribeChannels(it) hint: should subscribe with new methods
                         }
 
                     navController.navigate("Conversations") {
