@@ -13,7 +13,7 @@ import net.teamof.whisper.repositories.MessageRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class MessagesViewModel
+open class MessagesViewModel
 @Inject constructor(
     private val messageRepository: MessageRepository
 ) :
@@ -59,7 +59,7 @@ class MessagesViewModel
 //        scarletMessagingService.sendMessage(message)
     }
 
-    private fun saveMessage(message: Message) {
+    fun saveMessage(messageSide: MessageSide, message: Message) {
         messageRepository.saveMessage((message))
 
         _messages = ObjectBoxLiveData(messageBox.query().run {
