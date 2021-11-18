@@ -14,6 +14,7 @@ import net.teamof.whisper.api.SearchAPI
 import net.teamof.whisper.api.UsersAPI
 import net.teamof.whisper.repositories.MessageRepository
 import net.teamof.whisper.utils.DateMoshiAdapter
+import net.teamof.whisper.utils.MessageUpdater
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -71,4 +72,9 @@ class AppModule {
     @Singleton
     @Provides
     fun provideMessageRepository() = MessageRepository()
+
+    @Singleton
+    @Provides
+    fun provideMessageUpdater(messageRepository: MessageRepository) =
+        MessageUpdater(messageRepository)
 }
