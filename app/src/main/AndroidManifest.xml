@@ -26,7 +26,8 @@
         <service
             android:label="WhispersMessageListener"
             android:name=".services.MessageListenerService"
-            android:enabled="true" />
+            android:enabled="true"
+            android:process=":whisperslistener" />
 
         <activity
             android:name=".MainActivity"
