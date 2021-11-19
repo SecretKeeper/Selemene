@@ -1,8 +1,15 @@
 package net.teamof.whisper.viewModel
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import net.teamof.whisper.repositories.ConversationRepository
+import javax.inject.Inject
 
-class ConversationActionsViewModel : ConversationsViewModel() {
+@HiltViewModel
+class ConversationActionsViewModel @Inject constructor(
+    private val conversationRepository: ConversationRepository
+) : ViewModel() {
 
     private val _showActionsState: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>(false)
@@ -48,6 +55,6 @@ class ConversationActionsViewModel : ConversationsViewModel() {
 
     fun deleteSelectedConversations() {
         if (_selectedConversations.value != null)
-            deleteConversationsByToUserID(_selectedConversations.value!!)
+            conversationRepository.deleteByToUserIDs(_selectedConversations.value!!)
     }
 }
