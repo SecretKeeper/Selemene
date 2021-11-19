@@ -12,6 +12,7 @@ import net.teamof.whisper.Whisper
 import net.teamof.whisper.api.AuthAPI
 import net.teamof.whisper.api.SearchAPI
 import net.teamof.whisper.api.UsersAPI
+import net.teamof.whisper.repositories.ConversationRepository
 import net.teamof.whisper.repositories.MessageRepository
 import net.teamof.whisper.utils.DateMoshiAdapter
 import net.teamof.whisper.utils.MessageUpdater
@@ -72,6 +73,10 @@ class AppModule {
     @Singleton
     @Provides
     fun provideMessageRepository() = MessageRepository()
+
+    @Singleton
+    @Provides
+    fun provideConversationRepository() = ConversationRepository()
 
     @Singleton
     @Provides
