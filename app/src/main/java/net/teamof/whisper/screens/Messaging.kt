@@ -23,6 +23,7 @@ import net.teamof.whisper.components.messaging.MessagingAttachSource
 import net.teamof.whisper.components.messaging.MessagingFooter
 import net.teamof.whisper.components.messaging.MessagingHeader
 import net.teamof.whisper.models.Message
+import net.teamof.whisper.viewModel.ConversationsViewModel
 import net.teamof.whisper.viewModel.MessagesViewModel
 import net.teamof.whisper.viewModel.UserViewModel
 
@@ -38,7 +39,8 @@ fun Messaging(
     navController: NavController,
     to_user_id: String,
     messagesViewModel: MessagesViewModel,
-    userViewModel: UserViewModel
+    userViewModel: UserViewModel,
+    conversationsViewModel: ConversationsViewModel
 ) {
 
     messagesViewModel.getConversationMessages(to_user_id.toLong())
@@ -60,7 +62,7 @@ fun Messaging(
     ) {
 
         Column {
-            MessagingHeader(navController, to_user_id.toLong(), selection)
+            MessagingHeader(navController, conversationsViewModel, to_user_id.toLong(), selection)
             Column(Modifier.weight(1f)) {
                 Column(
                     Modifier.verticalScroll(
