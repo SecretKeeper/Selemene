@@ -8,6 +8,6 @@ class MessageRepository {
 
     private val messageBox: Box<Message> = ObjectBox.store.boxFor(Message::class.java)
 
-    fun saveMessage(message: Message) = messageBox.put((message))
+    fun create(message: Message) = messageBox.put((message))
 
 }
