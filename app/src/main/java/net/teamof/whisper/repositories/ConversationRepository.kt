@@ -1,22 +1,28 @@
 package net.teamof.whisper.repositories
 
 import io.objectbox.Box
+import io.objectbox.kotlin.equal
 import io.objectbox.kotlin.oneOf
 import io.objectbox.kotlin.or
 import net.teamof.whisper.ObjectBox
-import net.teamof.whisper.models.Conversation
-import net.teamof.whisper.models.Conversation_
-import net.teamof.whisper.models.Message
-import net.teamof.whisper.models.Message_
+import net.teamof.whisper.api.UserProfileResponse
+import net.teamof.whisper.api.UsersAPI
+import net.teamof.whisper.models.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import timber.log.Timber
+import javax.inject.Inject
 
-class ConversationRepository {
+class ConversationRepository @Inject constructor(
+    private val usersAPI: UsersAPI
+) {
     private val conversationBox: Box<Conversation> =
         ObjectBox.store.boxFor(Conversation::class.java)
 
     private val messageBox: Box<Message> = ObjectBox.store.boxFor(Message::class.java)
-
-
-    fun isConversationExist(to_user_id: Long): Long {
+    
+    private fun isConversationExist(to_user_id: Long): Long {
         val query = conversationBox.query().equal(Conversation_.to_user_id, to_user_id).build()
         val result = query.count()
         query.close()
@@ -24,6 +30,55 @@ class ConversationRepository {
         return result
     }
 
+    fun update(side: MessageSide, newMessage: Message) {
+        if (isConversationExist(
+                when (side) {
+                    MessageSide.THEMSELVES -> newMessage.user_id
+                    MessageSide.MYSELF -> newMessage.to_user_id
+                }
+            ) == 0L
+        ) {
+            val response =
+                usersAPI.getUserProfile(if (side == MessageSide.THEMSELVES) newMessage.user_id else newMessage.to_user_id)
+
+            response.enqueue(object : Callback<UserProfileResponse> {
+                override fun onResponse(
+                    call: Call<UserProfileResponse>,
+                    response: Response<UserProfileResponse>
+                ) {
+                    response.body()?.let {
+                        create(
+                            Conversation(
+                                to_user_id = if (side == MessageSide.THEMSELVES) newMessage.user_id else newMessage.to_user_id,
+                                last_message = newMessage.content,
+                                last_message_time = newMessage.created_at,
+                                unread_messages = 0,
+                                username = it.username,
+                                user_image = it.avatar
+                            )
+                        )
+                    }
+                }
+
+                override fun onFailure(call: Call<UserProfileResponse>, t: Throwable) {
+                    Timber.d(t)
+                }
+
+            })
+        } else {
+            conversationBox.query().run {
+                (Conversation_.to_user_id equal if (side == MessageSide.THEMSELVES) newMessage.user_id else newMessage.to_user_id)
+                build()
+            }.use {
+                val result = it.findFirst()
+                if (result != null) {
+                    result.last_message = newMessage.content
+                    result.last_message_time = newMessage.created_at
+                    conversationBox.put(result)
+                }
+            }
+        }
+    }
 
     fun create(conversation: Conversation) {
         conversationBox.put(conversation)
@@ -35,7 +90,6 @@ class ConversationRepository {
             build()
         }.use {
             it.remove()
-//            refreshConversations()
         }
     }
 
@@ -46,7 +100,6 @@ class ConversationRepository {
             build()
         }.use { it ->
             it.remove()
-//            refreshConversations()
             // Also remove history messages
             messageBox.query().run {
                 (Message_.to_user_id oneOf user_ids.toLongArray()
