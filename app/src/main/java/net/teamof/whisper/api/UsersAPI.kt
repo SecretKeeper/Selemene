@@ -18,5 +18,5 @@ data class UserProfileResponse(
 interface UsersAPI {
     @GET("user/id/{id}")
     @Headers("Content-Type: application/json")
-    fun getUserProfile(@Path("id") username: Long): Call<UserProfileResponse>
+    fun getUserProfile(@Path("id") user_id: Long): Call<UserProfileResponse>
 }

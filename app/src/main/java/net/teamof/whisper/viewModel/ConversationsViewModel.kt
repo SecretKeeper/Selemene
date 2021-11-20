@@ -5,12 +5,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.objectbox.Box
 import io.objectbox.android.ObjectBoxLiveData
 import io.objectbox.kotlin.equal
-import io.objectbox.kotlin.oneOf
-import io.objectbox.kotlin.or
 import net.teamof.whisper.ObjectBox
 import net.teamof.whisper.api.UserProfileResponse
 import net.teamof.whisper.api.UsersAPI
-import net.teamof.whisper.models.*
+import net.teamof.whisper.models.Conversation
+import net.teamof.whisper.models.Conversation_
+import net.teamof.whisper.models.Message
+import net.teamof.whisper.models.MessageSide
+import net.teamof.whisper.repositories.ConversationRepository
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -18,16 +20,13 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-open class ConversationsViewModel @Inject constructor() : ViewModel() {
-
-    @Inject
-    lateinit var usersAPI: UsersAPI
+class ConversationsViewModel @Inject constructor(
+    private val conversationRepository: ConversationRepository,
+    private val usersAPI: UsersAPI
+) : ViewModel() {
 
     private val conversationBox: Box<Conversation> =
         ObjectBox.store.boxFor(Conversation::class.java)
-
-    private val messageBox: Box<Message> =
-        ObjectBox.store.boxFor(Message::class.java)
 
     private var _conversations: ObjectBoxLiveData<Conversation> =
         ObjectBoxLiveData(conversationBox.query().build())
@@ -38,11 +37,8 @@ open class ConversationsViewModel @Inject constructor() : ViewModel() {
         _conversations = ObjectBoxLiveData(conversationBox.query().build())
     }
 
-    private fun isConversationExist(to_user_id: Long): Long =
-        conversationBox.query().run {
-            (Conversation_.to_user_id equal to_user_id)
-            build()
-        }.use { it.count() }
+    fun createConversation(conversation: Conversation) =
+        conversationRepository.create(conversation)
 
     fun getConversation(to_user_id: Long): Conversation? =
         conversationBox.query().run {
@@ -50,22 +46,8 @@ open class ConversationsViewModel @Inject constructor() : ViewModel() {
             build()
         }.use { it.findFirst() }
 
-    fun createConversation(conversation: Conversation) {
-        if (isConversationExist(conversation.to_user_id) == 0L) {
-            saveConversation(conversation) {
-                refreshConversations()
-            }
-        }
-    }
-
-    private fun saveConversation(conversation: Conversation, refresh: () -> Unit) {
-        conversationBox.put(conversation)
-        refresh()
-    }
-
     fun updateConversation(side: MessageSide, newMessage: Message) {
-        Timber.d(newMessage.toString())
-        if (isConversationExist(
+        if (conversationRepository.isConversationExist(
                 when (side) {
                     MessageSide.THEMSELVES -> newMessage.user_id
                     MessageSide.MYSELF -> newMessage.to_user_id
@@ -81,7 +63,7 @@ open class ConversationsViewModel @Inject constructor() : ViewModel() {
                     response: Response<UserProfileResponse>
                 ) {
                     response.body()?.let {
-                        createConversation(
+                        conversationRepository.create(
                             Conversation(
                                 to_user_id = if (side == MessageSide.THEMSELVES) newMessage.user_id else newMessage.to_user_id,
                                 last_message = newMessage.content,
@@ -101,45 +83,18 @@ open class ConversationsViewModel @Inject constructor() : ViewModel() {
             })
         } else {
             Timber.d("ITS EXECUTING!!!!")
-            conversationBox.query().run {
-                (Conversation_.to_user_id equal if (side == MessageSide.THEMSELVES) newMessage.user_id else newMessage.to_user_id)
-                build()
-            }.use {
-                val result = it.findFirst()
-                if (result != null) {
-                    result.last_message = newMessage.content
-                    result.last_message_time = newMessage.created_at
-                    conversationBox.put(result)
+            val query =
+                conversationBox.query().run {
+                    (Conversation_.to_user_id equal if (side == MessageSide.THEMSELVES) newMessage.user_id else newMessage.to_user_id)
+                    build()
+                }.use {
+                    val result = it.findFirst()
+                    if (result != null) {
+                        result.last_message = newMessage.content
+                        result.last_message_time = newMessage.created_at
+                        conversationBox.put(result)
+                    }
                 }
-            }
         }
     }
-
-    fun deleteConversation(conversation: Long) {
-        conversationBox.query().run {
-            equal(Conversation_.id, conversation)
-            build()
-        }.use {
-            it.remove()
-            refreshConversations()
-        }
-    }
-
-    fun deleteConversationsByToUserID(user_ids: List<Long>) =
-
-        conversationBox.query().run {
-            `in`(Conversation_.to_user_id, user_ids.toLongArray())
-            build()
-        }.use { it ->
-            it.remove()
-            refreshConversations()
-            // Also remove history messages
-            messageBox.query().run {
-                (Message_.to_user_id oneOf user_ids.toLongArray()
-                        or (Message_.user_id oneOf user_ids.toLongArray()))
-                build()
-            }.use {
-                it.remove()
-            }
-        }
 }

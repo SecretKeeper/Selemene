@@ -1,5 +1,6 @@
 package net.teamof.whisper.di
 
+import android.app.Application
 import android.content.Context
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -8,13 +9,18 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import net.teamof.whisper.ObjectBox
 import net.teamof.whisper.Whisper
 import net.teamof.whisper.api.AuthAPI
 import net.teamof.whisper.api.SearchAPI
 import net.teamof.whisper.api.UsersAPI
+import net.teamof.whisper.models.OBKeyValue
+import net.teamof.whisper.models.OBKeyValue_
+import net.teamof.whisper.repositories.ConversationRepository
 import net.teamof.whisper.repositories.MessageRepository
+import net.teamof.whisper.sockets.Socket
+import net.teamof.whisper.sockets.SocketBroadcastListener
 import net.teamof.whisper.utils.DateMoshiAdapter
-import net.teamof.whisper.utils.MessageUpdater
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -24,6 +30,16 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class AppModule {
+
+    @Singleton
+    @Provides
+    fun provideGetUserID(): String {
+        val obKeyValueBox = ObjectBox.store.boxFor(OBKeyValue::class.java)
+        return obKeyValueBox.query().run {
+            equal(OBKeyValue_.key, "user_id")
+            build()
+        }.use { it.findFirst() }?.value ?: "0"
+    }
 
     private val baseWebSocketAddress = "ws://10.0.2.2:3335/ws"
 
@@ -59,6 +75,23 @@ class AppModule {
 
     @Singleton
     @Provides
+    fun provideWhisperSocket(getUserID: String): Socket {
+        return Socket.Builder.with("ws://10.0.2.2:3335/ws")
+            .addHeader("user-id", getUserID)
+            .build().connect()
+    }
+
+    @Singleton
+    @Provides
+    fun provideSocketBroadcastListener(
+        application: Application,
+        whisperSocket: Socket,
+        moshi: Moshi,
+        messageRepository: MessageRepository
+    ) = SocketBroadcastListener(application, whisperSocket, moshi, messageRepository)
+
+    @Singleton
+    @Provides
     fun provideAuthAPI(retrofit: Retrofit): AuthAPI = retrofit.create(AuthAPI::class.java)
 
     @Singleton
@@ -75,6 +108,5 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideMessageUpdater(messageRepository: MessageRepository) =
-        MessageUpdater(messageRepository)
+    fun provideConversationRepository() = ConversationRepository()
 }

@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit
  * @author Ali Yusuf
  * @since 3/13/17
  */
-internal class Socket private constructor(request: Request) {
+class Socket private constructor(request: Request) {
     /**
      * Main socket states
      */
