@@ -21,7 +21,6 @@ import net.teamof.whisper.repositories.MessageRepository
 import net.teamof.whisper.sockets.Socket
 import net.teamof.whisper.sockets.SocketBroadcastListener
 import net.teamof.whisper.utils.DateMoshiAdapter
-import net.teamof.whisper.utils.MessageUpdater
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -88,8 +87,8 @@ class AppModule {
         application: Application,
         whisperSocket: Socket,
         moshi: Moshi,
-        messageUpdater: MessageUpdater
-    ) = SocketBroadcastListener(application, whisperSocket, moshi, messageUpdater)
+        messageRepository: MessageRepository
+    ) = SocketBroadcastListener(application, whisperSocket, moshi, messageRepository)
 
     @Singleton
     @Provides
@@ -110,9 +109,4 @@ class AppModule {
     @Singleton
     @Provides
     fun provideConversationRepository() = ConversationRepository()
-
-    @Singleton
-    @Provides
-    fun provideMessageUpdater(messageRepository: MessageRepository) =
-        MessageUpdater(messageRepository)
 }
