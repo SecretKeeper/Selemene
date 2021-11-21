@@ -94,7 +94,7 @@ fun MainHeader(navController: NavController, conversation: Conversation?) {
                     interactionSource = interactionSource,
                     indication = null
                 ) {
-                    navController.navigate("profile")
+                    navController.navigate("Profile/${conversation?.to_user_id}")
                 }
         ) {
             if (conversation != null) {

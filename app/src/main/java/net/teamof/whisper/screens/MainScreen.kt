@@ -118,7 +118,9 @@ private fun MainScreenNavigationConfigurations(
                 }
             }
             composable("SelfProfile") { SelfProfile() }
-            composable("Profile") { Profile(navController) }
+            composable("Profile/{to_user_id}") { backStackEntry ->
+                Profile(navController, backStackEntry.arguments?.getString("to_user_id")!!)
+            }
             composable("CreateGroup") { CreateGroup(navController) }
             composable("Activities") { Activities() }
         }

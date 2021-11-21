@@ -28,7 +28,6 @@ import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
-import kotlinx.coroutines.launch
 import net.teamof.whisper.R
 import net.teamof.whisper.ui.theme.fontFamily
 
@@ -49,7 +48,7 @@ val gridImages = listOf(
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @Composable
-fun Profile(navController: NavController) {
+fun Profile(navController: NavController, to_user_id: String) {
 
     val displayMetrics = Resources.getSystem().displayMetrics
     val heightDp = displayMetrics.heightPixels / displayMetrics.density
@@ -337,9 +336,7 @@ fun Profile(navController: NavController) {
                 backgroundColor = MaterialTheme.colors.primary,
                 elevation = FloatingActionButtonDefaults.elevation(0.dp),
                 onClick = {
-                    scope.launch {
-                        scaffoldState.snackbarHostState.showSnackbar("Snackbar")
-                    }
+                    navController.navigate("Messaging/${to_user_id}")
                 },
                 modifier = Modifier.scale(scaleFab.value)
             ) {
@@ -361,12 +358,12 @@ fun Profile(navController: NavController) {
             contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(((heightDp * 58) / 100).dp)
+                .height(((heightDp * 59) / 100).dp)
         )
         Row(
             Modifier
-                .offset(y = (-(heightDp * 58) / 100).dp)
-                .padding(vertical = 15.dp, horizontal = 10.dp)
+                .offset(y = (-(heightDp * 57) / 100).dp)
+                .padding(horizontal = 10.dp)
         ) {
             IconButton(onClick = { navController.navigateUp() }) {
                 Icon(
