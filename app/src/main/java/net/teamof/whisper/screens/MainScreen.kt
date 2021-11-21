@@ -111,6 +111,7 @@ private fun MainScreenNavigationConfigurations(
                 backStackEntry.arguments?.getString("action")?.let {
                     Contacts(
                         userViewModel,
+                        conversationsViewModel,
                         navController,
                         action = it
                     )

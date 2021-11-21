@@ -24,6 +24,7 @@ import kotlinx.coroutines.launch
 import net.teamof.whisper.R
 import net.teamof.whisper.components.Contact
 import net.teamof.whisper.models.Contact
+import net.teamof.whisper.viewModel.ConversationsViewModel
 import net.teamof.whisper.viewModel.UserViewModel
 
 val contacts = listOf(
@@ -105,6 +106,7 @@ val contacts = listOf(
 @Composable
 fun Contacts(
     userViewModel: UserViewModel,
+    conversationsViewModel: ConversationsViewModel,
     navController: NavController,
     action: String
 ) {
@@ -184,12 +186,12 @@ fun Contacts(
                 }
 
                 itemsIndexed(contactsForInitial) { _, contact ->
-                    Contact(navController, contact, action)
+                    Contact(conversationsViewModel, navController, contact, action)
                 }
             }
         else
             itemsIndexed(resultSearchUsers) { _, contact ->
-                Contact(navController, contact, action)
+                Contact(conversationsViewModel, navController, contact, action)
             }
 
     }
