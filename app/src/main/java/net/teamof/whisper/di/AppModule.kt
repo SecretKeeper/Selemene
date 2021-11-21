@@ -87,8 +87,15 @@ class AppModule {
         application: Application,
         whisperSocket: Socket,
         moshi: Moshi,
-        messageRepository: MessageRepository
-    ) = SocketBroadcastListener(application, whisperSocket, moshi, messageRepository)
+        messageRepository: MessageRepository,
+        conversationRepository: ConversationRepository
+    ) = SocketBroadcastListener(
+        application,
+        whisperSocket,
+        moshi,
+        messageRepository,
+        conversationRepository
+    )
 
     @Singleton
     @Provides
@@ -108,5 +115,5 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideConversationRepository() = ConversationRepository()
+    fun provideConversationRepository(usersAPI: UsersAPI) = ConversationRepository(usersAPI)
 }

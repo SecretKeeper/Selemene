@@ -102,7 +102,8 @@ private fun MainScreenNavigationConfigurations(
                     navController,
                     to_user_id = backStackEntry.arguments?.getString("to_user_id")!!,
                     messagesViewModel,
-                    userViewModel
+                    userViewModel,
+                    conversationsViewModel
                 )
             }
             composable("Create") { Create(navController) }
@@ -110,6 +111,7 @@ private fun MainScreenNavigationConfigurations(
                 backStackEntry.arguments?.getString("action")?.let {
                     Contacts(
                         userViewModel,
+                        conversationsViewModel,
                         navController,
                         action = it
                     )

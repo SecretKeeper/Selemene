@@ -9,7 +9,9 @@ import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import net.teamof.whisper.R
 import net.teamof.whisper.models.Message
+import net.teamof.whisper.models.MessageSide
 import net.teamof.whisper.models.WSSubscribeChannels
+import net.teamof.whisper.repositories.ConversationRepository
 import net.teamof.whisper.repositories.MessageRepository
 import timber.log.Timber
 import javax.inject.Inject
@@ -18,7 +20,8 @@ class SocketBroadcastListener @Inject constructor(
     val application: Application,
     val whisperSocket: Socket,
     val moshi: Moshi,
-    val messageRepository: MessageRepository
+    val messageRepository: MessageRepository,
+    val conversationRepository: ConversationRepository
 ) {
 
     val subscribeAdapter: JsonAdapter<WSSubscribeChannels> =
@@ -61,6 +64,7 @@ class SocketBroadcastListener @Inject constructor(
         object : Socket.OnEventResponseListener() {
             override fun onMessage(event: String?, data: String?) {
                 messageAdapter.fromJson(data)?.let {
+                    conversationRepository.update(MessageSide.THEMSELVES, it)
                     messageRepository.create(it)
                     if (!isAppRunning(application, "net.teamof.whisper")) {
                         val builder = NotificationCompat.Builder(application, "CHANNEL_ID")

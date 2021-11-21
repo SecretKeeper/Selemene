@@ -15,7 +15,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
@@ -29,10 +28,10 @@ import net.teamof.whisper.viewModel.ConversationsViewModel
 @ExperimentalMaterialApi
 @Composable
 fun Contact(
+    conversationsViewModel: ConversationsViewModel,
     navController: NavController,
     data: Contact,
-    action: String,
-    conversationsViewModel: ConversationsViewModel = viewModel()
+    action: String
 ) {
 
     var checked by rememberSaveable { mutableStateOf(false) }
