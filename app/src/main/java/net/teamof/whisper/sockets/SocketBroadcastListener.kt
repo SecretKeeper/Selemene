@@ -75,7 +75,7 @@ class SocketBroadcastListener @Inject constructor(
 
                         val notificationManager =
                             application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                        notificationManager.notify(7845, builder.build())
+                        notificationManager.notify(it.user_id.toInt(), builder.build())
                     }
                 }
             }
