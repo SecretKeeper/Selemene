@@ -81,8 +81,8 @@ fun MainHeader(navController: NavController, conversation: Conversation?) {
                 painter = painterResource(id = R.drawable.ic_chevron_left),
                 contentDescription = null,
                 Modifier
-                    .width(25.dp)
-                    .height(25.dp)
+                    .width(22.dp)
+                    .height(22.dp)
             )
         }
         Row(
@@ -139,8 +139,8 @@ fun MainHeader(navController: NavController, conversation: Conversation?) {
                     painter = painterResource(id = R.drawable.ic_more_vertical),
                     contentDescription = null,
                     Modifier
-                        .width(25.dp)
-                        .height(25.dp)
+                        .width(23.dp)
+                        .height(23.dp)
                 )
             }
             DropdownMenu(
