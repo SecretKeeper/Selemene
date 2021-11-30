@@ -11,12 +11,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import net.teamof.whisper.ObjectBox
-import net.teamof.whisper.api.AuthAPI
-import net.teamof.whisper.api.LoginRequest
-import net.teamof.whisper.api.SearchAPI
-import net.teamof.whisper.api.SearchUsersRequest
+import net.teamof.whisper.api.*
 import net.teamof.whisper.di.DataStoreManager
-import net.teamof.whisper.models.Contact
 import net.teamof.whisper.models.OBKeyValue
 import net.teamof.whisper.models.OBKeyValue_
 import org.json.JSONObject
@@ -104,24 +100,23 @@ class UserViewModel @Inject constructor(
         }
     }
 
-    fun searchUsers(input: String, fetchedUsers: (List<Contact>) -> Unit) {
+    fun searchUsers(input: String, fetchedUsers: (List<User>) -> Unit) {
 
         val response = searchAPI.searchUsers(SearchUsersRequest(input))
 
-        response.enqueue(object : Callback<List<Contact>> {
+        response.enqueue(object : Callback<List<User>> {
             override fun onResponse(
-                call: Call<List<Contact>>,
-                response: Response<List<Contact>>
+                call: Call<List<User>>,
+                response: Response<List<User>>
             ) {
                 response.body()?.let { fetchedUsers(it) }
                 Timber.d(response.body().toString())
             }
 
-            override fun onFailure(call: Call<List<Contact>>, t: Throwable) {
+            override fun onFailure(call: Call<List<User>>, t: Throwable) {
                 Timber.d(t)
             }
 
         })
     }
-
 }
