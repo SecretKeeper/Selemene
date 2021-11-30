@@ -64,6 +64,7 @@ private fun MainScreenNavigationConfigurations(
     val userViewModel = hiltViewModel<UserViewModel>()
     val messagesViewModel = hiltViewModel<MessagesViewModel>()
     val conversationsViewModel = hiltViewModel<ConversationsViewModel>()
+    val profileViewModel = hiltViewModel<ProfileViewModel>()
 
     val currentUserId = userViewModel.getUserID()
 
@@ -109,17 +110,16 @@ private fun MainScreenNavigationConfigurations(
             composable("Create") { Create(navController) }
             composable("Contacts/{action}") { backStackEntry ->
                 backStackEntry.arguments?.getString("action")?.let {
-                    Contacts(
-                        userViewModel,
-                        conversationsViewModel,
-                        navController,
-                        action = it
-                    )
+                    Contacts(userViewModel, profileViewModel, navController, action = it)
                 }
             }
             composable("SelfProfile") { SelfProfile() }
             composable("Profile/{to_user_id}") { backStackEntry ->
-                Profile(navController, backStackEntry.arguments?.getString("to_user_id")!!)
+                Profile(
+                    navController,
+                    profileViewModel,
+                    backStackEntry.arguments?.getString("to_user_id")!!
+                )
             }
             composable("CreateGroup") { CreateGroup(navController) }
             composable("Activities") { Activities() }
