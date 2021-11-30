@@ -97,32 +97,29 @@ fun MainHeader(navController: NavController, conversation: Conversation?) {
                     navController.navigate("Profile/${conversation?.to_user_id}")
                 }
         ) {
-            if (conversation != null) {
-                Image(
-                    painter = rememberImagePainter(data = conversation.user_image,
-                        builder = {
-                            transformations(CircleCropTransformation())
-                        }
-                    ),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .width(50.dp)
-                        .height(50.dp)
-                )
-            }
+            Image(
+                painter = rememberImagePainter(data = conversation?.user_image,
+                    builder = {
+                        transformations(CircleCropTransformation())
+                    }
+                ),
+                contentDescription = null,
+                modifier = Modifier
+                    .width(50.dp)
+                    .height(50.dp)
+            )
             Column(
                 Modifier
                     .padding(start = 15.dp)
             ) {
-                if (conversation != null) {
-                    Text(
-                        text = conversation.username,
-                        fontFamily = fontFamily,
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 15.sp,
-                        modifier = Modifier.padding(bottom = 5.dp)
-                    )
-                }
+                Text(
+                    text = conversation?.username!!,
+                    fontFamily = fontFamily,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 15.sp,
+                    modifier = Modifier.padding(bottom = 5.dp)
+                )
+
                 Text(
                     text = "Last seen recently",
                     fontSize = 12.sp,
