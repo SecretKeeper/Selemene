@@ -12,7 +12,10 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -30,6 +33,7 @@ import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import net.teamof.whisper.R
 import net.teamof.whisper.ui.theme.fontFamily
+import net.teamof.whisper.viewModel.ProfileViewModel
 
 
 val gridImages = listOf(
@@ -48,12 +52,16 @@ val gridImages = listOf(
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
 @Composable
-fun Profile(navController: NavController, to_user_id: String) {
+fun Profile(
+    navController: NavController,
+    profileViewModel: ProfileViewModel,
+    to_user_id: String
+) {
 
+    val user = profileViewModel.userState
     val displayMetrics = Resources.getSystem().displayMetrics
     val heightDp = displayMetrics.heightPixels / displayMetrics.density
 
-    val scope = rememberCoroutineScope()
     val scaffoldState = rememberBottomSheetScaffoldState()
 
     val expanded = remember { mutableStateOf(false) }
@@ -78,7 +86,7 @@ fun Profile(navController: NavController, to_user_id: String) {
                 item {
                     Column(modifier = Modifier.padding(vertical = 25.dp, horizontal = 25.dp)) {
                         Text(
-                            text = "Jaina Proudmoore",
+                            text = user.value?.username!!,
                             fontSize = 18.sp,
                             fontFamily = fontFamily,
                             fontWeight = FontWeight.SemiBold,
@@ -95,7 +103,7 @@ fun Profile(navController: NavController, to_user_id: String) {
                         Row {
                             ClickableText(
                                 text = AnnotatedString(
-                                    "223 Feeds",
+                                    "${user.value!!.counters.target.feeds} Feeds",
                                     spanStyle = SpanStyle(
                                         fontSize = 14.sp,
                                         fontFamily = fontFamily,
@@ -114,7 +122,7 @@ fun Profile(navController: NavController, to_user_id: String) {
                             )
                             ClickableText(
                                 text = AnnotatedString(
-                                    "209 Followers",
+                                    "${user.value!!.counters.target.followers} Followers",
                                     spanStyle = SpanStyle(
                                         fontSize = 14.sp,
                                         fontFamily = fontFamily,
@@ -129,7 +137,7 @@ fun Profile(navController: NavController, to_user_id: String) {
 
                         for (i in 1..3) {
                             Text(
-                                text = "We provide guests with everything needed for a relaxing holiday. With on-site spa services, a state-of-the-art fitness center and endless leisure activities.",
+                                text = user.value!!.profile.target.description,
                                 color = Color(red = 130, green = 130, blue = 130),
                                 fontFamily = fontFamily,
                                 fontWeight = FontWeight.Normal,
