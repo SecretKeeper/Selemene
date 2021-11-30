@@ -6,11 +6,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.objectbox.Box
 import io.objectbox.kotlin.boxFor
 import net.teamof.whisper.ObjectBox
-import net.teamof.whisper.api.User
 import net.teamof.whisper.api.UsersAPI
-import net.teamof.whisper.models.Counters
-import net.teamof.whisper.models.Profile
-import net.teamof.whisper.models.User_
+import net.teamof.whisper.models.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,13 +20,13 @@ class ProfileViewModel @Inject constructor(
 ) :
     ViewModel() {
 
-    private val userBox: Box<net.teamof.whisper.models.User> = ObjectBox.store.boxFor()
+    private val userBox: Box<User> = ObjectBox.store.boxFor()
 
-    private val _userState: MutableLiveData<net.teamof.whisper.models.User> by lazy {
-        MutableLiveData<net.teamof.whisper.models.User>(null)
+    private val _userState: MutableLiveData<User> by lazy {
+        MutableLiveData<User>(null)
     }
 
-    val userState: MutableLiveData<net.teamof.whisper.models.User> = _userState
+    val userState: MutableLiveData<User> = _userState
 
     fun getUserByUserID(user_id: Long, callback: () -> Unit) {
         val query = userBox.query().equal(User_.user_id, user_id)
@@ -37,7 +34,7 @@ class ProfileViewModel @Inject constructor(
 
         if (user == null) {
             fetchUserByID(user_id) { fetchedUser ->
-                val newUser = net.teamof.whisper.models.User(
+                val newUser = User(
                     user_id = fetchedUser.user_id,
                     username = fetchedUser.username,
                     email = fetchedUser.email,
@@ -60,14 +57,14 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    private fun fetchUserByID(user_id: Long, function: (User) -> Unit): User? {
-        val user: User? = null
+    private fun fetchUserByID(user_id: Long, function: (UserAPI) -> Unit): UserAPI? {
+        val user: UserAPI? = null
         val response = usersAPI.getUserProfile(user_id)
 
-        response.enqueue(object : Callback<User> {
+        response.enqueue(object : Callback<UserAPI> {
             override fun onResponse(
-                call: Call<User>,
-                response: Response<User>
+                call: Call<UserAPI>,
+                response: Response<UserAPI>
             ) {
                 Timber.e(response.toString())
                 response.body()?.let {
@@ -75,7 +72,7 @@ class ProfileViewModel @Inject constructor(
                 }
             }
 
-            override fun onFailure(call: Call<User>, t: Throwable) {
+            override fun onFailure(call: Call<UserAPI>, t: Throwable) {
                 Timber.e(t)
             }
 
