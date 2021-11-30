@@ -62,7 +62,12 @@ fun Messaging(
     ) {
 
         Column {
-            MessagingHeader(navController, conversationsViewModel, to_user_id.toLong(), selection)
+            MessagingHeader(
+                navController,
+                conversationsViewModel,
+                to_user_id.toLong(),
+                selection
+            )
             Column(Modifier.weight(1f)) {
                 Column(
                     Modifier.verticalScroll(
