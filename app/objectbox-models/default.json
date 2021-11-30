@@ -154,10 +154,105 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "6:7417154498416805274",
+      "lastPropertyId": "8:8360009469508857925",
+      "name": "User",
+      "properties": [
+        {
+          "id": "1:5732893380102374108",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:1051765704838790230",
+          "name": "user_id",
+          "indexId": "5:1651578279252170641",
+          "type": 6,
+          "flags": 40
+        },
+        {
+          "id": "3:750468292158147051",
+          "name": "username",
+          "type": 9
+        },
+        {
+          "id": "4:8829620454172113915",
+          "name": "avatar",
+          "type": 9
+        },
+        {
+          "id": "6:2869778388844649562",
+          "name": "email",
+          "type": 9
+        },
+        {
+          "id": "7:5815213991368770288",
+          "name": "profileId",
+          "indexId": "6:5503797423490397529",
+          "type": 11,
+          "flags": 520,
+          "relationTarget": "Profile"
+        },
+        {
+          "id": "8:8360009469508857925",
+          "name": "countersId",
+          "indexId": "7:606333653651855934",
+          "type": 11,
+          "flags": 520,
+          "relationTarget": "Counters"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "7:2964026085246005482",
+      "lastPropertyId": "3:6271072597278690150",
+      "name": "Counters",
+      "properties": [
+        {
+          "id": "1:4871387295019219571",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:3445750057239053496",
+          "name": "feeds",
+          "type": 5
+        },
+        {
+          "id": "3:6271072597278690150",
+          "name": "followers",
+          "type": 5
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "8:2134909903843266354",
+      "lastPropertyId": "2:7963408578368822999",
+      "name": "Profile",
+      "properties": [
+        {
+          "id": "1:2692719559566570258",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:7963408578368822999",
+          "name": "description",
+          "type": 9
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "5:9140733072167311526",
-  "lastIndexId": "4:1179973157385511260",
+  "lastEntityId": "8:2134909903843266354",
+  "lastIndexId": "7:606333653651855934",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
@@ -183,7 +278,8 @@
     1494507184102751714,
     6723436365272317572,
     5739247370111225509,
-    8590986862344883962
+    8590986862344883962,
+    5408633646924108329
   ],
   "retiredRelationUids": [],
   "version": 1
