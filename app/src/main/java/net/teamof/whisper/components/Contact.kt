@@ -20,17 +20,16 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import net.teamof.whisper.R
-import net.teamof.whisper.models.Contact
-import net.teamof.whisper.models.Conversation
-import net.teamof.whisper.viewModel.ConversationsViewModel
+import net.teamof.whisper.models.UserAPI
+import net.teamof.whisper.viewModel.ProfileViewModel
 
 @OptIn(ExperimentalCoilApi::class)
 @ExperimentalMaterialApi
 @Composable
 fun Contact(
-    conversationsViewModel: ConversationsViewModel,
     navController: NavController,
-    data: Contact,
+    profileViewModel: ProfileViewModel,
+    data: UserAPI,
     action: String
 ) {
 
@@ -45,15 +44,9 @@ fun Contact(
             when (action) {
                 "CreateGroup" -> checked = !checked
                 "Messaging" -> {
-                    conversationsViewModel.createConversation(
-                        Conversation(
-                            to_user_id = data.user_id,
-                            username = data.username,
-                            user_image = data.avatar,
-                        )
-                    )
-
-                    navController.navigate("Messaging/${data.user_id}")
+                    profileViewModel.getUserByUserID(
+                        data.user_id
+                    ) { navController.navigate("Profile/${data.user_id}") }
                 }
             }
         }) {
@@ -98,7 +91,7 @@ fun Contact(
                                 .padding(end = 10.dp)
                         )
                 }
-                Text(text = data.status, fontSize = 13.sp)
+                Text(text = "data.status", fontSize = 13.sp)
             }
         }
     }
