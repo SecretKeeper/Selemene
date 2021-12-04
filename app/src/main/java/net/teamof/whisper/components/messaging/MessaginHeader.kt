@@ -23,9 +23,8 @@ import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import kotlinx.coroutines.DelicateCoroutinesApi
 import net.teamof.whisper.R
-import net.teamof.whisper.models.Conversation
+import net.teamof.whisper.models.User
 import net.teamof.whisper.ui.theme.fontFamily
-import net.teamof.whisper.viewModel.ConversationsViewModel
 import net.teamof.whisper.viewModel.ProfileViewModel
 
 @OptIn(ExperimentalCoilApi::class)
@@ -36,12 +35,11 @@ import net.teamof.whisper.viewModel.ProfileViewModel
 @Composable
 fun MessagingHeader(
     navController: NavController,
-    conversationsViewModel: ConversationsViewModel,
     profileViewModel: ProfileViewModel,
     to_user_id: Long,
     selection: MutableState<Boolean>
 ) {
-    val conversation = conversationsViewModel.getConversation(to_user_id)
+    val user = profileViewModel.getUserByUserID(to_user_id)
 
     Column(Modifier.height(75.dp)) {
 
@@ -62,7 +60,7 @@ fun MessagingHeader(
             if (showActions)
                 MessagingActions(selection)
             else
-                MainHeader(navController, profileViewModel, conversation)
+                MainHeader(navController, profileViewModel, user)
         }
     }
 }
@@ -72,7 +70,7 @@ fun MessagingHeader(
 fun MainHeader(
     navController: NavController,
     profileViewModel: ProfileViewModel,
-    conversation: Conversation?
+    user: User?
 ) {
 
     val interactionSource = remember { MutableInteractionSource() }
@@ -100,15 +98,15 @@ fun MainHeader(
                     interactionSource = interactionSource,
                     indication = null
                 ) {
-                    conversation?.to_user_id?.let {
-                        profileViewModel.getUserByUserID(
-                            it
-                        ) { navController.navigate("Profile/${it}") }
+                    if (user != null) {
+                        profileViewModel.setUserStateByUserID(
+                            user.user_id,
+                        ) { navController.navigate("Profile/${user.user_id}") }
                     }
                 }
         ) {
             Image(
-                painter = rememberImagePainter(data = conversation?.user_image,
+                painter = rememberImagePainter(data = user?.avatar,
                     builder = {
                         transformations(CircleCropTransformation())
                     }
@@ -123,7 +121,7 @@ fun MainHeader(
                     .padding(start = 15.dp)
             ) {
                 Text(
-                    text = conversation?.username!!,
+                    text = user?.username!!,
                     fontFamily = fontFamily,
                     fontWeight = FontWeight.Medium,
                     fontSize = 15.sp,
