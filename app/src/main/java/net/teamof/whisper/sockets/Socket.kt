@@ -2,6 +2,7 @@ package net.teamof.whisper.sockets
 
 import android.os.Handler
 import android.os.Looper
+import net.teamof.whisper.repositories.KeyValueRepository
 import okhttp3.*
 import okhttp3.internal.ws.RealWebSocket
 import okio.ByteString
@@ -413,6 +414,7 @@ class Socket private constructor(request: Request) {
         const val EVENT_RECONNECT_ATTEMPT = "reconnecting"
         const val EVENT_CLOSED = "closed"
         private val httpClient: OkHttpClient.Builder? = OkHttpClient.Builder()
+            .addInterceptor(SocketUserTokenInterceptor(KeyValueRepository()))
 
         /**
          * Websocket state
