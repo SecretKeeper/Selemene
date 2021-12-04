@@ -91,7 +91,7 @@ fun Contact(
                                 .padding(end = 10.dp)
                         )
                 }
-                Text(text = "data.status", fontSize = 13.sp)
+                Text(text = data.profile.status, fontSize = 13.sp)
             }
         }
     }
