@@ -26,6 +26,7 @@ import net.teamof.whisper.R
 import net.teamof.whisper.models.Conversation
 import net.teamof.whisper.ui.theme.fontFamily
 import net.teamof.whisper.viewModel.ConversationsViewModel
+import net.teamof.whisper.viewModel.ProfileViewModel
 
 @OptIn(ExperimentalCoilApi::class)
 @SuppressLint("CoroutineCreationDuringComposition")
@@ -36,6 +37,7 @@ import net.teamof.whisper.viewModel.ConversationsViewModel
 fun MessagingHeader(
     navController: NavController,
     conversationsViewModel: ConversationsViewModel,
+    profileViewModel: ProfileViewModel,
     to_user_id: Long,
     selection: MutableState<Boolean>
 ) {
@@ -60,14 +62,18 @@ fun MessagingHeader(
             if (showActions)
                 MessagingActions(selection)
             else
-                MainHeader(navController, conversation)
+                MainHeader(navController, profileViewModel, conversation)
         }
     }
 }
 
 
 @Composable
-fun MainHeader(navController: NavController, conversation: Conversation?) {
+fun MainHeader(
+    navController: NavController,
+    profileViewModel: ProfileViewModel,
+    conversation: Conversation?
+) {
 
     val interactionSource = remember { MutableInteractionSource() }
     val expanded = remember { mutableStateOf(false) }
@@ -94,7 +100,11 @@ fun MainHeader(navController: NavController, conversation: Conversation?) {
                     interactionSource = interactionSource,
                     indication = null
                 ) {
-                    navController.navigate("Profile/${conversation?.to_user_id}")
+                    conversation?.to_user_id?.let {
+                        profileViewModel.getUserByUserID(
+                            it
+                        ) { navController.navigate("Profile/${it}") }
+                    }
                 }
         ) {
             Image(

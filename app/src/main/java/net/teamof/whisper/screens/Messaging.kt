@@ -25,6 +25,7 @@ import net.teamof.whisper.components.messaging.MessagingHeader
 import net.teamof.whisper.models.Message
 import net.teamof.whisper.viewModel.ConversationsViewModel
 import net.teamof.whisper.viewModel.MessagesViewModel
+import net.teamof.whisper.viewModel.ProfileViewModel
 import net.teamof.whisper.viewModel.UserViewModel
 
 
@@ -40,7 +41,8 @@ fun Messaging(
     to_user_id: String,
     messagesViewModel: MessagesViewModel,
     userViewModel: UserViewModel,
-    conversationsViewModel: ConversationsViewModel
+    conversationsViewModel: ConversationsViewModel,
+    profileViewModel: ProfileViewModel
 ) {
 
     messagesViewModel.getConversationMessages(to_user_id.toLong())
@@ -65,6 +67,7 @@ fun Messaging(
             MessagingHeader(
                 navController,
                 conversationsViewModel,
+                profileViewModel,
                 to_user_id.toLong(),
                 selection
             )
