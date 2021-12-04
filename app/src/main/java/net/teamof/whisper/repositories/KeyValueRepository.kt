@@ -22,6 +22,14 @@ class KeyValueRepository {
         return userId?.value?.toLong() ?: 0L
     }
 
+    fun getToken(): String {
+        val userId = oBKeyValueBox.query().run {
+            equal(OBKeyValue_.key, "token")
+            build()
+        }.use { it.findFirst() }
+
+        return userId?.value ?: ""
+    }
 //    fun delete(conversation_id: Long) {
 //        conversationBox.query().run {
 //            equal(Conversation_.id, conversation_id)
