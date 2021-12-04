@@ -17,6 +17,7 @@ import net.teamof.whisper.api.UsersAPI
 import net.teamof.whisper.models.OBKeyValue
 import net.teamof.whisper.models.OBKeyValue_
 import net.teamof.whisper.repositories.ConversationRepository
+import net.teamof.whisper.repositories.KeyValueRepository
 import net.teamof.whisper.repositories.MessageRepository
 import net.teamof.whisper.sockets.Socket
 import net.teamof.whisper.sockets.SocketBroadcastListener
@@ -83,22 +84,6 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideSocketBroadcastListener(
-        application: Application,
-        whisperSocket: Socket,
-        moshi: Moshi,
-        messageRepository: MessageRepository,
-        conversationRepository: ConversationRepository
-    ) = SocketBroadcastListener(
-        application,
-        whisperSocket,
-        moshi,
-        messageRepository,
-        conversationRepository
-    )
-
-    @Singleton
-    @Provides
     fun provideAuthAPI(retrofit: Retrofit): AuthAPI = retrofit.create(AuthAPI::class.java)
 
     @Singleton
@@ -115,5 +100,27 @@ class AppModule {
 
     @Singleton
     @Provides
+    fun provideKeyValueRepository() = KeyValueRepository()
+
+    @Singleton
+    @Provides
     fun provideConversationRepository(usersAPI: UsersAPI) = ConversationRepository(usersAPI)
+
+    @Singleton
+    @Provides
+    fun provideSocketBroadcastListener(
+        application: Application,
+        whisperSocket: Socket,
+        moshi: Moshi,
+        messageRepository: MessageRepository,
+        conversationRepository: ConversationRepository,
+        keyValueRepository: KeyValueRepository
+    ) = SocketBroadcastListener(
+        application,
+        whisperSocket,
+        moshi,
+        messageRepository,
+        conversationRepository,
+        keyValueRepository
+    )
 }
