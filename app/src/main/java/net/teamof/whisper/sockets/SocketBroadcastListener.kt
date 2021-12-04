@@ -12,6 +12,7 @@ import net.teamof.whisper.models.Message
 import net.teamof.whisper.models.MessageSide
 import net.teamof.whisper.models.WSSubscribeChannels
 import net.teamof.whisper.repositories.ConversationRepository
+import net.teamof.whisper.repositories.KeyValueRepository
 import net.teamof.whisper.repositories.MessageRepository
 import timber.log.Timber
 import javax.inject.Inject
@@ -21,7 +22,8 @@ class SocketBroadcastListener @Inject constructor(
     val whisperSocket: Socket,
     val moshi: Moshi,
     val messageRepository: MessageRepository,
-    val conversationRepository: ConversationRepository
+    val conversationRepository: ConversationRepository,
+    val keyValueRepository: KeyValueRepository
 ) {
 
     val subscribeAdapter: JsonAdapter<WSSubscribeChannels> =
@@ -47,12 +49,12 @@ class SocketBroadcastListener @Inject constructor(
             override fun onMessage(event: String?) {
                 Timber.e("Socket OPen Happened")
 
-                val channels = listOf("2")
+                val channels = listOf(keyValueRepository.getLoggedUser().toString())
 
                 whisperSocket.send(
                     "subscribe-channels", subscribeAdapter.toJson(
                         WSSubscribeChannels(
-                            "2",
+                            keyValueRepository.getLoggedUser().toString(),
                             channels
                         )
                     )
