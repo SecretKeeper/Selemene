@@ -10,7 +10,6 @@ import java.util.*
 data class Message(
     @Id
     var id: Long = 0,
-    var type: String = "message",
     var user_id: Long = 0,
     var to_user_id: Long = 0,
     var content: String = "",
