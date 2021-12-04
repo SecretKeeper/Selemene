@@ -17,6 +17,7 @@ import net.teamof.whisper.models.Conversation
 import net.teamof.whisper.ui.theme.BottomNavigationHeight
 import net.teamof.whisper.viewModel.ConversationActionsViewModel
 import net.teamof.whisper.viewModel.ConversationsViewModel
+import net.teamof.whisper.viewModel.ProfileViewModel
 
 @ExperimentalCoilApi
 @ExperimentalAnimationApi
@@ -25,7 +26,8 @@ import net.teamof.whisper.viewModel.ConversationsViewModel
 fun Conversations(
     navController: NavController,
     conversationsViewModel: ConversationsViewModel,
-    conversationActionsViewModel: ConversationActionsViewModel
+    conversationActionsViewModel: ConversationActionsViewModel,
+    profileViewModel: ProfileViewModel
 ) {
 
     val conversations: List<Conversation> by conversationsViewModel.conversations.observeAsState(
@@ -41,7 +43,8 @@ fun Conversations(
             Conversation(
                 conversation,
                 navController,
-                conversationActionsViewModel
+                conversationActionsViewModel,
+                profileViewModel
             )
         }
     }

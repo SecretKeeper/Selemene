@@ -44,7 +44,7 @@ fun Contact(
             when (action) {
                 "CreateGroup" -> checked = !checked
                 "Messaging" -> {
-                    profileViewModel.getUserByUserID(
+                    profileViewModel.setUserStateByUserID(
                         data.user_id
                     ) { navController.navigate("Profile/${data.user_id}") }
                 }
