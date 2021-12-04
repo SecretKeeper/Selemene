@@ -1,7 +1,7 @@
 package net.teamof.whisper.api
 
 import com.squareup.moshi.JsonClass
-import net.teamof.whisper.models.Contact
+import net.teamof.whisper.models.UserAPI
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Headers
@@ -15,5 +15,5 @@ data class SearchUsersRequest(
 interface SearchAPI {
     @POST("search-users")
     @Headers("Content-Type: application/json")
-    fun searchUsers(@Body searchUsersRequest: SearchUsersRequest): Call<List<Contact>>
+    fun searchUsers(@Body searchUsersRequest: SearchUsersRequest): Call<List<UserAPI>>
 }

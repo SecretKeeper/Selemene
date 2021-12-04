@@ -23,80 +23,142 @@ import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import net.teamof.whisper.R
 import net.teamof.whisper.components.Contact
-import net.teamof.whisper.models.Contact
-import net.teamof.whisper.viewModel.ConversationsViewModel
+import net.teamof.whisper.models.Counters
+import net.teamof.whisper.models.Profile
+import net.teamof.whisper.models.UserAPI
+import net.teamof.whisper.viewModel.ProfileViewModel
 import net.teamof.whisper.viewModel.UserViewModel
 
 val contacts = listOf(
-    Contact(
-        1,
+    UserAPI(
         1,
         "Jaina Proudmoore",
+        "jaina.proudmoore@gmail.com",
         "https://c4.wallpaperflare.com/wallpaper/607/463/825/world-of-warcraft-jaina-proudmoore-magic-mazert-young-turquoise-hd-wallpaper-preview.jpg",
-        " Lord Admiral, ruler of the Kul Tiras kingdom"
+        Profile(
+            description = "Lord Admiral, ruler of the Kul Tiras kingdom"
+        ),
+        Counters(
+            feeds = 114,
+            followers = 846
+        )
     ),
-    Contact(
+    UserAPI(
         2,
-        3,
         "Lichking",
+        "lichking@gmail.com",
         "https://million-wallpapers.com/wallpapers/1/65/16175274567205625182.jpg",
-        "Your soul is mine"
+        Profile(
+            description = "Your soul is mine"
+        ),
+        Counters(
+            feeds = 14,
+            followers = 114
+        )
     ),
-    Contact(
-        3,
-        4,
+    UserAPI(
+        1,
         "Thrall",
-        "https://cdn.hearthstonetopdecks.com/wp-content/uploads/2014/04/thrall-shaman001-640x1136.jpg",
-        "Lord of the Clans"
+        "thrall@gmail.com",
+        "https://million-wallpapers.com/wallpapers/1/65/16175274567205625182.jpg",
+        Profile(
+            description = "Lord of the Clans"
+        ),
+        Counters(
+            feeds = 14,
+            followers = 114
+        )
     ),
-    Contact(
-        5,
-        6,
+    UserAPI(
+        2,
+        "Thrall",
+        "thrall@gmail.com",
+        "https://million-wallpapers.com/wallpapers/1/65/16175274567205625182.jpg",
+        Profile(
+            description = "Lord of the Clans"
+        ),
+        Counters(
+            feeds = 14,
+            followers = 114
+        )
+    ),
+    UserAPI(
+        1,
         "Sylvanas Windrunner",
+        "sylvanas.windrunner@gmail.com",
         "https://wallpaperchat.com/walls/full/2/2/5/402192.jpg",
-        "Dark Lady, Also known Banshee Queen"
+        Profile(
+            description = "Dark Lady, Also known Banshee Queen"
+        ),
+        Counters(
+            feeds = 26,
+            followers = 4870
+        )
     ),
-    Contact(
-        6,
-        7,
+    UserAPI(
+        2,
         "Anduin Wrynn",
+        "anduin.wrynn@gmail.com",
         "https://mocah.org/thumbs/329166-WoW-The-Alliance-Anduin-Wrynn-Genn-Greymane-4K-iphone-wallpaper.jpg",
-        "The King of the Stormwind City"
+        Profile(
+            description = "The King of the Stormwind City"
+        ),
+        Counters(
+            feeds = 9,
+            followers = 1702
+        )
     ),
-    Contact(
-        7,
-        8,
+    UserAPI(
+        1,
         "Illidan Stormrage",
+        "illidan.stormrage@gmail.com",
         "https://images.wallpapersden.com/image/download/illidan-stormrage_a2xuaGeUmZqaraWkpJRsamWtZmhoaQ.jpg",
-        "Lord of the Outland"
+        Profile(
+            description = "Lord of the Outland"
+        ),
+        Counters(
+            feeds = 78,
+            followers = 3202
+        )
     ),
-    Contact(
-        8,
-        9,
+    UserAPI(
+        2,
         "Tyrande Whisperwind",
+        "tyrande.whisperwind@gmail.com",
         "https://coolwallpapers.me/picsup/2990861-elves-blue-hair-fantasy-art-world-of-warcraft-tyrande-whisperwind___mixed-wallpapers.jpg",
-        "High Priestess of Elune"
+        Profile(
+            description = "High Priestess of Elune"
+        ),
+        Counters(
+            feeds = 236,
+            followers = 10502
+        )
     ),
-    Contact(
-        9,
-        10,
-        "Garrosh Hellscream",
-        "https://i.pinimg.com/originals/28/a3/b7/28a3b7ced21793e17d1b9f5d5f1f3fd0.png",
-        "Warlord of the Warsong clan"
-    ),
-    Contact(
-        10,
-        11,
+    UserAPI(
+        1,
         "Kel'thuzad",
+        "kelthuzad@gmail.com",
         "https://www.mobygames.com/images/promo/original/1465476647-1936338714.jpg",
-        "Founder of the Cult of the Damned"
+        Profile(
+            description = "Founder of the Cult of the Damned"
+        ),
+        Counters(
+            feeds = 8,
+            followers = 202
+        )
     ),
-    Contact(
-        11,
-        12,
+    UserAPI(
+        2,
         "Liadrin",
+        "liadrin@gmail.com",
         "https://i.pinimg.com/originals/e1/81/25/e181259a1cf944de6dd8cb4d40142185.jpg",
-        "Blood Knight Matriarch"
+        Profile(
+            description = "Blood Knight Matriarch"
+        ),
+        Counters(
+            feeds = 46,
+            followers = 522
+        )
     ),
 )
 
@@ -106,7 +168,7 @@ val contacts = listOf(
 @Composable
 fun Contacts(
     userViewModel: UserViewModel,
-    conversationsViewModel: ConversationsViewModel,
+    profileViewModel: ProfileViewModel,
     navController: NavController,
     action: String
 ) {
@@ -114,7 +176,7 @@ fun Contacts(
     val composableScope = rememberCoroutineScope()
     val grouped = contacts.groupBy { it.username[0] }
     val searchValue = remember { mutableStateOf("") }
-    var resultSearchUsers = remember { mutableListOf<Contact>() }
+    var resultSearchUsers = remember { mutableListOf<UserAPI>() }
     LazyColumn {
 
         if (action == "CreateGroup")
@@ -157,7 +219,7 @@ fun Contacts(
                     composableScope.launch {
                         userViewModel.searchUsers(it) {
                             resultSearchUsers =
-                                it as MutableList<Contact>
+                                it as MutableList<UserAPI>
                         }
                     }
                 },
@@ -186,12 +248,12 @@ fun Contacts(
                 }
 
                 itemsIndexed(contactsForInitial) { _, contact ->
-                    Contact(conversationsViewModel, navController, contact, action)
+                    Contact(navController, profileViewModel, contact, action)
                 }
             }
         else
-            itemsIndexed(resultSearchUsers) { _, contact ->
-                Contact(conversationsViewModel, navController, contact, action)
+            itemsIndexed(resultSearchUsers) { _, user ->
+                Contact(navController, profileViewModel, user, action)
             }
 
     }

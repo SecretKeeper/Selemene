@@ -26,6 +26,7 @@ import net.teamof.whisper.R
 import net.teamof.whisper.models.Conversation
 import net.teamof.whisper.ui.theme.fontFamily
 import net.teamof.whisper.viewModel.ConversationsViewModel
+import net.teamof.whisper.viewModel.ProfileViewModel
 
 @OptIn(ExperimentalCoilApi::class)
 @SuppressLint("CoroutineCreationDuringComposition")
@@ -36,6 +37,7 @@ import net.teamof.whisper.viewModel.ConversationsViewModel
 fun MessagingHeader(
     navController: NavController,
     conversationsViewModel: ConversationsViewModel,
+    profileViewModel: ProfileViewModel,
     to_user_id: Long,
     selection: MutableState<Boolean>
 ) {
@@ -47,11 +49,11 @@ fun MessagingHeader(
             targetState = selection.value,
             transitionSpec = {
                 if (selection.value) {
-                    slideInVertically({ height -> height }) + fadeIn() with
-                            slideOutVertically({ height -> -height }) + fadeOut()
+                    slideInVertically(initialOffsetY = { height -> height }) + fadeIn() with
+                            slideOutVertically(targetOffsetY = { height -> -height }) + fadeOut()
                 } else {
-                    slideInVertically({ height -> -height }) + fadeIn() with
-                            slideOutVertically({ height -> -height }) + fadeOut()
+                    slideInVertically(initialOffsetY = { height -> -height }) + fadeIn() with
+                            slideOutVertically(targetOffsetY = { height -> -height }) + fadeOut()
                 }.using(
                     SizeTransform(clip = true)
                 )
@@ -60,14 +62,18 @@ fun MessagingHeader(
             if (showActions)
                 MessagingActions(selection)
             else
-                MainHeader(navController, conversation)
+                MainHeader(navController, profileViewModel, conversation)
         }
     }
 }
 
 
 @Composable
-fun MainHeader(navController: NavController, conversation: Conversation?) {
+fun MainHeader(
+    navController: NavController,
+    profileViewModel: ProfileViewModel,
+    conversation: Conversation?
+) {
 
     val interactionSource = remember { MutableInteractionSource() }
     val expanded = remember { mutableStateOf(false) }
@@ -81,8 +87,8 @@ fun MainHeader(navController: NavController, conversation: Conversation?) {
                 painter = painterResource(id = R.drawable.ic_chevron_left),
                 contentDescription = null,
                 Modifier
-                    .width(25.dp)
-                    .height(25.dp)
+                    .width(22.dp)
+                    .height(22.dp)
             )
         }
         Row(
@@ -94,35 +100,36 @@ fun MainHeader(navController: NavController, conversation: Conversation?) {
                     interactionSource = interactionSource,
                     indication = null
                 ) {
-                    navController.navigate("profile")
+                    conversation?.to_user_id?.let {
+                        profileViewModel.getUserByUserID(
+                            it
+                        ) { navController.navigate("Profile/${it}") }
+                    }
                 }
         ) {
-            if (conversation != null) {
-                Image(
-                    painter = rememberImagePainter(data = conversation.user_image,
-                        builder = {
-                            transformations(CircleCropTransformation())
-                        }
-                    ),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .width(50.dp)
-                        .height(50.dp)
-                )
-            }
+            Image(
+                painter = rememberImagePainter(data = conversation?.user_image,
+                    builder = {
+                        transformations(CircleCropTransformation())
+                    }
+                ),
+                contentDescription = null,
+                modifier = Modifier
+                    .width(50.dp)
+                    .height(50.dp)
+            )
             Column(
                 Modifier
                     .padding(start = 15.dp)
             ) {
-                if (conversation != null) {
-                    Text(
-                        text = conversation.username,
-                        fontFamily = fontFamily,
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 15.sp,
-                        modifier = Modifier.padding(bottom = 5.dp)
-                    )
-                }
+                Text(
+                    text = conversation?.username!!,
+                    fontFamily = fontFamily,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 15.sp,
+                    modifier = Modifier.padding(bottom = 5.dp)
+                )
+
                 Text(
                     text = "Last seen recently",
                     fontSize = 12.sp,
@@ -139,8 +146,8 @@ fun MainHeader(navController: NavController, conversation: Conversation?) {
                     painter = painterResource(id = R.drawable.ic_more_vertical),
                     contentDescription = null,
                     Modifier
-                        .width(25.dp)
-                        .height(25.dp)
+                        .width(23.dp)
+                        .height(23.dp)
                 )
             }
             DropdownMenu(

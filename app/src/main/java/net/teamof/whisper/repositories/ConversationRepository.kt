@@ -5,7 +5,6 @@ import io.objectbox.kotlin.equal
 import io.objectbox.kotlin.oneOf
 import io.objectbox.kotlin.or
 import net.teamof.whisper.ObjectBox
-import net.teamof.whisper.api.UserProfileResponse
 import net.teamof.whisper.api.UsersAPI
 import net.teamof.whisper.models.*
 import retrofit2.Call
@@ -21,7 +20,7 @@ class ConversationRepository @Inject constructor(
         ObjectBox.store.boxFor(Conversation::class.java)
 
     private val messageBox: Box<Message> = ObjectBox.store.boxFor(Message::class.java)
-    
+
     private fun isConversationExist(to_user_id: Long): Long {
         val query = conversationBox.query().equal(Conversation_.to_user_id, to_user_id).build()
         val result = query.count()
@@ -41,10 +40,10 @@ class ConversationRepository @Inject constructor(
             val response =
                 usersAPI.getUserProfile(if (side == MessageSide.THEMSELVES) newMessage.user_id else newMessage.to_user_id)
 
-            response.enqueue(object : Callback<UserProfileResponse> {
+            response.enqueue(object : Callback<UserAPI> {
                 override fun onResponse(
-                    call: Call<UserProfileResponse>,
-                    response: Response<UserProfileResponse>
+                    call: Call<UserAPI>,
+                    response: Response<UserAPI>
                 ) {
                     response.body()?.let {
                         create(
@@ -60,7 +59,7 @@ class ConversationRepository @Inject constructor(
                     }
                 }
 
-                override fun onFailure(call: Call<UserProfileResponse>, t: Throwable) {
+                override fun onFailure(call: Call<UserAPI>, t: Throwable) {
                     Timber.d(t)
                 }
 
