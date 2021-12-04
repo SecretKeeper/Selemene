@@ -47,11 +47,11 @@ fun MessagingHeader(
             targetState = selection.value,
             transitionSpec = {
                 if (selection.value) {
-                    slideInVertically({ height -> height }) + fadeIn() with
-                            slideOutVertically({ height -> -height }) + fadeOut()
+                    slideInVertically(initialOffsetY = { height -> height }) + fadeIn() with
+                            slideOutVertically(targetOffsetY = { height -> -height }) + fadeOut()
                 } else {
-                    slideInVertically({ height -> -height }) + fadeIn() with
-                            slideOutVertically({ height -> -height }) + fadeOut()
+                    slideInVertically(initialOffsetY = { height -> -height }) + fadeIn() with
+                            slideOutVertically(targetOffsetY = { height -> -height }) + fadeOut()
                 }.using(
                     SizeTransform(clip = true)
                 )
