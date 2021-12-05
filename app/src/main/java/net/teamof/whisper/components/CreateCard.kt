@@ -11,7 +11,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -41,12 +40,11 @@ fun CreateCard(navController: NavController, createCard: CreateCard) {
                     .height(65.dp)
                     .padding(end = 25.dp)
             )
-            Column() {
+            Column {
                 Text(
                     text = createCard.title,
                     fontSize = 16.sp,
                     fontFamily = fontFamily,
-                    fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(bottom = 5.dp)
                 )
                 Text(
@@ -54,10 +52,9 @@ fun CreateCard(navController: NavController, createCard: CreateCard) {
                     fontSize = 13.sp,
                     lineHeight = 20.sp,
                     fontFamily = fontFamily,
+                    color = Color.Gray
                 )
             }
-
         }
-
     }
 }
