@@ -26,6 +26,7 @@ import net.teamof.whisper.components.Contact
 import net.teamof.whisper.models.Counters
 import net.teamof.whisper.models.Profile
 import net.teamof.whisper.models.UserAPI
+import net.teamof.whisper.ui.theme.fontFamily
 import net.teamof.whisper.viewModel.ProfileViewModel
 import net.teamof.whisper.viewModel.UserViewModel
 
@@ -183,7 +184,11 @@ fun Contacts(
             item {
                 Column(modifier = Modifier.padding(20.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(text = "Choose users to invite", modifier = Modifier.weight(1f))
+                        Text(
+                            text = "Choose users to invite",
+                            fontFamily = fontFamily,
+                            modifier = Modifier.weight(1f)
+                        )
                         TextButton(
                             shape = RoundedCornerShape(10.dp),
                             onClick = { /* Do something! */ },
@@ -202,6 +207,7 @@ fun Contacts(
                             Text(
                                 "Done",
                                 color = MaterialTheme.colors.primary,
+                                fontFamily = fontFamily,
                                 fontSize = 14.sp,
                                 fontWeight = FontWeight.W600,
                                 modifier = Modifier.padding(start = 7.dp)
@@ -229,7 +235,7 @@ fun Contacts(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent
                 ),
-                placeholder = { Text(text = "Search") },
+                placeholder = { Text(text = "Search", fontFamily = fontFamily) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 15.dp)
