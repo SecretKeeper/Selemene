@@ -10,9 +10,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -21,6 +21,7 @@ import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import net.teamof.whisper.R
 import net.teamof.whisper.models.UserAPI
+import net.teamof.whisper.ui.theme.fontFamily
 import net.teamof.whisper.viewModel.ProfileViewModel
 
 @OptIn(ExperimentalCoilApi::class)
@@ -75,7 +76,8 @@ fun Contact(
                 Row(verticalAlignment = Alignment.Top) {
                     Text(
                         text = data.username,
-                        fontWeight = FontWeight.SemiBold,
+                        fontFamily = fontFamily,
+                        fontSize = 15.sp,
                         modifier = Modifier
                             .padding(bottom = 7.dp)
                             .weight(1f)
@@ -91,7 +93,12 @@ fun Contact(
                                 .padding(end = 10.dp)
                         )
                 }
-                Text(text = data.profile.status, fontSize = 13.sp)
+                Text(
+                    text = data.profile.status,
+                    fontFamily = fontFamily,
+                    fontSize = 13.sp,
+                    color = Color.Gray
+                )
             }
         }
     }
