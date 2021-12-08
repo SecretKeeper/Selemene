@@ -11,8 +11,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import net.teamof.whisper.components.Feed
+import net.teamof.whisper.components.UnderConstruction
 import net.teamof.whisper.models.Feed
 import net.teamof.whisper.ui.theme.BottomNavigationHeight
+import net.teamof.whisper.ui.theme.showUnderConstruction
 import net.teamof.whisper.viewModel.FeedsViewModel
 
 @Composable
@@ -20,13 +22,16 @@ fun Feeds(feedsViewModel: FeedsViewModel) {
 
     val feeds: List<Feed> by feedsViewModel.feeds.observeAsState(listOf())
 
-    LazyColumn(
-        Modifier
-            .background(Color(red = 245, green = 245, blue = 253))
-            .padding(top = 70.dp, bottom = BottomNavigationHeight, start = 15.dp, end = 15.dp)
-    ) {
-        itemsIndexed(feeds) { _, item ->
-            Feed(item)
+    if (showUnderConstruction)
+        UnderConstruction(0.10f)
+    else
+        LazyColumn(
+            Modifier
+                .background(Color(red = 245, green = 245, blue = 253))
+                .padding(top = 70.dp, bottom = BottomNavigationHeight, start = 15.dp, end = 15.dp)
+        ) {
+            itemsIndexed(feeds) { _, item ->
+                Feed(item)
+            }
         }
-    }
 }

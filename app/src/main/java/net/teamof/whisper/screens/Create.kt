@@ -1,54 +1,72 @@
 package net.teamof.whisper.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.Card
-import androidx.compose.material.Divider
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import net.teamof.whisper.R
+import net.teamof.whisper.components.CreateCard
+
+sealed class CreateCard(
+    val image: Int,
+    val title: String,
+    val shortDescription: String,
+    val route: String
+) {
+    object Whisper : CreateCard(
+        R.drawable.ic_heart,
+        "Start Conversation",
+        "Start chatting instantly with anybody using AES-256 encryption",
+        "Contacts/Messaging"
+    )
+
+    object Feed : CreateCard(
+        R.drawable.ic_heart,
+        "Create Feed",
+        "Start chatting instantly with anybody using AES-256 encryption",
+        ""
+    )
+
+    object Group : CreateCard(
+        R.drawable.ic_heart,
+        "Create Group",
+        "Start chatting instantly with anybody using AES-256 encryption",
+        ""
+    )
+
+    object Guild : CreateCard(
+        R.drawable.ic_heart,
+        "Create Guild",
+        "Start chatting instantly with anybody using AES-256 encryption",
+        ""
+    )
+}
 
 @ExperimentalMaterialApi
 @Composable
 fun Create(navController: NavController) {
+
+    val items = listOf(
+        CreateCard.Whisper,
+        CreateCard.Feed,
+        CreateCard.Group,
+        CreateCard.Guild
+    )
+
     Column(
         Modifier
-            .background(Color(red = 245, green = 245, blue = 253))
+            .background(Color.White)
             .padding(20.dp)
             .fillMaxSize()
     ) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.White),
-            onClick = { navController.navigate("Contacts/Messaging") }
-        ) {
-            Column(Modifier.padding(40.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_heart),
-                    contentDescription = null,
-                    Modifier
-                        .width(70.dp)
-                        .height(70.dp)
-                )
-                Text(
-                    text = "Start chatting instantly with anybody using AES-256 encryption ",
-                    Modifier.padding(top = 30.dp),
-                    textAlign = TextAlign.Center,
-                    lineHeight = 24.sp,
-                )
-                Divider(Modifier.padding(vertical = 20.dp))
-            }
+        items.forEach { createCard ->
+            CreateCard(navController, createCard)
         }
     }
 }

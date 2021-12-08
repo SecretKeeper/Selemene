@@ -87,7 +87,8 @@ private fun MainScreenNavigationConfigurations(
                 Conversations(
                     navController,
                     conversationsViewModel,
-                    conversationsActionsViewModel
+                    conversationsActionsViewModel,
+                    profileViewModel
                 )
             }
             composable("Feeds") {
@@ -104,7 +105,6 @@ private fun MainScreenNavigationConfigurations(
                     to_user_id = backStackEntry.arguments?.getString("to_user_id")!!,
                     messagesViewModel,
                     userViewModel,
-                    conversationsViewModel,
                     profileViewModel
                 )
             }

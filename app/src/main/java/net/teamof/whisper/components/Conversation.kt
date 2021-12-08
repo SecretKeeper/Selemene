@@ -32,6 +32,7 @@ import net.teamof.whisper.R
 import net.teamof.whisper.models.Conversation
 import net.teamof.whisper.ui.theme.fontFamily
 import net.teamof.whisper.viewModel.ConversationActionsViewModel
+import net.teamof.whisper.viewModel.ProfileViewModel
 import org.ocpsoft.prettytime.PrettyTime
 
 @ExperimentalCoilApi
@@ -41,7 +42,8 @@ import org.ocpsoft.prettytime.PrettyTime
 fun Conversation(
     conversation: Conversation,
     navController: NavController,
-    conversationActionsViewModel: ConversationActionsViewModel
+    conversationActionsViewModel: ConversationActionsViewModel,
+    profileViewModel: ProfileViewModel
 ) {
 
     val cachedConversation = remember(conversation) { mutableStateOf(conversation) }
@@ -68,9 +70,11 @@ fun Conversation(
             .pointerInput(Unit) {
                 detectTapGestures(
                     onTap = {
-                        if (!showConversationActions)
-                            navController.navigate("Messaging/${cachedConversation.value.to_user_id}")
-                        else
+                        if (!showConversationActions) {
+                            profileViewModel.setUserStateByUserID(cachedConversation.value.to_user_id) {
+                                navController.navigate("Messaging/${cachedConversation.value.to_user_id}")
+                            }
+                        } else
                             if (cachedConversation.value.to_user_id in selectedConversationsState)
                                 conversationActionsViewModel.unselectConversationByToUserID(
                                     cachedConversation.value.to_user_id

@@ -28,7 +28,7 @@ class ProfileViewModel @Inject constructor(
 
     val userState: MutableLiveData<User> = _userState
 
-    fun getUserByUserID(user_id: Long, callback: () -> Unit) {
+    fun setUserStateByUserID(user_id: Long, callback: () -> Unit) {
         val query = userBox.query().equal(User_.user_id, user_id)
         val user = query.build().findFirst()
 
@@ -55,6 +55,34 @@ class ProfileViewModel @Inject constructor(
             _userState.value = user
             callback()
         }
+    }
+
+    fun getUserByUserID(user_id: Long): User? {
+        var userResult: User? = null
+        val query = userBox.query().equal(User_.user_id, user_id)
+        val user = query.build().findFirst()
+
+        if (user == null) {
+            fetchUserByID(user_id) { fetchedUser ->
+                val newUser = User(
+                    user_id = fetchedUser.user_id,
+                    username = fetchedUser.username,
+                    email = fetchedUser.email,
+                    avatar = fetchedUser.avatar,
+                )
+                newUser.profile.target = Profile(description = fetchedUser.profile.description)
+                newUser.counters.target = Counters(
+                    followers = fetchedUser._count.followers,
+                    feeds = fetchedUser._count.feeds
+                )
+
+                userBox.put(newUser)
+                userResult = newUser
+            }
+
+        } else userResult = user
+
+        return userResult
     }
 
     private fun fetchUserByID(user_id: Long, function: (UserAPI) -> Unit): UserAPI? {

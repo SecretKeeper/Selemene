@@ -77,12 +77,13 @@ class UserViewModel @Inject constructor(
                     buttonText("Signing In...")
                     val jsonRes = JSONObject(response.body()?.string())
                     val jwt = JWT(jsonRes.getString("token"))
-                    Timber.d(jwt.getClaim("user_id").asString())
+
+                    oBKeyValueBox.put(OBKeyValue(key = "token", value = jsonRes.getString("token")))
+
                     jwt.getClaim("user_id").asLong()?.let { setUserID(it) }
                     jwt.getClaim("user_id").asString()
                         ?.let {
                             oBKeyValueBox.put(OBKeyValue(key = "user_id", value = it))
-//                            webSocketMessageTriggers.sendSubscribeChannels(it) hint: should subscribe with new methods
                         }
 
                     navController.navigate("Conversations") {

@@ -4,7 +4,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import net.teamof.whisper.components.Activity
+import net.teamof.whisper.components.UnderConstruction
 import net.teamof.whisper.models.Activity
+import net.teamof.whisper.ui.theme.showUnderConstruction
 
 val activities = listOf(
     Activity(
@@ -35,9 +37,12 @@ val activities = listOf(
 
 @Composable
 fun Activities() {
-    LazyColumn {
-        itemsIndexed(activities) { _, activity ->
-            Activity(activity)
+    if (showUnderConstruction)
+        UnderConstruction(0.3f)
+    else
+        LazyColumn {
+            itemsIndexed(activities) { _, activity ->
+                Activity(activity)
+            }
         }
-    }
 }

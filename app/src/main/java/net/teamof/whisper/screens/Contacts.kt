@@ -26,6 +26,7 @@ import net.teamof.whisper.components.Contact
 import net.teamof.whisper.models.Counters
 import net.teamof.whisper.models.Profile
 import net.teamof.whisper.models.UserAPI
+import net.teamof.whisper.ui.theme.fontFamily
 import net.teamof.whisper.viewModel.ProfileViewModel
 import net.teamof.whisper.viewModel.UserViewModel
 
@@ -36,7 +37,7 @@ val contacts = listOf(
         "jaina.proudmoore@gmail.com",
         "https://c4.wallpaperflare.com/wallpaper/607/463/825/world-of-warcraft-jaina-proudmoore-magic-mazert-young-turquoise-hd-wallpaper-preview.jpg",
         Profile(
-            description = "Lord Admiral, ruler of the Kul Tiras kingdom"
+            status = "Lord Admiral, ruler of the Kul Tiras kingdom"
         ),
         Counters(
             feeds = 114,
@@ -49,7 +50,7 @@ val contacts = listOf(
         "lichking@gmail.com",
         "https://million-wallpapers.com/wallpapers/1/65/16175274567205625182.jpg",
         Profile(
-            description = "Your soul is mine"
+            status = "Your soul is mine"
         ),
         Counters(
             feeds = 14,
@@ -62,7 +63,7 @@ val contacts = listOf(
         "thrall@gmail.com",
         "https://million-wallpapers.com/wallpapers/1/65/16175274567205625182.jpg",
         Profile(
-            description = "Lord of the Clans"
+            status = "Lord of the Clans"
         ),
         Counters(
             feeds = 14,
@@ -75,7 +76,7 @@ val contacts = listOf(
         "thrall@gmail.com",
         "https://million-wallpapers.com/wallpapers/1/65/16175274567205625182.jpg",
         Profile(
-            description = "Lord of the Clans"
+            status = "Dark Lady, Also known Banshee Queen"
         ),
         Counters(
             feeds = 14,
@@ -88,7 +89,7 @@ val contacts = listOf(
         "sylvanas.windrunner@gmail.com",
         "https://wallpaperchat.com/walls/full/2/2/5/402192.jpg",
         Profile(
-            description = "Dark Lady, Also known Banshee Queen"
+            status = "Dark Lady, Also known Banshee Queen"
         ),
         Counters(
             feeds = 26,
@@ -101,7 +102,7 @@ val contacts = listOf(
         "anduin.wrynn@gmail.com",
         "https://mocah.org/thumbs/329166-WoW-The-Alliance-Anduin-Wrynn-Genn-Greymane-4K-iphone-wallpaper.jpg",
         Profile(
-            description = "The King of the Stormwind City"
+            status = "The King of the Stormwind City"
         ),
         Counters(
             feeds = 9,
@@ -114,7 +115,7 @@ val contacts = listOf(
         "illidan.stormrage@gmail.com",
         "https://images.wallpapersden.com/image/download/illidan-stormrage_a2xuaGeUmZqaraWkpJRsamWtZmhoaQ.jpg",
         Profile(
-            description = "Lord of the Outland"
+            status = "Lord of the Outland"
         ),
         Counters(
             feeds = 78,
@@ -127,7 +128,7 @@ val contacts = listOf(
         "tyrande.whisperwind@gmail.com",
         "https://coolwallpapers.me/picsup/2990861-elves-blue-hair-fantasy-art-world-of-warcraft-tyrande-whisperwind___mixed-wallpapers.jpg",
         Profile(
-            description = "High Priestess of Elune"
+            status = "High Priestess of Elune"
         ),
         Counters(
             feeds = 236,
@@ -140,7 +141,7 @@ val contacts = listOf(
         "kelthuzad@gmail.com",
         "https://www.mobygames.com/images/promo/original/1465476647-1936338714.jpg",
         Profile(
-            description = "Founder of the Cult of the Damned"
+            status = "Founder of the Cult of the Damned"
         ),
         Counters(
             feeds = 8,
@@ -153,7 +154,7 @@ val contacts = listOf(
         "liadrin@gmail.com",
         "https://i.pinimg.com/originals/e1/81/25/e181259a1cf944de6dd8cb4d40142185.jpg",
         Profile(
-            description = "Blood Knight Matriarch"
+            status = "Blood Knight Matriarch"
         ),
         Counters(
             feeds = 46,
@@ -183,7 +184,11 @@ fun Contacts(
             item {
                 Column(modifier = Modifier.padding(20.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(text = "Choose users to invite", modifier = Modifier.weight(1f))
+                        Text(
+                            text = "Choose users to invite",
+                            fontFamily = fontFamily,
+                            modifier = Modifier.weight(1f)
+                        )
                         TextButton(
                             shape = RoundedCornerShape(10.dp),
                             onClick = { /* Do something! */ },
@@ -202,6 +207,7 @@ fun Contacts(
                             Text(
                                 "Done",
                                 color = MaterialTheme.colors.primary,
+                                fontFamily = fontFamily,
                                 fontSize = 14.sp,
                                 fontWeight = FontWeight.W600,
                                 modifier = Modifier.padding(start = 7.dp)
@@ -229,7 +235,7 @@ fun Contacts(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent
                 ),
-                placeholder = { Text(text = "Search") },
+                placeholder = { Text(text = "Search", fontFamily = fontFamily) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 15.dp)
