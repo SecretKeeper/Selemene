@@ -8,6 +8,18 @@ import retrofit2.http.Headers
 import retrofit2.http.POST
 
 @JsonClass(generateAdapter = true)
+data class SignupResponse(
+    val token: String
+)
+
+@JsonClass(generateAdapter = true)
+data class SignupRequest(
+    val username: String,
+    val email: String,
+    val password: String
+)
+
+@JsonClass(generateAdapter = true)
 data class LoginResponse(
     val token: String
 )
@@ -19,11 +31,11 @@ data class LoginRequest(
 )
 
 interface AuthAPI {
-    @POST("signup")
+    @POST("auth/signup")
     @Headers("Content-Type: application/json")
-    suspend fun signup(@Body loginRequest: LoginRequest): LoginResponse
+    suspend fun signup(@Body loginRequest: SignupRequest): Response<ResponseBody>
 
-    @POST("signin")
+    @POST("auth/signin")
     @Headers("Content-Type: application/json")
     suspend fun signIn(@Body loginRequest: LoginRequest): Response<ResponseBody>
 }
