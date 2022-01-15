@@ -25,13 +25,17 @@ fun RegisterScreen(
 ) {
     val composableScope = rememberCoroutineScope()
     val buttonEnabled = remember { mutableStateOf(true) }
-    val buttonText = remember { mutableStateOf("Sign In") }
+    val buttonText = remember { mutableStateOf("Register") }
     val buttonLoading = remember { mutableStateOf(false) }
     val buttonColor = remember { mutableStateOf(0xFF0336FF) }
     val username = remember { mutableStateOf("") }
     val usernameError = remember { mutableStateOf(false) }
+    val email = remember { mutableStateOf("") }
+    val emailError = remember { mutableStateOf(false) }
     val password = remember { mutableStateOf("") }
     val passwordError = remember { mutableStateOf(false) }
+    val cPassword = remember { mutableStateOf("") }
+    val cPasswordError = remember { mutableStateOf(false) }
 
 
     Column(Modifier.padding(horizontal = 25.dp, vertical = 15.dp)) {
@@ -65,6 +69,15 @@ fun RegisterScreen(
                 isError = usernameError.value
             )
             TextField(
+                text = "Email",
+                value = email.value,
+                onChange = {
+                    email.value = it.toString()
+                    emailError.value = it.toString().length < 3
+                },
+                isError = emailError.value
+            )
+            TextField(
                 text = "Password",
                 value = password.value,
                 onChange = {
@@ -74,13 +87,24 @@ fun RegisterScreen(
                 type = "password",
                 isError = passwordError.value
             )
+            TextField(
+                text = "Confirm Password",
+                value = password.value,
+                onChange = {
+                    cPassword.value = it.toString()
+                    cPasswordError.value = it.toString().length < 8
+                },
+                type = "password",
+                isError = cPasswordError.value
+            )
             Button(
                 onClick = {
                     composableScope.launch {
                         username.value.let {
-                            userViewModel.authenticate(
+                            userViewModel.signupWithEmailPassword(
                                 navController,
                                 username.value,
+                                email.value,
                                 password.value,
                                 { buttonLoading.value = it },
                                 { buttonText.value = it },
@@ -123,23 +147,7 @@ fun RegisterScreen(
                     )
                 }
             }
-            TextButton(
-                onClick = {
-//                    navController.navigate("Conversations") {
-//                        launchSingleTop = true
-//                        popUpTo("Login") { inclusive = true }
-//                    }
-                }) {
-                Text(
-                    text = "Forgot Password?",
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .padding(vertical = 20.dp)
-                        .fillMaxWidth()
-                )
-            }
         }
-
         TextButton(
             onClick = {
                 navController.navigate("Conversations") {
@@ -148,7 +156,7 @@ fun RegisterScreen(
                 }
             }) {
             Text(
-                text = "Does not have an account yet?",
+                text = "Already have account? Sign in",
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .padding(vertical = 6.dp)
