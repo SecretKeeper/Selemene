@@ -44,7 +44,7 @@ class AppModule {
 
     private val baseWebSocketAddress = "ws://10.0.2.2:3335/ws"
 
-    private val baseGateWayAddress = "http://10.0.2.2:3334"
+    private val baseGateWayAddress = "http://10.0.2.2:3333"
 
     @Provides
     fun providesApplication(@ApplicationContext context: Context): Whisper {
