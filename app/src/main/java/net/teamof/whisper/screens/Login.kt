@@ -142,9 +142,9 @@ fun LoginScreen(
 
         TextButton(
             onClick = {
-//                navController.navigate("Register") {
-//                    launchSingleTop = true
-//                }
+                navController.navigate("Register") {
+                    launchSingleTop = true
+                }
             }) {
             Text(
                 text = "Does not have an account yet?",
