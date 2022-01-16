@@ -30,8 +30,8 @@ private val DarkColorPalette = darkColors(
 
 private val LightColorPalette = lightColors(
     primary = Color(0xff0a5dfe),
+    secondary = Color(0xff3ddc84),
     primaryVariant = Purple700,
-    secondary = Teal200,
     onPrimary = Color(0xff111827),
     onSecondary = Color(0xff6b7280),
 
