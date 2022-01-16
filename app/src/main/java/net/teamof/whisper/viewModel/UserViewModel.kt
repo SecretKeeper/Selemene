@@ -2,7 +2,6 @@ package net.teamof.whisper.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
-import com.auth0.android.jwt.JWT
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.objectbox.Box
 import io.objectbox.kotlin.boxFor
@@ -11,10 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import net.teamof.whisper.ObjectBox
-import net.teamof.whisper.api.AuthAPI
-import net.teamof.whisper.api.LoginRequest
-import net.teamof.whisper.api.SearchAPI
-import net.teamof.whisper.api.SearchUsersRequest
+import net.teamof.whisper.api.*
 import net.teamof.whisper.di.DataStoreManager
 import net.teamof.whisper.models.OBKeyValue
 import net.teamof.whisper.models.OBKeyValue_
@@ -76,15 +72,14 @@ class UserViewModel @Inject constructor(
                     buttonEnabled(false)
                     buttonText("Signing In...")
                     val jsonRes = JSONObject(response.body()?.string())
-                    val jwt = JWT(jsonRes.getString("token"))
 
                     oBKeyValueBox.put(OBKeyValue(key = "token", value = jsonRes.getString("token")))
-
-                    jwt.getClaim("user_id").asLong()?.let { setUserID(it) }
-                    jwt.getClaim("user_id").asString()
-                        ?.let {
-                            oBKeyValueBox.put(OBKeyValue(key = "user_id", value = it))
-                        }
+                    oBKeyValueBox.put(
+                        OBKeyValue(
+                            key = "user_id",
+                            value = jsonRes.getString("user_id")
+                        )
+                    )
 
                     navController.navigate("Conversations") {
                         launchSingleTop = true
@@ -104,6 +99,52 @@ class UserViewModel @Inject constructor(
             }
         }
     }
+
+    suspend fun signupWithEmailPassword(
+        completeRegistration: (Boolean) -> Unit,
+        username: String,
+        email: String,
+        password: String,
+        buttonLoading: (Boolean) -> Unit,
+        buttonText: (String) -> Unit,
+        buttonColor: (Long) -> Unit,
+        buttonEnabled: (Boolean) -> Unit
+    ) {
+        buttonLoading(true)
+        buttonEnabled(false)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = authAPI.signup(
+                SignupRequest(
+                    username,
+                    email,
+                    password
+                )
+            )
+
+            withContext(Dispatchers.Main) {
+                if (response.isSuccessful) {
+                    buttonLoading(false)
+                    buttonEnabled(false)
+                    //buttonColor(0xff3ddc84)
+                    buttonText("Your account successfully created")
+                    completeRegistration(true)
+
+                } else {
+                    buttonLoading(false)
+                    buttonEnabled(false)
+                    buttonText("Credentials Wrong")
+                    buttonColor(0xFFe11d48)
+                    Timer().schedule(2500) {
+                        buttonColor(0xFF0336FF)
+                        buttonText("Signup")
+                        buttonEnabled(true)
+                    }
+                }
+            }
+        }
+    }
+
 
     fun searchUsers(input: String, fetchedUsers: (List<UserAPI>) -> Unit) {
 
