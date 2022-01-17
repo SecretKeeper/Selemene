@@ -94,7 +94,7 @@ fun Contact(
                         )
                 }
                 Text(
-                    text = data.profile.status,
+                    text = data.profile.status ?: "",
                     fontFamily = fontFamily,
                     fontSize = 13.sp,
                     color = Color.Gray
