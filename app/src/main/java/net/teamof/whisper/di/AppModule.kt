@@ -13,6 +13,7 @@ import net.teamof.whisper.ObjectBox
 import net.teamof.whisper.Whisper
 import net.teamof.whisper.api.AuthAPI
 import net.teamof.whisper.api.SearchAPI
+import net.teamof.whisper.api.UserTokenInterceptor
 import net.teamof.whisper.api.UsersAPI
 import net.teamof.whisper.models.OBKeyValue
 import net.teamof.whisper.models.OBKeyValue_
@@ -60,9 +61,9 @@ class AppModule {
     }
 
     @Provides
-    fun provideHttpClient(): OkHttpClient {
+    fun provideHttpClient(keyValueRepository: KeyValueRepository): OkHttpClient {
 
-        return OkHttpClient.Builder()
+        return OkHttpClient.Builder().addInterceptor(UserTokenInterceptor(keyValueRepository))
             .build()
     }
 
