@@ -38,7 +38,7 @@ class ConversationRepository @Inject constructor(
             ) == 0L
         ) {
             val response =
-                usersAPI.getUserProfile(if (side == MessageSide.THEMSELVES) newMessage.user_id else newMessage.to_user_id)
+                usersAPI.getUserProfile(if (side == MessageSide.THEMSELVES) newMessage.user_id.toString() else newMessage.to_user_id.toString())
 
             response.enqueue(object : Callback<UserAPI> {
                 override fun onResponse(
@@ -53,7 +53,7 @@ class ConversationRepository @Inject constructor(
                                 last_message_time = newMessage.created_at,
                                 unread_messages = 0,
                                 username = it.username,
-                                user_image = it.avatar
+                                user_image = it.avatar ?: ""
                             )
                         )
                     }
