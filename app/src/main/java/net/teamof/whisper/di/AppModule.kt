@@ -42,9 +42,7 @@ class AppModule {
             build()
         }.use { it.findFirst() }?.value ?: "0"
     }
-
-    private val baseWebSocketAddress = "ws://10.0.2.2:3335/ws"
-
+    
     private val baseGateWayAddress = "http://10.0.2.2:3333"
 
     @Provides
