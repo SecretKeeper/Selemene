@@ -38,12 +38,12 @@ class ProfileViewModel @Inject constructor(
                     user_id = fetchedUser.user_id,
                     username = fetchedUser.username,
                     email = fetchedUser.email,
-                    avatar = fetchedUser.avatar,
+                    avatar = fetchedUser.avatar ?: "",
                 )
                 newUser.profile.target = Profile(description = fetchedUser.profile.description)
                 newUser.counters.target = Counters(
-                    followers = fetchedUser._count.followers,
-                    feeds = fetchedUser._count.feeds
+                    followers = fetchedUser._count?.followers ?: 0,
+                    feeds = fetchedUser._count?.feeds ?: 0
                 )
 
                 userBox.put(newUser)
@@ -68,12 +68,12 @@ class ProfileViewModel @Inject constructor(
                     user_id = fetchedUser.user_id,
                     username = fetchedUser.username,
                     email = fetchedUser.email,
-                    avatar = fetchedUser.avatar,
+                    avatar = fetchedUser.avatar ?: "",
                 )
                 newUser.profile.target = Profile(description = fetchedUser.profile.description)
                 newUser.counters.target = Counters(
-                    followers = fetchedUser._count.followers,
-                    feeds = fetchedUser._count.feeds
+                    followers = fetchedUser._count?.followers ?: 0,
+                    feeds = fetchedUser._count?.feeds ?: 0
                 )
 
                 userBox.put(newUser)
@@ -87,7 +87,7 @@ class ProfileViewModel @Inject constructor(
 
     private fun fetchUserByID(user_id: Long, function: (UserAPI) -> Unit): UserAPI? {
         val user: UserAPI? = null
-        val response = usersAPI.getUserProfile(user_id)
+        val response = usersAPI.getUserProfile(user_id.toString())
 
         response.enqueue(object : Callback<UserAPI> {
             override fun onResponse(
