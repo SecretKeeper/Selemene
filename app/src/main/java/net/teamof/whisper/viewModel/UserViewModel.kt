@@ -10,7 +10,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import net.teamof.whisper.ObjectBox
-import net.teamof.whisper.api.*
+import net.teamof.whisper.api.AuthAPI
+import net.teamof.whisper.api.LoginRequest
+import net.teamof.whisper.api.SearchAPI
+import net.teamof.whisper.api.SignupRequest
 import net.teamof.whisper.di.DataStoreManager
 import net.teamof.whisper.models.OBKeyValue
 import net.teamof.whisper.models.OBKeyValue_
@@ -148,7 +151,7 @@ class UserViewModel @Inject constructor(
 
     fun searchUsers(input: String, fetchedUsers: (List<UserAPI>) -> Unit) {
 
-        val response = searchAPI.searchUsers(SearchUsersRequest(input))
+        val response = searchAPI.searchUsers(input)
 
         response.enqueue(object : Callback<List<UserAPI>> {
             override fun onResponse(
@@ -156,7 +159,7 @@ class UserViewModel @Inject constructor(
                 response: Response<List<UserAPI>>
             ) {
                 response.body()?.let { fetchedUsers(it) }
-                Timber.d(response.body().toString())
+                Timber.d(response.code().toString())
             }
 
             override fun onFailure(call: Call<List<UserAPI>>, t: Throwable) {
