@@ -25,8 +25,8 @@ data class User(
 @JsonClass(generateAdapter = true)
 data class Profile(
     @Id var id: Long = 0,
-    var description: String = "",
-    var status: String = ""
+    var description: String? = "",
+    var status: String? = ""
 )
 
 @Entity
