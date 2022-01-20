@@ -9,7 +9,7 @@ import java.util.*
 @Entity
 @JsonClass(generateAdapter = true)
 data class Message(
-    @Id(assignable = true)
+    @Id
     var id: Long = 0,
     var user_id: Long = 0,
     var to_user_id: Long = 0,
