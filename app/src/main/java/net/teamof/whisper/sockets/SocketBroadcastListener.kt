@@ -4,6 +4,7 @@ import android.app.ActivityManager
 import android.app.Application
 import android.app.NotificationManager
 import android.content.Context
+import android.content.Intent
 import androidx.core.app.NotificationCompat
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
@@ -69,7 +70,7 @@ class SocketBroadcastListener @Inject constructor(
                     conversationRepository.update(MessageSide.THEMSELVES, it)
                     messageRepository.create(it)
                     if (!isAppRunning(application, "net.teamof.whisper")) {
-                        val builder = NotificationCompat.Builder(application, "CHANNEL_ID")
+                        val builder = NotificationCompat.Builder(application, "MYWhisperCHANNEL_ID")
                             .setSmallIcon(R.drawable.objectbox_notification)
                             .setContentTitle("Whisper Messenger")
                             .setContentText(it.content)
@@ -78,6 +79,13 @@ class SocketBroadcastListener @Inject constructor(
                         val notificationManager =
                             application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                         notificationManager.notify(it.user_id.toInt(), builder.build())
+                    } else {
+                        application.sendBroadcast(
+                            Intent("WhisperLocalMessageCommunication").putExtra(
+                                "RECEIVE_MESSAGE",
+                                it
+                            )
+                        )
                     }
                 }
             }
