@@ -7,7 +7,7 @@ import retrofit2.http.Headers
 import retrofit2.http.Path
 
 interface UsersAPI {
-    @GET("user/id/{id}")
+    @GET("users/id/{id}")
     @Headers("Content-Type: application/json")
-    fun getUserProfile(@Path("id") user_id: Long): Call<UserAPI>
+    fun getUserProfile(@Path("id") user_id: String): Call<UserAPI>
 }
