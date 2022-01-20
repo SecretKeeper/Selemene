@@ -1,7 +1,11 @@
 package net.teamof.whisper.viewModel
 
+import android.app.Application
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import androidx.lifecycle.ViewModel
-import com.squareup.moshi.Moshi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.objectbox.Box
 import io.objectbox.android.AndroidScheduler
@@ -10,30 +14,39 @@ import io.objectbox.kotlin.equal
 import io.objectbox.kotlin.or
 import io.objectbox.query.Query
 import net.teamof.whisper.ObjectBox
-import net.teamof.whisper.models.Message
-import net.teamof.whisper.models.Message_
-import net.teamof.whisper.models.OBKeyValue
-import net.teamof.whisper.models.OBKeyValue_
+import net.teamof.whisper.models.*
+import net.teamof.whisper.repositories.ConversationRepository
 import net.teamof.whisper.repositories.MessageRepository
-import net.teamof.whisper.sockets.Socket
-import net.teamof.whisper.sockets.SocketBroadcastListener
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class MessagesViewModel @Inject constructor(
-    moshi: Moshi,
-    socketBroadcastListener: SocketBroadcastListener,
-    private val whisperSocket: Socket,
+    private val application: Application,
     private val messageRepository: MessageRepository,
+    private val conversationRepository: ConversationRepository
 ) : ViewModel() {
 
-    init {
-        whisperSocket.onEvent(Socket.EVENT_OPEN, socketBroadcastListener.broadcastSubscribe())
-        whisperSocket.onEventResponse("message", socketBroadcastListener.onMessageListener())
+    private val broadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            val message = intent.getSerializableExtra("RECEIVE_MESSAGE") as? Message
+
+            if (message != null) {
+                conversationRepository.update(MessageSide.THEMSELVES, message)
+                messageRepository.create(message)
+            }
+
+
+            Timber.d("We Go It in VM onReceive: $message")
+        }
     }
 
-    val messageAdapter = moshi.adapter(Message::class.java)
+    init {
+        application.registerReceiver(
+            broadcastReceiver,
+            IntentFilter("WhisperLocalMessageCommunication")
+        )
+    }
 
     private val oBKeyValueBox: Box<OBKeyValue> = ObjectBox.store.boxFor(OBKeyValue::class.java)
 
@@ -63,23 +76,21 @@ class MessagesViewModel @Inject constructor(
 
         messageRepository.create(message)
 
-        _messages = ObjectBoxLiveData(messageBox.query().run {
-            (Message_.to_user_id equal message.to_user_id
-                    or (Message_.user_id equal message.user_id))
-            orderDesc(Message_.id)
-            build()
-        })
-
-        whisperSocket.send("message", messageAdapter.toJson(message))
+        application.sendBroadcast(
+            Intent("WhisperLocalMessageCommunication").putExtra(
+                "SEND_MESSAGE",
+                message
+            )
+        )
     }
-    
+
     fun getConversationMessages(to_user_id: Long) {
         if (currentUserId != null) {
             ObjectBoxLiveData(
                 messageBox.query().run {
                     (Message_.to_user_id equal to_user_id
                             or (Message_.user_id equal currentUserId.value))
-                    order(Message_.created_at)
+                    order(Message_.id)
                     build()
                 }
             )
