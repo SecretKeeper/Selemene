@@ -30,7 +30,13 @@ fun MainScreen(
 ) {
     val navController = rememberNavController()
     val disabledNavScreens =
-        listOf("Login", "Register", "Messaging/{to_user_id}", "Profile", "Contacts/{action}")
+        listOf(
+            "Login",
+            "Register",
+            "Messaging/{to_user_id}",
+            "Profile/{to_user_id}",
+            "Contacts/{action}"
+        )
     val conversationsActionsViewModel = hiltViewModel<ConversationActionsViewModel>()
 
     WhisperTheme {
