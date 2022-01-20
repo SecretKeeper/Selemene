@@ -66,10 +66,12 @@ class SocketBroadcastListener @Inject constructor(
     fun onMessageListener(): Socket.OnEventResponseListener =
         object : Socket.OnEventResponseListener() {
             override fun onMessage(event: String?, data: String?) {
+
                 messageAdapter.fromJson(data)?.let {
-                    conversationRepository.update(MessageSide.THEMSELVES, it)
-                    messageRepository.create(it)
                     if (!isAppRunning(application, "net.teamof.whisper")) {
+                        conversationRepository.update(MessageSide.THEMSELVES, it)
+                        messageRepository.create(it)
+
                         val builder = NotificationCompat.Builder(application, "MYWhisperCHANNEL_ID")
                             .setSmallIcon(R.drawable.objectbox_notification)
                             .setContentTitle("Whisper Messenger")
