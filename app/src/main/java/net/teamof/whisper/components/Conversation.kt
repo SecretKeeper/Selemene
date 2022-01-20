@@ -3,7 +3,6 @@ package net.teamof.whisper.components
 import BackPressHandler
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,9 +25,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberImagePainter
-import coil.transform.CircleCropTransformation
 import net.teamof.whisper.R
+import net.teamof.whisper.components.conversation.Avatar
 import net.teamof.whisper.models.Conversation
 import net.teamof.whisper.ui.theme.fontFamily
 import net.teamof.whisper.viewModel.ConversationActionsViewModel
@@ -98,18 +96,8 @@ fun Conversation(
                 .padding(vertical = 10.dp, horizontal = 10.dp)
         ) {
             Box {
-                Image(
-                    painter = rememberImagePainter(data = cachedConversation.value.user_image,
-                        builder = {
-                            transformations(CircleCropTransformation())
-                        }
-                    ),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .width(60.dp)
-                        .height(60.dp)
-                )
-
+                Avatar(cachedConversation.value.user_image, cachedConversation.value.username)
+                
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_checkmark_conversation),
                     tint = Color.Unspecified,
@@ -130,14 +118,14 @@ fun Conversation(
                         text = cachedConversation.value.username,
                         fontFamily = fontFamily,
                         fontWeight = FontWeight.Medium,
-                        fontSize = 15.sp,
+                        fontSize = 16.sp,
                         modifier = Modifier
                             .weight(1f)
                             .padding(bottom = 10.dp)
                     )
                     Text(
                         text = PrettyTime().format(conversation.last_message_time),
-                        fontSize = 12.sp,
+                        fontSize = 13.sp,
                         fontFamily = fontFamily,
                         fontWeight = FontWeight.Normal,
                         modifier = Modifier.padding(bottom = 7.dp)
@@ -146,7 +134,7 @@ fun Conversation(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         text = conversation.last_message,
-                        fontSize = 13.sp,
+                        fontSize = 14.sp,
                         fontFamily = fontFamily,
                         fontWeight = FontWeight.Normal,
                         color = MaterialTheme.colors.onSecondary,
