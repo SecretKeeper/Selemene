@@ -93,7 +93,7 @@ fun Profile(
                             color = Color.DarkGray
                         )
                         Text(
-                            text = "Don't let them take your mind",
+                            text = user.value!!.profile.target.status ?: "",
                             fontSize = 14.sp,
                             fontFamily = fontFamily,
                             fontWeight = FontWeight.Medium,
@@ -137,7 +137,7 @@ fun Profile(
 
                         for (i in 1..3) {
                             Text(
-                                text = user.value!!.profile.target.description,
+                                text = user.value!!.profile.target.description ?: "",
                                 color = Color(red = 130, green = 130, blue = 130),
                                 fontFamily = fontFamily,
                                 fontWeight = FontWeight.Normal,
