@@ -76,6 +76,8 @@ class MessagesViewModel @Inject constructor(
 
         messageRepository.create(message)
 
+        conversationRepository.update(MessageSide.MYSELF, message)
+
         application.sendBroadcast(
             Intent("WhisperLocalMessageCommunication").putExtra(
                 "SEND_MESSAGE",
@@ -86,7 +88,7 @@ class MessagesViewModel @Inject constructor(
 
     fun getConversationMessages(to_user_id: Long) {
         if (currentUserId != null) {
-            ObjectBoxLiveData(
+            _messages = ObjectBoxLiveData(
                 messageBox.query().run {
                     (Message_.to_user_id equal to_user_id
                             or (Message_.user_id equal currentUserId.value))
