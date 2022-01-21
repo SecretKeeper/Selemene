@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
@@ -59,20 +60,20 @@ fun MessagingFooter(
                 bottom = 3.dp
             )
         ) {
-            IconButton(
-                onClick = {
-                    when {
-                        cameraPermissionState.hasPermission -> scope.launch { bottomSheetState.show() }
-
-                        cameraPermissionState.shouldShowRationale ||
-                                !cameraPermissionState.permissionRequested -> cameraPermissionState.launchPermissionRequest()
-                    }
-                },
-                Modifier
-                    .width(27.dp)
-                    .height(27.dp)
+            Box(
+                modifier = Modifier
+                    .width(32.dp)
+                    .height(32.dp)
                     .clip(shape = CircleShape)
                     .background(MaterialTheme.colors.primary)
+                    .clickable {
+                        when {
+                            cameraPermissionState.hasPermission -> scope.launch { bottomSheetState.show() }
+
+                            cameraPermissionState.shouldShowRationale ||
+                                    !cameraPermissionState.permissionRequested -> cameraPermissionState.launchPermissionRequest()
+                        }
+                    }
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_add),
@@ -81,6 +82,7 @@ fun MessagingFooter(
                     modifier = Modifier
                         .width(23.dp)
                         .height(23.dp)
+                        .align(Alignment.Center)
                 )
             }
             OutlinedTextField(
