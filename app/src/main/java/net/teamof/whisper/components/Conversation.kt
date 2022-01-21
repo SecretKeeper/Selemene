@@ -97,7 +97,7 @@ fun Conversation(
         ) {
             Box {
                 Avatar(cachedConversation.value.user_image, cachedConversation.value.username)
-                
+
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_checkmark_conversation),
                     tint = Color.Unspecified,
@@ -117,7 +117,7 @@ fun Conversation(
                     Text(
                         text = cachedConversation.value.username,
                         fontFamily = fontFamily,
-                        fontWeight = FontWeight.Medium,
+                        fontWeight = FontWeight.Bold,
                         fontSize = 16.sp,
                         modifier = Modifier
                             .weight(1f)
