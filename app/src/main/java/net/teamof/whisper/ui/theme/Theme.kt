@@ -13,11 +13,11 @@ import net.teamof.whisper.R
 
 
 val fontFamily = FontFamily(
-    Font(R.font.roboto_black, FontWeight.Black),
-    Font(R.font.roboto_bold, FontWeight.Bold),
-    Font(R.font.roboto_light, FontWeight.Light),
-    Font(R.font.roboto_medium, FontWeight.Medium),
-    Font(R.font.roboto_regular, FontWeight.Normal)
+    Font(R.font.acumin_pro_black, FontWeight.Black),
+    Font(R.font.acumin_pro_bold, FontWeight.Bold),
+    Font(R.font.acumin_pro_extralight, FontWeight.Light),
+    Font(R.font.acumin_pro_medium, FontWeight.Medium),
+    Font(R.font.acumin_pro_book, FontWeight.Normal)
 )
 
 private val DarkColorPalette = darkColors(
