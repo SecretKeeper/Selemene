@@ -107,7 +107,9 @@ dependencies {
     implementation "androidx.compose.material:material:$compose_version"
 
     // Accompanist Permission
-    implementation "com.google.accompanist:accompanist-permissions:0.20.0"
+    implementation "com.google.accompanist:accompanist-permissions:0.22.0-rc"
+    implementation "com.google.accompanist:accompanist-systemuicontroller:0.22.0-rc"
+
 
     // Coil Compose
     implementation("io.coil-kt:coil-compose:1.4.0")
