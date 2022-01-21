@@ -123,18 +123,17 @@ fun MainHeader(
                 Text(
                     text = user?.username!!,
                     fontFamily = fontFamily,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
                     modifier = Modifier.padding(bottom = 5.dp)
                 )
 
                 Text(
                     text = "Last seen recently",
-                    fontSize = 12.sp,
+                    fontSize = 13.sp,
                     fontFamily = fontFamily,
                     fontWeight = FontWeight.Normal,
-                    color = MaterialTheme.colors.onSecondary,
-                    modifier = Modifier.padding(bottom = 5.dp)
+                    color = MaterialTheme.colors.onSecondary
                 )
             }
         }
