@@ -21,12 +21,18 @@ fun TextField(
     value: String,
     onChange: (Any) -> Unit,
     type: String = "text",
-    isError: Boolean = false
+    isError: Boolean = false,
+    singleLine: Boolean = false,
+    maxLines: Int = Int.MAX_VALUE
 ) {
     androidx.compose.material.TextField(
         label = { Text(text) },
         value = value,
-        onValueChange = { onChange(it) },
+        onValueChange = {
+            if (!singleLine) onChange(it) else {
+                if (!it.contains("\n")) onChange(it)
+            }
+        },
         keyboardOptions = KeyboardOptions(
             keyboardType = when (type) {
                 "text" -> KeyboardType.Text
@@ -45,6 +51,8 @@ fun TextField(
             disabledIndicatorColor = Color.Transparent
         ),
         isError = isError,
+        singleLine = singleLine,
+        maxLines = maxLines,
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 25.dp)
