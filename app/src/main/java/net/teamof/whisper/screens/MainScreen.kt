@@ -19,6 +19,8 @@ import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import net.teamof.whisper.components.BottomAppBar
+import net.teamof.whisper.components.settings.ChangeAccountPasswordScreen
+import net.teamof.whisper.screens.settings.SecurityScreen
 import net.teamof.whisper.ui.theme.WhisperTheme
 import net.teamof.whisper.viewModel.*
 
@@ -128,7 +130,9 @@ private fun MainScreenNavigationConfigurations(
                     Contacts(userViewModel, profileViewModel, navController, action = it)
                 }
             }
-            composable("SelfProfile") { SelfProfile() }
+            composable("SelfProfile") { SelfProfile(navController) }
+            composable("Security") { SecurityScreen(navController) }
+            composable("ChangeAccountPassword") { ChangeAccountPasswordScreen() }
             composable("Profile/{to_user_id}") { backStackEntry ->
                 Profile(
                     navController,
