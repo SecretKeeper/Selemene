@@ -53,43 +53,56 @@ fun ChangePassword() {
 //        )
 
         TextField(
+            type = "password",
             text = "Current Password",
             value = currentPassword.value,
             onChange = {
                 currentPassword.value = it.toString()
-                currentPasswordError.value = it.toString().length < 3
+                currentPasswordError.value = it.toString().length < 8
             },
             isError = currentPasswordError.value,
             singleLine = true
         )
 
         TextField(
+            type = "password",
             text = "New Password",
             value = newPassword.value,
             onChange = {
                 newPassword.value = it.toString()
-                newPasswordError.value = it.toString().length < 3
+                newPasswordError.value = it.toString().length < 8
             },
             isError = newPasswordError.value,
             singleLine = true
         )
 
         TextField(
+            type = "password",
             text = "Confirm Password",
             value = confirmPassword.value,
             onChange = {
                 confirmPassword.value = it.toString()
-                confirmPasswordError.value = it.toString().length < 3
+                confirmPasswordError.value = it.toString().length < 8
             },
             isError = confirmPasswordError.value,
             singleLine = true
         )
-
+        if (newPassword.value.isNotEmpty() && confirmPassword.value.isNotEmpty()
+            && newPassword.value != confirmPassword.value
+        ) Text(
+            text = "Password does not match",
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Bold,
+            fontSize = 13.sp,
+            color = Color.Red,
+            modifier = Modifier.padding(bottom = 30.dp)
+        )
         Button(
             onClick = {
-
             },
-            enabled = !newPasswordError.value || !newPasswordError.value || !confirmPasswordError.value || buttonEnabled.value,
+            enabled = !newPasswordError.value || !newPasswordError.value ||
+                    !confirmPasswordError.value || buttonEnabled.value ||
+                    newPassword.value != confirmPassword.value,
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = Color(buttonColor.value),
                 disabledBackgroundColor = Color(buttonColor.value)
