@@ -21,11 +21,10 @@ import net.teamof.whisper.ui.theme.fontFamily
 fun SelfProfile(navController: NavController) {
     Column {
 
-
         Column(modifier = Modifier.padding(top = 30.dp, start = 20.dp, end = 20.dp)) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(bottom = 35.dp)
+                modifier = Modifier.padding(bottom = 15.dp)
             ) {
                 Image(
                     painter = rememberImagePainter(
@@ -41,7 +40,7 @@ fun SelfProfile(navController: NavController) {
                 )
                 Column(modifier = Modifier.padding(start = 20.dp)) {
                     Text(
-                        text = "Vahid Security",
+                        text = "VahidSecurity",
                         fontFamily = fontFamily,
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
@@ -55,11 +54,26 @@ fun SelfProfile(navController: NavController) {
                     )
                 }
             }
+        }
+
+        Column(modifier = Modifier.padding(top = 30.dp, start = 20.dp, end = 20.dp)) {
+            SettingsItem(title = "My Account", event = { navController.navigate("MyAccount") })
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color(red = 235, green = 235, blue = 235))
+                .height(1.dp)
+        )
+
+        Column(modifier = Modifier.padding(top = 30.dp, start = 20.dp, end = 20.dp)) {
             SettingsItem(title = "Notifications")
             SettingsItem(title = "Privacy")
-            SettingsItem(title = "Security") { navController.navigate("Security") }
+            SettingsItem(title = "Security", event = { navController.navigate("Security") })
             SettingsItem(title = "Devices")
         }
+
 
         Box(
             modifier = Modifier
