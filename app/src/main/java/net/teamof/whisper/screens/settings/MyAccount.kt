@@ -1,11 +1,13 @@
 package net.teamof.whisper.screens.settings
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -15,6 +17,8 @@ import net.teamof.whisper.ui.theme.fontFamily
 
 @Composable
 fun MyAccount(navController: NavController) {
+
+    val context = LocalContext.current
 
     Column {
         Column(modifier = Modifier.padding(top = 30.dp, start = 20.dp, end = 20.dp)) {
@@ -51,7 +55,13 @@ fun MyAccount(navController: NavController) {
         Column(modifier = Modifier.padding(top = 30.dp, start = 20.dp, end = 20.dp)) {
             SettingsItem(
                 title = "Blocked Users",
-                event = { navController.navigate("ChangeEmail") }
+                event = {
+                    Toast.makeText(
+                        context,
+                        "This feature is not available yet",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             )
         }
 
@@ -65,12 +75,24 @@ fun MyAccount(navController: NavController) {
         Column(modifier = Modifier.padding(top = 30.dp, start = 20.dp, end = 20.dp)) {
             SettingsItem(
                 title = "Deactivate Account",
-                event = { navController.navigate("ChangeEmail") }
+                event = {
+                    Toast.makeText(
+                        context,
+                        "This feature is not available yet",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             )
 
             SettingsItem(
                 title = "Delete Your Account",
-                event = { navController.navigate("ChangeEmail") },
+                event = {
+                    Toast.makeText(
+                        context,
+                        "This feature is not available yet",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                },
                 titleColor = Color.Red
             )
         }
