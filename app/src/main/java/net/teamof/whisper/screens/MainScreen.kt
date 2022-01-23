@@ -20,7 +20,11 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import net.teamof.whisper.components.BottomAppBar
 import net.teamof.whisper.components.settings.ChangeAccountPasswordScreen
+import net.teamof.whisper.screens.settings.MyAccount
 import net.teamof.whisper.screens.settings.SecurityScreen
+import net.teamof.whisper.screens.settings.myAccount.ChangeEmail
+import net.teamof.whisper.screens.settings.myAccount.ChangePassword
+import net.teamof.whisper.screens.settings.myAccount.ChangeUsername
 import net.teamof.whisper.ui.theme.WhisperTheme
 import net.teamof.whisper.viewModel.*
 
@@ -131,6 +135,17 @@ private fun MainScreenNavigationConfigurations(
                 }
             }
             composable("SelfProfile") { SelfProfile(navController) }
+
+
+
+
+            composable("MyAccount") { MyAccount(navController) }
+            composable("ChangeUsername") { ChangeUsername() }
+            composable("ChangeEmail") { ChangeEmail() }
+            composable("ChangePassword") { ChangePassword() }
+
+
+
             composable("Security") { SecurityScreen(navController) }
             composable("ChangeAccountPassword") { ChangeAccountPasswordScreen() }
             composable("Profile/{to_user_id}") { backStackEntry ->
