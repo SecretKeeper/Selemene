@@ -140,7 +140,7 @@ private fun MainScreenNavigationConfigurations(
 
 
             composable("MyAccount") { MyAccount(navController) }
-            composable("ChangeUsername") { ChangeUsername() }
+            composable("ChangeUsername") { ChangeUsername(navController, userViewModel) }
             composable("ChangeEmail") { ChangeEmail() }
             composable("ChangePassword") { ChangePassword(navController, userViewModel) }
 
