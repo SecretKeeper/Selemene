@@ -1,5 +1,6 @@
 package net.teamof.whisper.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -8,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -19,6 +21,10 @@ import net.teamof.whisper.ui.theme.fontFamily
 
 @Composable
 fun SelfProfile(navController: NavController) {
+
+    val context = LocalContext.current
+    val showToast = Toast.makeText(context, "This feature is not available yet", Toast.LENGTH_SHORT)
+
     Column {
 
         Column(modifier = Modifier.padding(top = 30.dp, start = 20.dp, end = 20.dp)) {
@@ -68,10 +74,10 @@ fun SelfProfile(navController: NavController) {
         )
 
         Column(modifier = Modifier.padding(top = 30.dp, start = 20.dp, end = 20.dp)) {
-            SettingsItem(title = "Notifications")
-            SettingsItem(title = "Privacy")
+            SettingsItem(title = "Notifications", event = { showToast.show() })
+            SettingsItem(title = "Privacy", event = { showToast.show() })
             SettingsItem(title = "Security", event = { navController.navigate("Security") })
-            SettingsItem(title = "Devices")
+            SettingsItem(title = "Devices", event = { showToast.show() })
         }
 
 
@@ -83,9 +89,9 @@ fun SelfProfile(navController: NavController) {
         )
 
         Column(modifier = Modifier.padding(top = 30.dp, start = 20.dp, end = 20.dp)) {
-            SettingsItem(title = "FAQs")
-            SettingsItem(title = "Privacy & Policy")
-            SettingsItem(title = "Contact Support")
+            SettingsItem(title = "FAQs", event = { showToast.show() })
+            SettingsItem(title = "Privacy & Policy", event = { showToast.show() })
+            SettingsItem(title = "Contact Support", event = { showToast.show() })
         }
 
         Box(
