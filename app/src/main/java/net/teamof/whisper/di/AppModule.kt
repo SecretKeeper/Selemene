@@ -11,10 +11,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import net.teamof.whisper.ObjectBox
 import net.teamof.whisper.Whisper
-import net.teamof.whisper.api.AuthAPI
-import net.teamof.whisper.api.SearchAPI
-import net.teamof.whisper.api.UserTokenInterceptor
-import net.teamof.whisper.api.UsersAPI
+import net.teamof.whisper.api.*
 import net.teamof.whisper.models.OBKeyValue
 import net.teamof.whisper.models.OBKeyValue_
 import net.teamof.whisper.repositories.ConversationRepository
@@ -42,7 +39,7 @@ class AppModule {
             build()
         }.use { it.findFirst() }?.value ?: "0"
     }
-    
+
     private val baseGateWayAddress = "http://10.0.2.2:3333"
 
     @Provides
@@ -92,6 +89,10 @@ class AppModule {
     @Singleton
     @Provides
     fun provideUsersAPI(retrofit: Retrofit): UsersAPI = retrofit.create(UsersAPI::class.java)
+
+    @Singleton
+    @Provides
+    fun provideAccountAPI(retrofit: Retrofit): AccountAPI = retrofit.create(AccountAPI::class.java)
 
     @Singleton
     @Provides
