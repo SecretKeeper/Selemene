@@ -6,6 +6,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -13,12 +14,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import kotlinx.coroutines.launch
 import net.teamof.whisper.R
 import net.teamof.whisper.components.TextField
 import net.teamof.whisper.ui.theme.fontFamily
+import net.teamof.whisper.viewModel.UserViewModel
 
 @Composable
-fun ChangeUsername() {
+fun ChangeUsername(navController: NavController, userViewModel: UserViewModel) {
+
+    val composableScope = rememberCoroutineScope()
 
     val username = remember { mutableStateOf("VahidSecurtiy") }
     val usernameError = remember { mutableStateOf(false) }
@@ -42,7 +48,16 @@ fun ChangeUsername() {
 
         Button(
             onClick = {
-
+                composableScope.launch {
+                    userViewModel.changeUsername(
+                        navController,
+                        username.value,
+                        { buttonLoading.value = it },
+                        { buttonText.value = it },
+                        { buttonColor.value = it },
+                        { buttonEnabled.value = it }
+                    )
+                }
             },
             enabled = !usernameError.value || buttonEnabled.value,
             colors = ButtonDefaults.buttonColors(
