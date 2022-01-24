@@ -6,6 +6,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -14,12 +15,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import kotlinx.coroutines.launch
 import net.teamof.whisper.R
 import net.teamof.whisper.components.TextField
 import net.teamof.whisper.ui.theme.fontFamily
+import net.teamof.whisper.viewModel.UserViewModel
 
 @Composable
-fun ChangeEmail() {
+fun ChangeEmail(navController: NavController, userViewModel: UserViewModel) {
+
+    val composableScope = rememberCoroutineScope()
 
     val email = remember { mutableStateOf("vahid.security@gmail.com") }
     val emailError = remember { mutableStateOf(false) }
@@ -73,7 +79,17 @@ fun ChangeEmail() {
 
         Button(
             onClick = {
-
+                composableScope.launch {
+                    userViewModel.changeEmail(
+                        navController,
+                        email.value,
+                        password.value,
+                        { buttonLoading.value = it },
+                        { buttonText.value = it },
+                        { buttonColor.value = it },
+                        { buttonEnabled.value = it }
+                    )
+                }
             },
             enabled = !passwordError.value || !emailError.value || buttonEnabled.value,
             colors = ButtonDefaults.buttonColors(
