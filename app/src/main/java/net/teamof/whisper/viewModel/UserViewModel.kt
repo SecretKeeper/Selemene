@@ -10,10 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import net.teamof.whisper.ObjectBox
-import net.teamof.whisper.api.AuthAPI
-import net.teamof.whisper.api.LoginRequest
-import net.teamof.whisper.api.SearchAPI
-import net.teamof.whisper.api.SignupRequest
+import net.teamof.whisper.api.*
 import net.teamof.whisper.di.DataStoreManager
 import net.teamof.whisper.models.OBKeyValue
 import net.teamof.whisper.models.OBKeyValue_
@@ -31,7 +28,8 @@ import kotlin.concurrent.schedule
 class UserViewModel @Inject constructor(
     private val dataStoreManager: DataStoreManager,
     private val authAPI: AuthAPI,
-    private val searchAPI: SearchAPI
+    private val searchAPI: SearchAPI,
+    private val accountAPI: AccountAPI
 ) :
     ViewModel() {
 
@@ -88,6 +86,49 @@ class UserViewModel @Inject constructor(
                         launchSingleTop = true
                         popUpTo("Login") { inclusive = true }
                     }
+                } else {
+                    buttonLoading(false)
+                    buttonEnabled(false)
+                    buttonText("Credentials Wrong")
+                    buttonColor(0xFFe11d48)
+                    Timer().schedule(2500) {
+                        buttonColor(0xFF0336FF)
+                        buttonText("Sign In")
+                        buttonEnabled(true)
+                    }
+                }
+            }
+        }
+    }
+
+    suspend fun changePassword(
+        navController: NavController,
+        current_password: String,
+        new_password: String,
+        buttonLoading: (Boolean) -> Unit,
+        buttonText: (String) -> Unit,
+        buttonColor: (Long) -> Unit,
+        buttonEnabled: (Boolean) -> Unit
+    ) {
+        buttonLoading(true)
+        buttonEnabled(false)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = accountAPI.changePassword(
+                ChangePasswordRequest(
+                    current_password,
+                    new_password
+                )
+            )
+            withContext(Dispatchers.Main) {
+                if (response.isSuccessful) {
+                    buttonLoading(false)
+                    buttonEnabled(false)
+                    buttonText("Done..")
+//                    navController.navigate("Conversations") {
+//                        launchSingleTop = true
+//                        popUpTo("Login") { inclusive = true }
+//                    }
                 } else {
                     buttonLoading(false)
                     buttonEnabled(false)
