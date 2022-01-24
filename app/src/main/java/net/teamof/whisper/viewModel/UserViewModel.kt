@@ -136,7 +136,7 @@ class UserViewModel @Inject constructor(
                     buttonColor(0xFFe11d48)
                     Timer().schedule(2500) {
                         buttonColor(0xFF0336FF)
-                        buttonText("Sign In")
+                        buttonText("Change Password")
                         buttonEnabled(true)
                     }
                 }
@@ -177,7 +177,50 @@ class UserViewModel @Inject constructor(
                     buttonColor(0xFFe11d48)
                     Timer().schedule(2500) {
                         buttonColor(0xFF0336FF)
-                        buttonText("Sign In")
+                        buttonText("Sign Username")
+                        buttonEnabled(true)
+                    }
+                }
+            }
+        }
+    }
+
+    suspend fun changeEmail(
+        navController: NavController,
+        email: String,
+        password: String,
+        buttonLoading: (Boolean) -> Unit,
+        buttonText: (String) -> Unit,
+        buttonColor: (Long) -> Unit,
+        buttonEnabled: (Boolean) -> Unit
+    ) {
+        buttonLoading(true)
+        buttonEnabled(false)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = accountAPI.changeEmail(
+                ChangeEmailRequest(
+                    email,
+                    password
+                )
+            )
+            withContext(Dispatchers.Main) {
+                if (response.isSuccessful) {
+                    buttonLoading(false)
+                    buttonEnabled(false)
+                    buttonText("Done..")
+//                    navController.navigate("Conversations") {
+//                        launchSingleTop = true
+//                        popUpTo("Login") { inclusive = true }
+//                    }
+                } else {
+                    buttonLoading(false)
+                    buttonEnabled(false)
+                    buttonText("Credentials Wrong")
+                    buttonColor(0xFFe11d48)
+                    Timer().schedule(2500) {
+                        buttonColor(0xFF0336FF)
+                        buttonText("Change Email")
                         buttonEnabled(true)
                     }
                 }
