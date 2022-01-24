@@ -14,7 +14,7 @@ data class ChangeUsernameResponse(
 
 @JsonClass(generateAdapter = true)
 data class ChangeUsernameRequest(
-    val newUsername: String,
+    val username: String,
 )
 
 
@@ -25,14 +25,15 @@ data class ChangeEmailResponse(
 
 @JsonClass(generateAdapter = true)
 data class ChangeEmailRequest(
-    val newEmail: String,
+    val email: String,
+    val password: String
 )
 
 
-@JsonClass(generateAdapter = true)
-data class ChangePasswordResponse(
-    val message: String
-)
+//@JsonClass(generateAdapter = true)
+//data class ChangePasswordResponse(
+//    val message: String
+//)
 
 @JsonClass(generateAdapter = true)
 data class ChangePasswordRequest(
@@ -44,7 +45,7 @@ data class ChangePasswordRequest(
 interface AccountAPI {
     @POST("user/change-username")
     @Headers("Content-Type: application/json")
-    suspend fun changeUsername(@Body new_password: ChangeUsernameRequest): Response<ResponseBody>
+    suspend fun changeUsername(@Body username: ChangeUsernameRequest): Response<ResponseBody>
 
     @POST("user/change-email")
     @Headers("Content-Type: application/json")
