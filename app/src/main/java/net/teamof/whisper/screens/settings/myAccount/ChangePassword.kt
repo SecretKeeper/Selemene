@@ -48,15 +48,6 @@ fun ChangePassword(navController: NavController, userViewModel: UserViewModel) {
             fontSize = 18.sp,
             modifier = Modifier.padding(bottom = 30.dp)
         )
-//        Text(
-//            text = "Change your email",
-//            fontFamily = fontFamily,
-//            fontWeight = FontWeight.Bold,
-//            fontSize = 16.sp,
-//            color = Color.Gray,
-//            modifier = Modifier.padding(bottom = 30.dp)
-//        )
-
         TextField(
             type = "password",
             text = "Current Password",
