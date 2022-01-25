@@ -37,8 +37,8 @@ data class ChangeEmailRequest(
 
 @JsonClass(generateAdapter = true)
 data class ChangePasswordRequest(
-    val current_password: String,
-    val new_password: String
+    val currentPassword: String,
+    val newPassword: String
 )
 
 
