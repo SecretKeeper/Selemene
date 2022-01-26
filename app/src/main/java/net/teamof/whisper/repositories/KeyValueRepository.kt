@@ -1,6 +1,7 @@
 package net.teamof.whisper.repositories
 
 import io.objectbox.Box
+import io.objectbox.kotlin.equal
 import net.teamof.whisper.ObjectBox
 import net.teamof.whisper.models.OBKeyValue
 import net.teamof.whisper.models.OBKeyValue_
@@ -13,22 +14,47 @@ class KeyValueRepository {
         oBKeyValueBox.put(pair)
     }
 
-    fun getLoggedUser(): Long {
-        val userId = oBKeyValueBox.query().run {
-            equal(OBKeyValue_.key, "user_id")
-            build()
-        }.use { it.findFirst() }
+    fun createOrUpdate(pair: OBKeyValue) {
+        val query = oBKeyValueBox.query(OBKeyValue_.key equal pair.key).build()
+        val result = query.findFirst()
 
-        return userId?.value?.toLong() ?: 0L
+        if (result != null) {
+            val uQuery = oBKeyValueBox.get(result.id)
+            uQuery.value = pair.value
+            oBKeyValueBox.put(uQuery)
+        } else
+            oBKeyValueBox.put(pair)
+    }
+
+    fun createOrUpdate(pairs: List<OBKeyValue>) {
+
+        pairs.map { pair ->
+            val query = oBKeyValueBox.query(OBKeyValue_.key equal pair.key).build()
+            val result = query.findFirst()
+
+            if (result != null) {
+                val uQuery = oBKeyValueBox.get(result.id)
+                uQuery.value = pair.value
+                oBKeyValueBox.put(uQuery)
+            } else
+                oBKeyValueBox.put(pair)
+        }
+    }
+
+    fun getLoggedUser(): Long {
+        val query = oBKeyValueBox.query(OBKeyValue_.key equal "user_id").build()
+        val result = query.findFirst()
+        query.close()
+
+        return result?.value?.toLong() ?: 0L
     }
 
     fun getToken(): String {
-        val userId = oBKeyValueBox.query().run {
-            equal(OBKeyValue_.key, "token")
-            build()
-        }.use { it.findFirst() }
+        val query = oBKeyValueBox.query(OBKeyValue_.key equal "token").build()
+        val result = query.findFirst()
+        query.close()
 
-        return userId?.value ?: ""
+        return result?.value ?: ""
     }
 //    fun delete(conversation_id: Long) {
 //        conversationBox.query().run {
