@@ -35,9 +35,6 @@ class MessagesViewModel @Inject constructor(
                 conversationRepository.update(MessageSide.THEMSELVES, message)
                 messageRepository.create(message)
             }
-
-
-            Timber.d("We Go It in VM onReceive: $message")
         }
     }
 
@@ -52,10 +49,16 @@ class MessagesViewModel @Inject constructor(
 
     private val messageBox: Box<Message> = ObjectBox.store.boxFor(Message::class.java)
 
-    private val currentUserId = oBKeyValueBox.query().run {
-        equal(OBKeyValue_.key, "user_id")
-        build()
-    }.use { it.findFirst() }
+    private val currentUserId = getCurrentUserId()
+
+    private fun getCurrentUserId(): Long {
+
+        val query = oBKeyValueBox.query(OBKeyValue_.key equal "user_id").build()
+        val result = query.findFirst()
+        query.close()
+
+        return result?.value?.toLong() ?: 0
+    }
 
     private var _messages: ObjectBoxLiveData<Message> =
         ObjectBoxLiveData(fetchAndObserveMessages())
@@ -87,16 +90,13 @@ class MessagesViewModel @Inject constructor(
     }
 
     fun getConversationMessages(to_user_id: Long) {
-        if (currentUserId != null) {
-            _messages = ObjectBoxLiveData(
-                messageBox.query().run {
-                    (Message_.to_user_id equal to_user_id
-                            or (Message_.user_id equal currentUserId.value))
-                    order(Message_.id)
-                    build()
-                }
-            )
-        }
+        _messages = ObjectBoxLiveData(
+            messageBox.query().run {
+                (Message_.content equal to_user_id
+                        or (Message_.user_id equal currentUserId))
+                order(Message_.id)
+                build()
+            }
+        )
     }
-
 }
