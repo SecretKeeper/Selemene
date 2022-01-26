@@ -26,18 +26,16 @@ import androidx.compose.ui.unit.sp
 import net.teamof.whisper.R
 import net.teamof.whisper.models.Message
 import net.teamof.whisper.ui.theme.fontFamily
-import net.teamof.whisper.viewModel.UserViewModel
 
 @ExperimentalAnimationApi
 @Composable
 fun Message(
-    userViewModel: UserViewModel,
+    currentUserId: Long,
     data: Message,
     selection: Boolean,
     enableSelectionMode: () -> Unit
 ) {
 
-    val currentUserId = userViewModel.getUserID()
     val isOwnMessage = data.user_id == currentUserId
     val messageSelected = remember { mutableStateOf(false) }
     val selectIconScaleState =
