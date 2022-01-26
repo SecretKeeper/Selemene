@@ -124,7 +124,7 @@ private fun MainScreenNavigationConfigurations(
                     navController,
                     to_user_id = backStackEntry.arguments?.getString("to_user_id")!!,
                     messagesViewModel,
-                    userViewModel,
+                    currentUserId,
                     profileViewModel
                 )
             }
