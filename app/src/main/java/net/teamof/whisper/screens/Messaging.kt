@@ -25,7 +25,6 @@ import net.teamof.whisper.components.messaging.MessagingHeader
 import net.teamof.whisper.models.Message
 import net.teamof.whisper.viewModel.MessagesViewModel
 import net.teamof.whisper.viewModel.ProfileViewModel
-import net.teamof.whisper.viewModel.UserViewModel
 
 
 @ExperimentalPermissionsApi
@@ -39,7 +38,7 @@ fun Messaging(
     navController: NavController,
     to_user_id: String,
     messagesViewModel: MessagesViewModel,
-    userViewModel: UserViewModel,
+    currentUserId: Long,
     profileViewModel: ProfileViewModel
 ) {
 
@@ -77,7 +76,7 @@ fun Messaging(
                 ) {
                     messages.forEach { message ->
                         Message(
-                            userViewModel,
+                            currentUserId,
                             message,
                             selection.value,
                             enableSelectionMode = { selection.value = true },
@@ -85,7 +84,7 @@ fun Messaging(
                     }
                 }
             }
-            MessagingFooter(bottomSheetState, messagesViewModel, userViewModel, to_user_id.toLong())
+            MessagingFooter(bottomSheetState, messagesViewModel, currentUserId, to_user_id.toLong())
         }
     }
 }
