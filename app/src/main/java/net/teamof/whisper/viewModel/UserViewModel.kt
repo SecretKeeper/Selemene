@@ -11,10 +11,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import net.teamof.whisper.ObjectBox
 import net.teamof.whisper.api.*
-import net.teamof.whisper.di.DataStoreManager
 import net.teamof.whisper.models.OBKeyValue
 import net.teamof.whisper.models.OBKeyValue_
 import net.teamof.whisper.models.UserAPI
+import net.teamof.whisper.repositories.KeyValueRepository
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -26,7 +26,7 @@ import kotlin.concurrent.schedule
 
 @HiltViewModel
 class UserViewModel @Inject constructor(
-    private val dataStoreManager: DataStoreManager,
+    private val keyValueRepository: KeyValueRepository,
     private val authAPI: AuthAPI,
     private val searchAPI: SearchAPI,
     private val accountAPI: AccountAPI
@@ -36,16 +36,11 @@ class UserViewModel @Inject constructor(
     private val oBKeyValueBox: Box<OBKeyValue> = ObjectBox.store.boxFor()
 
     fun getUserID(): Long {
-        val userId = oBKeyValueBox.query().run {
-            equal(OBKeyValue_.key, "user_id")
-            build()
-        }.use { it.findFirst() }
+        val query = oBKeyValueBox.query(OBKeyValue_.key.equal("user_id")).build()
+        val result = query.findFirst()
+        query.close()
 
-        return userId?.value?.toLong() ?: 0L
-    }
-
-    private suspend fun setUserID(user_id: Long) {
-        dataStoreManager.setUserId(user_id)
+        return result?.value?.toLong() ?: 0L
     }
 
     suspend fun authenticate(
@@ -73,12 +68,26 @@ class UserViewModel @Inject constructor(
                     buttonEnabled(false)
                     buttonText("Signing In...")
                     val jsonRes = JSONObject(response.body()?.string())
-
-                    oBKeyValueBox.put(OBKeyValue(key = "token", value = jsonRes.getString("token")))
-                    oBKeyValueBox.put(
-                        OBKeyValue(
-                            key = "user_id",
-                            value = jsonRes.getString("user_id")
+                    val userRes = JSONObject(jsonRes.getString("user"))
+                    
+                    keyValueRepository.createOrUpdate(
+                        listOf(
+                            OBKeyValue(
+                                key = "token",
+                                value = jsonRes.getString("token")
+                            ),
+                            OBKeyValue(
+                                key = "user_id",
+                                value = userRes.getString("user_id")
+                            ),
+                            OBKeyValue(
+                                key = "username",
+                                value = userRes.getString("username")
+                            ),
+                            OBKeyValue(
+                                key = "email",
+                                value = userRes.getString("email")
+                            )
                         )
                     )
 
