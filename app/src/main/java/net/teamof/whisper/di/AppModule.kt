@@ -9,6 +9,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import io.objectbox.kotlin.equal
 import net.teamof.whisper.ObjectBox
 import net.teamof.whisper.Whisper
 import net.teamof.whisper.api.*
@@ -34,10 +35,11 @@ class AppModule {
     @Provides
     fun provideGetUserID(): String {
         val obKeyValueBox = ObjectBox.store.boxFor(OBKeyValue::class.java)
-        return obKeyValueBox.query().run {
-            equal(OBKeyValue_.key, "user_id")
-            build()
-        }.use { it.findFirst() }?.value ?: "0"
+        val query = obKeyValueBox.query(OBKeyValue_.key equal "user_id").build()
+        val result = query.findFirst()
+
+        query.close()
+        return result?.value ?: "0"
     }
 
     private val baseGateWayAddress = "http://10.0.2.2:3333"
