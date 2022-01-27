@@ -69,7 +69,7 @@ class UserViewModel @Inject constructor(
                     buttonText("Signing In...")
                     val jsonRes = JSONObject(response.body()?.string())
                     val userRes = JSONObject(jsonRes.getString("user"))
-                    
+
                     keyValueRepository.createOrUpdate(
                         listOf(
                             OBKeyValue(
@@ -107,6 +107,14 @@ class UserViewModel @Inject constructor(
                     }
                 }
             }
+        }
+    }
+
+    suspend fun signOut(navController: NavController) {
+        keyValueRepository.delete(listOf("token", "user_id", "username", "email"))
+
+        navController.navigate("Login") {
+            launchSingleTop = true
         }
     }
 
