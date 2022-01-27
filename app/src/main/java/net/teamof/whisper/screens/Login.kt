@@ -120,6 +120,8 @@ fun LoginScreen(
                         color = Color.White,
                         textAlign = TextAlign.Center,
                         fontFamily = fontFamily,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 16.sp
                     )
                 }
             }
@@ -133,6 +135,7 @@ fun LoginScreen(
                 Text(
                     text = "Forgot Password?",
                     textAlign = TextAlign.Center,
+                    fontFamily = fontFamily,
                     modifier = Modifier
                         .padding(vertical = 20.dp)
                         .fillMaxWidth()
@@ -149,6 +152,8 @@ fun LoginScreen(
             Text(
                 text = "Does not have an account yet?",
                 textAlign = TextAlign.Center,
+                fontFamily = fontFamily,
+                color = Color.Gray,
                 modifier = Modifier
                     .padding(vertical = 6.dp)
                     .fillMaxWidth()
