@@ -119,6 +119,7 @@ class UserViewModel @Inject constructor(
 
         navController.navigate("Login") {
             launchSingleTop = true
+            popUpTo(0)
         }
     }
 
