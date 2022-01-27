@@ -13,10 +13,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import net.teamof.whisper.components.settings.SettingsItem
+import net.teamof.whisper.components.settings.SignOut
 import net.teamof.whisper.ui.theme.fontFamily
+import net.teamof.whisper.viewModel.UserViewModel
 
 @Composable
-fun MyAccount(navController: NavController) {
+fun MyAccount(navController: NavController, userViewModel: UserViewModel) {
 
     val context = LocalContext.current
 
@@ -95,6 +97,17 @@ fun MyAccount(navController: NavController) {
                 },
                 titleColor = Color.Red
             )
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color(red = 235, green = 235, blue = 235))
+                .height(1.dp)
+        )
+
+        Column(modifier = Modifier.padding(top = 30.dp, start = 20.dp, end = 20.dp)) {
+            SignOut(navController, userViewModel)
         }
     }
 }
