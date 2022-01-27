@@ -43,6 +43,10 @@ class UserViewModel @Inject constructor(
         return result?.value?.toLong() ?: 0L
     }
 
+    fun gePair(key: String): OBKeyValue? {
+        return keyValueRepository.getPair(key)
+    }
+
     suspend fun authenticate(
         navController: NavController,
         username: String,
