@@ -7,6 +7,6 @@ import io.objectbox.annotation.Id
 data class OBKeyValue(
     @Id
     var id: Long = 0,
-    var key: String,
-    var value: String
+    var key: String = "",
+    var value: String = ""
 )
