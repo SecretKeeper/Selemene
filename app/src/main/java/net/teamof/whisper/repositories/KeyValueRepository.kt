@@ -49,6 +49,14 @@ class KeyValueRepository {
         return result?.value?.toLong() ?: 0L
     }
 
+    fun getPair(key: String): OBKeyValue? {
+        val query = oBKeyValueBox.query(OBKeyValue_.key equal key).build()
+        val result = query.findFirst()
+        query.close()
+
+        return result
+    }
+
     fun getToken(): String {
         val query = oBKeyValueBox.query(OBKeyValue_.key equal "token").build()
         val result = query.findFirst()
@@ -74,21 +82,4 @@ class KeyValueRepository {
         }
 
     }
-//
-//    fun deleteByToUserIDs(user_ids: List<Long>) =
-//
-//        conversationBox.query().run {
-//            `in`(Conversation_.to_user_id, user_ids.toLongArray())
-//            build()
-//        }.use { it ->
-//            it.remove()
-//            // Also remove history messages
-//            messageBox.query().run {
-//                (Message_.to_user_id oneOf user_ids.toLongArray()
-//                        or (Message_.user_id oneOf user_ids.toLongArray()))
-//                build()
-//            }.use {
-//                it.remove()
-//            }
-//        }
 }
