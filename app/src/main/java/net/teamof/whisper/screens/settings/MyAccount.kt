@@ -33,12 +33,12 @@ fun MyAccount(navController: NavController, userViewModel: UserViewModel) {
             )
             SettingsItem(
                 title = "Username",
-                subTitle = "VahidSecurity",
+                subTitle = userViewModel.gePair("username")?.value,
                 event = { navController.navigate("ChangeUsername") }
             )
             SettingsItem(
                 title = "Email",
-                subTitle = "vahid.security@gmail.com",
+                subTitle = userViewModel.gePair("email")?.value,
                 event = { navController.navigate("ChangeEmail") }
             )
             SettingsItem(
