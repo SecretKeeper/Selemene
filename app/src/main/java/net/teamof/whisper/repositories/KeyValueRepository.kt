@@ -56,14 +56,24 @@ class KeyValueRepository {
 
         return result?.value ?: ""
     }
-//    fun delete(conversation_id: Long) {
-//        conversationBox.query().run {
-//            equal(Conversation_.id, conversation_id)
-//            build()
-//        }.use {
-//            it.remove()
-//        }
-//    }
+
+    fun delete(key: String) {
+        val query = oBKeyValueBox.query(OBKeyValue_.key equal key).build()
+        query.remove()
+
+        query.close()
+    }
+
+    fun delete(keys: List<String>) {
+
+        keys.map { key ->
+            val query = oBKeyValueBox.query(OBKeyValue_.key equal key).build()
+            query.remove()
+
+            query.close()
+        }
+
+    }
 //
 //    fun deleteByToUserIDs(user_ids: List<Long>) =
 //
