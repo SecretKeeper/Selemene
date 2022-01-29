@@ -29,6 +29,11 @@
             android:enabled="true"
             android:process=":whisperslistener" />
 
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            tools:node="remove" />
+
         <activity
             android:name=".MainActivity"
             android:windowSoftInputMode="adjustResize"
