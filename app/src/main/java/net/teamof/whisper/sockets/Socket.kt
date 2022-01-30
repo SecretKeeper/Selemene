@@ -66,7 +66,9 @@ class Socket private constructor(request: Request) {
         checkNotNull(httpClient) { "Make sure to use Socket.Builder before using Socket#connect." }
         if (realWebSocket == null) {
             realWebSocket =
-                httpClient.build().newWebSocket(request, webSocketListener) as RealWebSocket
+                request?.let {
+                    httpClient.build().newWebSocket(it, webSocketListener)
+                } as RealWebSocket
             changeState(State.OPENING)
         } else if (Companion.state == State.CLOSED) {
             realWebSocket!!.connect(httpClient.build())
