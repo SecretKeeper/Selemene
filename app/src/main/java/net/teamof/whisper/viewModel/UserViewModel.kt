@@ -1,7 +1,9 @@
 package net.teamof.whisper.viewModel
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.navigation.NavController
+import androidx.work.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.objectbox.Box
 import io.objectbox.kotlin.boxFor
@@ -10,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import net.teamof.whisper.ObjectBox
+import net.teamof.whisper.RevokeTokenWorker
 import net.teamof.whisper.api.*
 import net.teamof.whisper.models.OBKeyValue
 import net.teamof.whisper.models.OBKeyValue_
@@ -26,14 +29,17 @@ import kotlin.concurrent.schedule
 
 @HiltViewModel
 class UserViewModel @Inject constructor(
+    application: Application,
     private val keyValueRepository: KeyValueRepository,
     private val authAPI: AuthAPI,
     private val searchAPI: SearchAPI,
     private val accountAPI: AccountAPI
 ) :
-    ViewModel() {
+    AndroidViewModel(application) {
 
     private val oBKeyValueBox: Box<OBKeyValue> = ObjectBox.store.boxFor()
+
+    private val workManager: WorkManager = WorkManager.getInstance(application)
 
     fun getUserID(): Long {
         val query = oBKeyValueBox.query(OBKeyValue_.key.equal("user_id")).build()
@@ -77,8 +83,16 @@ class UserViewModel @Inject constructor(
                     keyValueRepository.createOrUpdate(
                         listOf(
                             OBKeyValue(
-                                key = "token",
-                                value = jsonRes.getString("token")
+                                key = "accessToken",
+                                value = jsonRes.getString("accessToken")
+                            ),
+                            OBKeyValue(
+                                key = "refreshToken",
+                                value = jsonRes.getString("refreshToken")
+                            ),
+                            OBKeyValue(
+                                key = "accessTokenExpiresAt",
+                                value = jsonRes.getString("expiresAt")
                             ),
                             OBKeyValue(
                                 key = "user_id",
@@ -114,8 +128,33 @@ class UserViewModel @Inject constructor(
         }
     }
 
-    suspend fun signOut(navController: NavController) {
-        keyValueRepository.delete(listOf("token", "user_id", "username", "email"))
+    fun signOut(navController: NavController) {
+
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val builder = Data.Builder()
+        builder.putString("refreshToken", keyValueRepository.getPair("refreshToken")?.value)
+
+        val revokeTokenRequest = OneTimeWorkRequestBuilder<RevokeTokenWorker>()
+            .setConstraints(constraints)
+            .setInputData(builder.build())
+            .build()
+
+        workManager.beginUniqueWork("REVOKE_TOKEN", ExistingWorkPolicy.KEEP, revokeTokenRequest)
+            .enqueue()
+
+        keyValueRepository.delete(
+            listOf(
+                "accessToken",
+                "refreshToken",
+                "accessTokenExpiresAt",
+                "user_id",
+                "username",
+                "email"
+            )
+        )
 
         navController.navigate("Login") {
             launchSingleTop = true
