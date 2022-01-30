@@ -66,7 +66,7 @@ class UserViewModel @Inject constructor(
         buttonEnabled(false)
 
         CoroutineScope(Dispatchers.IO).launch {
-            val response = authAPI.signIn(
+            val response = authAPI.login(
                 LoginRequest(
                     username,
                     password
@@ -76,7 +76,7 @@ class UserViewModel @Inject constructor(
                 if (response.isSuccessful) {
                     buttonLoading(false)
                     buttonEnabled(false)
-                    buttonText("Signing In...")
+                    buttonText("Logging In...")
                     val jsonRes = JSONObject(response.body()?.string())
                     val userRes = JSONObject(jsonRes.getString("user"))
 
@@ -120,7 +120,7 @@ class UserViewModel @Inject constructor(
                     buttonColor(0xFFe11d48)
                     Timer().schedule(2500) {
                         buttonColor(0xFF0336FF)
-                        buttonText("Sign In")
+                        buttonText("Login")
                         buttonEnabled(true)
                     }
                 }
