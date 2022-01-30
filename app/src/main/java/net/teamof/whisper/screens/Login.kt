@@ -25,7 +25,7 @@ fun LoginScreen(
 ) {
     val composableScope = rememberCoroutineScope()
     val buttonEnabled = remember { mutableStateOf(true) }
-    val buttonText = remember { mutableStateOf("Sign In") }
+    val buttonText = remember { mutableStateOf("Login") }
     val buttonLoading = remember { mutableStateOf(false) }
     val buttonColor = remember { mutableStateOf(0xFF0336FF) }
     val username = remember { mutableStateOf("") }
