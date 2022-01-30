@@ -48,7 +48,7 @@ interface AuthAPI {
 
     @POST("auth/signin")
     @Headers("Content-Type: application/json")
-    suspend fun signIn(@Body loginRequest: LoginRequest): Response<ResponseBody>
+    suspend fun login(@Body loginRequest: LoginRequest): Response<ResponseBody>
 
     @POST("auth/revoke-token")
     @Headers("Content-Type: application/json")
