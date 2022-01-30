@@ -58,7 +58,7 @@ class KeyValueRepository {
     }
 
     fun getToken(): String {
-        val query = oBKeyValueBox.query(OBKeyValue_.key equal "token").build()
+        val query = oBKeyValueBox.query(OBKeyValue_.key equal "accessToken").build()
         val result = query.findFirst()
         query.close()
 
