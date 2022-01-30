@@ -22,6 +22,7 @@ import net.teamof.whisper.sockets.Socket
 import net.teamof.whisper.sockets.SocketBroadcastListener
 import net.teamof.whisper.utils.DateMoshiAdapter
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.*
@@ -59,8 +60,12 @@ class AppModule {
 
     @Provides
     fun provideHttpClient(keyValueRepository: KeyValueRepository): OkHttpClient {
+        val logging = HttpLoggingInterceptor()
+        logging.setLevel(HttpLoggingInterceptor.Level.BASIC)
 
-        return OkHttpClient.Builder().addInterceptor(UserTokenInterceptor(keyValueRepository))
+        return OkHttpClient.Builder()
+            .addInterceptor(logging)
+            .addInterceptor(UserTokenInterceptor(keyValueRepository))
             .build()
     }
 
