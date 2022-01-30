@@ -12,8 +12,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import net.teamof.whisper.components.settings.Logout
 import net.teamof.whisper.components.settings.SettingsItem
-import net.teamof.whisper.components.settings.SignOut
 import net.teamof.whisper.ui.theme.fontFamily
 import net.teamof.whisper.viewModel.UserViewModel
 
@@ -107,7 +107,7 @@ fun MyAccount(navController: NavController, userViewModel: UserViewModel) {
         )
 
         Column(modifier = Modifier.padding(top = 30.dp, start = 20.dp, end = 20.dp)) {
-            SignOut(navController, userViewModel)
+            Logout(navController, userViewModel)
         }
     }
 }
