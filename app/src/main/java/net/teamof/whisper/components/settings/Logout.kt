@@ -17,12 +17,12 @@ import net.teamof.whisper.ui.theme.fontFamily
 import net.teamof.whisper.viewModel.UserViewModel
 
 @Composable
-fun SignOut(navController: NavController, userViewModel: UserViewModel) {
+fun Logout(navController: NavController, userViewModel: UserViewModel) {
     val composableScope = rememberCoroutineScope()
     val openDialog = remember { mutableStateOf(false) }
 
     SettingsItem(
-        title = "Sign Out",
+        title = "Logout",
         event = {
             openDialog.value = true
         },
