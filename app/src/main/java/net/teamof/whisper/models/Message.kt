@@ -10,10 +10,11 @@ import java.util.*
 @JsonClass(generateAdapter = true)
 data class Message(
     @Id
+    var local_id: Long = 0,
     var id: Long = 0,
     var user_id: Long = 0,
     var to_user_id: Long = 0,
     var content: String = "",
-    var created_at: Date = Date(),
+    var created_at: Date? = null,
     var updated_at: Date? = null,
 ) : Serializable
