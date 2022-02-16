@@ -8,17 +8,17 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.os.*
+import android.os.Binder
+import android.os.Build
+import android.os.IBinder
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.hilt.android.AndroidEntryPoint
-import net.teamof.whisper.models.*
 import net.teamof.whisper.models.Message
 import net.teamof.whisper.sockets.Socket
 import net.teamof.whisper.sockets.SocketBroadcastListener
 import net.teamof.whisper.utils.DateMoshiAdapter
-import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
@@ -51,13 +51,6 @@ class MessageListenerService : Service() {
                 "message",
                 moshiMessageAdapter.toJson(intent.getSerializableExtra("SEND_MESSAGE") as Message?)
             )
-            Timber.d(
-                "Oh Well Oh well onReceive: ${
-                    intent.getSerializableExtra(
-                        "SEND_MESSAGE"
-                    )
-                }"
-            )
         }
     }
 
@@ -84,11 +77,17 @@ class MessageListenerService : Service() {
 
         createNotificationChannel()
 
-        Timber.d("I AM REGISTERInG IT")
         registerReceiver(broadcastReceiver, IntentFilter("WhisperLocalMessageCommunication"))
 
         whisperSocket.onEvent(Socket.EVENT_OPEN, socketBroadcastListener.broadcastSubscribe())
+
         whisperSocket.onEventResponse("message", socketBroadcastListener.onMessageListener())
+
+        whisperSocket.onEventResponse(
+            "assigned_message",
+            socketBroadcastListener.onAssignedMessageListener()
+        )
+
     }
 
     override fun onDestroy() {
