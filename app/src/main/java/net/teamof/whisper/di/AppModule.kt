@@ -80,7 +80,7 @@ class AppModule {
     @Singleton
     @Provides
     fun provideWhisperSocket(getUserID: String): Socket {
-        return Socket.Builder.with("ws://10.0.2.2:3335/ws")
+        return Socket.Builder.with("ws://10.0.2.2:3335/ws/")
             .addHeader("user-id", getUserID)
             .build().connect()
     }
@@ -117,17 +117,13 @@ class AppModule {
     @Provides
     fun provideSocketBroadcastListener(
         application: Application,
-        whisperSocket: Socket,
         moshi: Moshi,
         messageRepository: MessageRepository,
-        conversationRepository: ConversationRepository,
-        keyValueRepository: KeyValueRepository
+        conversationRepository: ConversationRepository
     ) = SocketBroadcastListener(
         application,
-        whisperSocket,
         moshi,
         messageRepository,
-        conversationRepository,
-        keyValueRepository
+        conversationRepository
     )
 }
