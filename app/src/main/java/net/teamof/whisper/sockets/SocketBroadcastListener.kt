@@ -11,24 +11,17 @@ import com.squareup.moshi.Moshi
 import net.teamof.whisper.R
 import net.teamof.whisper.models.Message
 import net.teamof.whisper.models.MessageSide
-import net.teamof.whisper.models.WSSubscribeChannels
 import net.teamof.whisper.repositories.ConversationRepository
-import net.teamof.whisper.repositories.KeyValueRepository
 import net.teamof.whisper.repositories.MessageRepository
 import timber.log.Timber
 import javax.inject.Inject
 
 class SocketBroadcastListener @Inject constructor(
     val application: Application,
-    val whisperSocket: Socket,
     val moshi: Moshi,
     val messageRepository: MessageRepository,
-    val conversationRepository: ConversationRepository,
-    val keyValueRepository: KeyValueRepository
+    val conversationRepository: ConversationRepository
 ) {
-
-    val subscribeAdapter: JsonAdapter<WSSubscribeChannels> =
-        moshi.adapter(WSSubscribeChannels::class.java)
 
     val messageAdapter: JsonAdapter<Message> = moshi.adapter(Message::class.java)
 
@@ -49,17 +42,6 @@ class SocketBroadcastListener @Inject constructor(
         object : Socket.OnEventListener() {
             override fun onMessage(event: String?) {
                 Timber.e("Socket OPen Happened")
-
-                val channels = listOf(keyValueRepository.getLoggedUser().toString())
-
-                whisperSocket.send(
-                    "subscribe-channels", subscribeAdapter.toJson(
-                        WSSubscribeChannels(
-                            keyValueRepository.getLoggedUser().toString(),
-                            channels
-                        )
-                    )
-                )
             }
         }
 
@@ -85,6 +67,25 @@ class SocketBroadcastListener @Inject constructor(
                         application.sendBroadcast(
                             Intent("WhisperLocalMessageCommunication").putExtra(
                                 "RECEIVE_MESSAGE",
+                                it
+                            )
+                        )
+                    }
+                }
+            }
+        }
+
+    fun onAssignedMessageListener(): Socket.OnEventResponseListener =
+        object : Socket.OnEventResponseListener() {
+            override fun onMessage(event: String?, data: String?) {
+                Timber.e("Get Real Data: $data")
+                messageAdapter.fromJson(data)?.let {
+                    if (!isAppRunning(application, "net.teamof.whisper")) {
+                        messageRepository.updateAssignedMessage(it)
+                    } else {
+                        application.sendBroadcast(
+                            Intent("WhisperLocalMessageCommunication").putExtra(
+                                "RECEIVE_ASSIGNED_MESSAGE",
                                 it
                             )
                         )
