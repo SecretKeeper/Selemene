@@ -31,9 +31,17 @@ class MessagesViewModel @Inject constructor(
         override fun onReceive(context: Context, intent: Intent) {
             val message = intent.getSerializableExtra("RECEIVE_MESSAGE") as? Message
 
+            val assignedMessage =
+                intent.getSerializableExtra("RECEIVE_ASSIGNED_MESSAGE") as? Message
+            
             if (message != null) {
                 conversationRepository.update(MessageSide.THEMSELVES, message)
                 messageRepository.create(message)
+            }
+
+            if (assignedMessage != null) {
+                Timber.e("We are calling messageRepository.updateAssignedMessage")
+                messageRepository.updateAssignedMessage(assignedMessage)
             }
         }
     }
