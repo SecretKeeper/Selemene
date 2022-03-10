@@ -26,6 +26,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.*
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -43,7 +44,9 @@ class AppModule {
         return result?.value ?: "0"
     }
 
-    private val baseGateWayAddress = "http://10.0.2.2:3333"
+    private val baseGatewayAddress = "http://10.0.2.2:3333"
+
+    private val baseWhisperAddress = "http://10.0.2.2:3335"
 
     @Provides
     fun providesApplication(@ApplicationContext context: Context): Whisper {
@@ -73,7 +76,16 @@ class AppModule {
     @Provides
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
         .addConverterFactory(MoshiConverterFactory.create())
-        .baseUrl(baseGateWayAddress)
+        .baseUrl(baseWhisperAddress)
+        .client(okHttpClient)
+        .build()
+
+    @Singleton
+    @Provides
+    @Named("Gateway")
+    fun provideGatewayRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
+        .addConverterFactory(MoshiConverterFactory.create())
+        .baseUrl(baseGatewayAddress)
         .client(okHttpClient)
         .build()
 
@@ -87,7 +99,8 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideAuthAPI(retrofit: Retrofit): AuthAPI = retrofit.create(AuthAPI::class.java)
+    fun provideAuthAPI(@Named("Gateway") retrofit: Retrofit): AuthAPI =
+        retrofit.create(AuthAPI::class.java)
 
     @Singleton
     @Provides
