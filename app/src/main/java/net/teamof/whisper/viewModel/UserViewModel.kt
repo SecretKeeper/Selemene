@@ -84,15 +84,15 @@ class UserViewModel @Inject constructor(
                         listOf(
                             OBKeyValue(
                                 key = "accessToken",
-                                value = jsonRes.getString("accessToken")
+                                value = jsonRes.getString("access_token")
                             ),
                             OBKeyValue(
                                 key = "refreshToken",
-                                value = jsonRes.getString("refreshToken")
+                                value = jsonRes.getString("refresh_token")
                             ),
                             OBKeyValue(
                                 key = "accessTokenExpiresAt",
-                                value = jsonRes.getString("expiresAt")
+                                value = jsonRes.getString("expires")
                             ),
                             OBKeyValue(
                                 key = "user_id",
