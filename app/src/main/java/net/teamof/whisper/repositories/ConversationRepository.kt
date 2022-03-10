@@ -11,6 +11,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
 
 class ConversationRepository @Inject constructor(
@@ -50,7 +51,7 @@ class ConversationRepository @Inject constructor(
                             Conversation(
                                 to_user_id = if (side == MessageSide.THEMSELVES) newMessage.user_id else newMessage.to_user_id,
                                 last_message = newMessage.content,
-                                last_message_time = newMessage.created_at,
+                                last_message_time = newMessage.created_at ?: Date(),
                                 unread_messages = 0,
                                 username = it.username,
                                 user_image = it.avatar ?: ""
@@ -72,7 +73,7 @@ class ConversationRepository @Inject constructor(
                 val result = it.findFirst()
                 if (result != null) {
                     result.last_message = newMessage.content
-                    result.last_message_time = newMessage.created_at
+                    result.last_message_time = newMessage.created_at ?: Date()
                     conversationBox.put(result)
                 }
             }
