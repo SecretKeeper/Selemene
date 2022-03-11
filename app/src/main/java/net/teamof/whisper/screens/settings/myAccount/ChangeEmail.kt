@@ -27,7 +27,7 @@ fun ChangeEmail(navController: NavController, userViewModel: UserViewModel) {
 
     val composableScope = rememberCoroutineScope()
 
-    val email = remember { mutableStateOf("vahid.security@gmail.com") }
+    val email = remember { mutableStateOf(userViewModel.gePair("email")?.value ?: "") }
     val emailError = remember { mutableStateOf(false) }
 
     val password = remember { mutableStateOf("") }
