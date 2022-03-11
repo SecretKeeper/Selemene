@@ -35,13 +35,13 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideGetUserID(): String {
+    fun provideGetUserToken(): String {
         val obKeyValueBox = ObjectBox.store.boxFor(OBKeyValue::class.java)
-        val query = obKeyValueBox.query(OBKeyValue_.key equal "user_id").build()
+        val query = obKeyValueBox.query(OBKeyValue_.key equal "accessToken").build()
         val result = query.findFirst()
 
         query.close()
-        return result?.value ?: "0"
+        return result?.value ?: ""
     }
 
     private val baseGatewayAddress = "http://10.0.2.2:3333"
@@ -91,9 +91,9 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideWhisperSocket(getUserID: String): Socket {
+    fun provideWhisperSocket(getUserToken: String): Socket {
         return Socket.Builder.with("ws://10.0.2.2:3335/ws/")
-            .addHeader("user-id", getUserID)
+            .addHeader("Authorization", "Bearer $getUserToken")
             .build().connect()
     }
 
