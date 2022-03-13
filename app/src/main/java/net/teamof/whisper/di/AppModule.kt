@@ -116,6 +116,10 @@ class AppModule {
 
     @Singleton
     @Provides
+    fun provideProfileAPI(retrofit: Retrofit): ProfileAPI = retrofit.create(ProfileAPI::class.java)
+
+    @Singleton
+    @Provides
     fun provideMessageRepository() = MessageRepository()
 
     @Singleton
