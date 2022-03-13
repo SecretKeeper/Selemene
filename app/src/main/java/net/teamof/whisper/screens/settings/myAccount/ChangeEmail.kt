@@ -14,11 +14,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import net.teamof.whisper.R
 import net.teamof.whisper.components.TextField
+import net.teamof.whisper.components.settings.SettingTemplate
 import net.teamof.whisper.ui.theme.fontFamily
 import net.teamof.whisper.viewModel.UserViewModel
 
@@ -39,22 +39,8 @@ fun ChangeEmail(navController: NavController, userViewModel: UserViewModel) {
     val buttonLoading = remember { mutableStateOf(false) }
     val buttonColor = remember { mutableStateOf(0xFF0336FF) }
 
-    Column(modifier = Modifier.padding(top = 30.dp, start = 20.dp, end = 20.dp)) {
-        Text(
-            text = "Change your email",
-            fontFamily = fontFamily,
-            fontWeight = FontWeight.Bold,
-            fontSize = 18.sp,
-            modifier = Modifier.padding(bottom = 30.dp)
-        )
-//        Text(
-//            text = "Change your email",
-//            fontFamily = fontFamily,
-//            fontWeight = FontWeight.Bold,
-//            fontSize = 16.sp,
-//            color = Color.Gray,
-//            modifier = Modifier.padding(bottom = 30.dp)
-//        )
+    SettingTemplate(navController = navController, title = "Change Email") {
+
         TextField(
             text = "Email",
             value = email.value,
