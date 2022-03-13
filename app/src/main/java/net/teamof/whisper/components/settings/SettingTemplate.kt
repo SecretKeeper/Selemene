@@ -23,7 +23,7 @@ fun SettingTemplate(
     title: String,
     children: @Composable() () -> Unit
 ) {
-    Column(modifier = Modifier.padding(top = 30.dp, start = 10.dp, end = 10.dp)) {
+    Column(modifier = Modifier.padding(top = 30.dp, start = 5.dp, end = 5.dp)) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
