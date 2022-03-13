@@ -18,9 +18,10 @@ import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import net.teamof.whisper.components.settings.SettingsItem
 import net.teamof.whisper.ui.theme.fontFamily
+import net.teamof.whisper.viewModel.UserViewModel
 
 @Composable
-fun SelfProfile(navController: NavController) {
+fun SelfProfile(navController: NavController, userViewModel: UserViewModel) {
 
     val context = LocalContext.current
     val showToast = Toast.makeText(context, "This feature is not available yet", Toast.LENGTH_SHORT)
@@ -46,14 +47,14 @@ fun SelfProfile(navController: NavController) {
                 )
                 Column(modifier = Modifier.padding(start = 20.dp)) {
                     Text(
-                        text = "VahidSecurity",
+                        text = userViewModel.gePair("username")?.value ?: "",
                         fontFamily = fontFamily,
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
                         modifier = Modifier.padding(bottom = 10.dp)
                     )
                     Text(
-                        text = "Non-can scape my fury",
+                        text = userViewModel.gePair("status")?.value ?: "",
                         fontFamily = fontFamily,
                         fontWeight = FontWeight.Normal,
                         fontSize = 16.sp,
