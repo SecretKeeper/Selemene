@@ -134,7 +134,7 @@ private fun MainScreenNavigationConfigurations(
                     Contacts(userViewModel, profileViewModel, navController, action = it)
                 }
             }
-            composable("SelfProfile") { SelfProfile(navController) }
+            composable("SelfProfile") { SelfProfile(navController, userViewModel) }
 
 
 
