@@ -95,7 +95,6 @@ fun MyAccount(navController: NavController, userViewModel: UserViewModel) {
                         Toast.LENGTH_SHORT
                     ).show()
                 },
-                titleColor = Color.Red
             )
         }
 
