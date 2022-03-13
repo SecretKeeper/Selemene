@@ -80,6 +80,8 @@ class UserViewModel @Inject constructor(
                     val jsonRes = JSONObject(response.body()?.string())
                     val userRes = JSONObject(jsonRes.getString("user"))
 
+                    getLoggedUserProfile(userRes.getLong("user_id"))
+
                     keyValueRepository.createOrUpdate(
                         listOf(
                             OBKeyValue(
@@ -334,6 +336,23 @@ class UserViewModel @Inject constructor(
         }
     }
 
+    private suspend fun getLoggedUserProfile(user_id: Long) {
+
+        val response = profileAPI.getProfileByID(user_id)
+
+        keyValueRepository.createOrUpdate(
+            listOf(
+                OBKeyValue(
+                    key = "status",
+                    value = response.status ?: ""
+                ),
+                OBKeyValue(
+                    key = "description",
+                    value = response.description ?: ""
+                ),
+            )
+        );
+    }
 
     fun searchUsers(input: String, fetchedUsers: (List<UserAPI>) -> Unit) {
 
