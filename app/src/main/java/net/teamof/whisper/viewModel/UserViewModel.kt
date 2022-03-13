@@ -33,7 +33,8 @@ class UserViewModel @Inject constructor(
     private val keyValueRepository: KeyValueRepository,
     private val authAPI: AuthAPI,
     private val searchAPI: SearchAPI,
-    private val accountAPI: AccountAPI
+    private val accountAPI: AccountAPI,
+    private val profileAPI: ProfileAPI
 ) :
     AndroidViewModel(application) {
 
@@ -107,6 +108,10 @@ class UserViewModel @Inject constructor(
                             OBKeyValue(
                                 key = "email",
                                 value = userRes.getString("email")
+                            ),
+                            OBKeyValue(
+                                key = "avatar",
+                                value = userRes.getString("avatar")
                             )
                         )
                     )
@@ -154,7 +159,10 @@ class UserViewModel @Inject constructor(
                 "accessTokenExpiresAt",
                 "user_id",
                 "username",
-                "email"
+                "email",
+                "avatar",
+                "status",
+                "description"
             )
         )
 
