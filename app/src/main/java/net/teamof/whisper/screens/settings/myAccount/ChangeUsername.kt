@@ -18,6 +18,7 @@ import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import net.teamof.whisper.R
 import net.teamof.whisper.components.TextField
+import net.teamof.whisper.components.settings.SettingTemplate
 import net.teamof.whisper.ui.theme.fontFamily
 import net.teamof.whisper.viewModel.UserViewModel
 
@@ -34,7 +35,8 @@ fun ChangeUsername(navController: NavController, userViewModel: UserViewModel) {
     val buttonLoading = remember { mutableStateOf(false) }
     val buttonColor = remember { mutableStateOf(0xFF0336FF) }
 
-    Column(modifier = Modifier.padding(top = 30.dp, start = 20.dp, end = 20.dp)) {
+    SettingTemplate(navController = navController, title = "Change Username") {
+        
         TextField(
             text = "Username",
             value = username.value,
