@@ -19,6 +19,7 @@ import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import net.teamof.whisper.R
 import net.teamof.whisper.components.TextField
+import net.teamof.whisper.components.settings.SettingTemplate
 import net.teamof.whisper.ui.theme.fontFamily
 import net.teamof.whisper.viewModel.UserViewModel
 
@@ -40,14 +41,8 @@ fun ChangePassword(navController: NavController, userViewModel: UserViewModel) {
     val buttonLoading = remember { mutableStateOf(false) }
     val buttonColor = remember { mutableStateOf(0xFF0336FF) }
 
-    Column(modifier = Modifier.padding(top = 30.dp, start = 20.dp, end = 20.dp)) {
-        Text(
-            text = "Change your password",
-            fontFamily = fontFamily,
-            fontWeight = FontWeight.Bold,
-            fontSize = 18.sp,
-            modifier = Modifier.padding(bottom = 30.dp)
-        )
+    SettingTemplate(navController = navController, title = "Change password") {
+
         TextField(
             type = "password",
             text = "Current Password",
