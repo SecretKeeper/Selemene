@@ -55,21 +55,16 @@ class MessageListenerService : Service() {
     }
 
     private fun createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name: CharSequence = "WhisperChannelName"
-            val description = "channel_desc"
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel("MYWhisperCHANNEL_ID", name, importance)
-            channel.description = description
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            val notificationManager = getSystemService(
-                NotificationManager::class.java
-            )
-            notificationManager.createNotificationChannel(channel)
-        }
+        val name: CharSequence = "WhisperChannelName"
+        val description = "channel_desc"
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel("MYWhisperCHANNEL_ID", name, importance)
+        channel.description = description
+        
+        val notificationManager = getSystemService(
+            NotificationManager::class.java
+        )
+        notificationManager.createNotificationChannel(channel)
     }
 
     override fun onCreate() {
