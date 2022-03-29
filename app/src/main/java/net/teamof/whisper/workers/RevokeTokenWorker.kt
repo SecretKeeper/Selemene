@@ -1,4 +1,4 @@
-package net.teamof.whisper
+package net.teamof.whisper.workers
 
 import android.content.Context
 import androidx.hilt.work.HiltWorker
