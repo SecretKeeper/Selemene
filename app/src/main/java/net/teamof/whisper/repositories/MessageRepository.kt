@@ -2,6 +2,7 @@ package net.teamof.whisper.repositories
 
 import io.objectbox.Box
 import net.teamof.whisper.ObjectBox
+import net.teamof.whisper.models.DeliveryReport
 import net.teamof.whisper.models.Message
 import net.teamof.whisper.models.Message_
 
@@ -25,5 +26,18 @@ class MessageRepository {
         }
 
         query.close()
+    }
+
+    fun updateDeliveryStatus(deliveryReport: DeliveryReport) {
+        messageBox.query().run {
+            `in`(Message_.id, deliveryReport.ids.toLongArray())
+            build()
+        }.use { it ->
+            val result = it.findFirst()
+            if (result != null) {
+                result.verify_delivery_report = true
+                messageBox.put(result)
+            }
+        }
     }
 }
