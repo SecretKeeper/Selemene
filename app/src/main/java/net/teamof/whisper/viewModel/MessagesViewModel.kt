@@ -33,16 +33,20 @@ class MessagesViewModel @Inject constructor(
 
             val assignedMessage =
                 intent.getSerializableExtra("RECEIVE_ASSIGNED_MESSAGE") as? Message
-            
+
             if (message != null) {
                 conversationRepository.update(MessageSide.THEMSELVES, message)
                 messageRepository.create(message)
+                application.sendBroadcast(
+                    Intent("SEND_DELIVERY_REPORT").putExtra(
+                        "DELIVERY_REPORT_MODEL",
+                        DeliveryReport(ids = listOf(message.id))
+                    )
+                )
             }
 
-            if (assignedMessage != null) {
-                Timber.e("We are calling messageRepository.updateAssignedMessage")
-                messageRepository.updateAssignedMessage(assignedMessage)
-            }
+            if (assignedMessage != null) messageRepository.updateAssignedMessage(assignedMessage)
+
         }
     }
 
@@ -90,8 +94,8 @@ class MessagesViewModel @Inject constructor(
         conversationRepository.update(MessageSide.MYSELF, message)
 
         application.sendBroadcast(
-            Intent("WhisperLocalMessageCommunication").putExtra(
-                "SEND_MESSAGE",
+            Intent("SEND_MESSAGE").putExtra(
+                "MESSAGE_MODEL",
                 message
             )
         )
