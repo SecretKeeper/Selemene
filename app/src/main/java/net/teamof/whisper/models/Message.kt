@@ -21,3 +21,8 @@ data class Message(
     var created_at: Date? = null,
     var updated_at: Date? = null,
 ) : Serializable
+
+@JsonClass(generateAdapter = true)
+data class MessagesArray(
+    val messages: List<Message>
+)
