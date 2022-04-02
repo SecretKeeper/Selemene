@@ -9,12 +9,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Binder
-import android.os.Build
 import android.os.IBinder
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.hilt.android.AndroidEntryPoint
+import net.teamof.whisper.models.DeliveryReport
 import net.teamof.whisper.models.Message
 import net.teamof.whisper.sockets.Socket
 import net.teamof.whisper.sockets.SocketBroadcastListener
@@ -40,6 +40,8 @@ class MessageListenerService : Service() {
 
     private val moshiMessageAdapter: JsonAdapter<Message> = moshi.adapter(Message::class.java)
 
+    private val moshiDeliveryReportAdapter: JsonAdapter<DeliveryReport> =
+        moshi.adapter(DeliveryReport::class.java)
 
     inner class LocalBinder : Binder() {
         fun getService(): MessageListenerService = this@MessageListenerService
@@ -47,10 +49,20 @@ class MessageListenerService : Service() {
 
     private val broadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            whisperSocket.send(
-                "message",
-                moshiMessageAdapter.toJson(intent.getSerializableExtra("SEND_MESSAGE") as Message?)
-            )
+            when (intent.action) {
+                "SEND_MESSAGE" -> {
+                    whisperSocket.send(
+                        "message",
+                        moshiMessageAdapter.toJson(intent.getSerializableExtra("MESSAGE_MODEL") as Message?)
+                    )
+                }
+                "SEND_DELIVERY_REPORT" -> {
+                    whisperSocket.send(
+                        "delivery-report",
+                        moshiDeliveryReportAdapter.toJson(intent.getSerializableExtra("DELIVERY_REPORT_MODEL") as DeliveryReport?)
+                    )
+                }
+            }
         }
     }
 
@@ -72,7 +84,10 @@ class MessageListenerService : Service() {
 
         createNotificationChannel()
 
-        registerReceiver(broadcastReceiver, IntentFilter("WhisperLocalMessageCommunication"))
+        registerReceiver(broadcastReceiver, IntentFilter().apply {
+            addAction("SEND_MESSAGE")
+            addAction("SEND_DELIVERY_REPORT")
+        })
 
         whisperSocket.onEvent(Socket.EVENT_OPEN, socketBroadcastListener.broadcastSubscribe())
 
