@@ -12,12 +12,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import net.teamof.whisper.ObjectBox
-import net.teamof.whisper.RevokeTokenWorker
 import net.teamof.whisper.api.*
 import net.teamof.whisper.models.OBKeyValue
 import net.teamof.whisper.models.OBKeyValue_
 import net.teamof.whisper.models.UserAPI
 import net.teamof.whisper.repositories.KeyValueRepository
+import net.teamof.whisper.workers.RevokeTokenWorker
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
