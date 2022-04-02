@@ -56,7 +56,7 @@ class AppModule {
     @Singleton
     @Provides
     fun provideMoshi(): Moshi {
-        return Moshi.Builder().add(Date::class.java, DateMoshiAdapter())
+        return Moshi.Builder().add(Date::class.java, DateMoshiAdapter().nullSafe())
             .addLast(KotlinJsonAdapterFactory())
             .build()
     }
