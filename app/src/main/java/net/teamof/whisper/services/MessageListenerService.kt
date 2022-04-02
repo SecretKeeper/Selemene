@@ -72,7 +72,7 @@ class MessageListenerService : Service() {
         val importance = NotificationManager.IMPORTANCE_DEFAULT
         val channel = NotificationChannel("MYWhisperCHANNEL_ID", name, importance)
         channel.description = description
-        
+
         val notificationManager = getSystemService(
             NotificationManager::class.java
         )
@@ -98,6 +98,10 @@ class MessageListenerService : Service() {
             socketBroadcastListener.onAssignedMessageListener()
         )
 
+        whisperSocket.onEventResponse(
+            "new-messages-array",
+            socketBroadcastListener.onNewMessagesArrayListener()
+        )
     }
 
     override fun onDestroy() {
