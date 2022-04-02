@@ -11,6 +11,8 @@ class MessageRepository {
 
     fun create(message: Message) = messageBox.put((message))
 
+    fun create(messages: List<Message>) = messageBox.put(messages)
+
     fun updateAssignedMessage(message: Message) {
         val query = messageBox.query().equal(Message_.local_id, message.local_id).build()
         val result = query.findFirst()
