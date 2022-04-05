@@ -362,7 +362,7 @@ fun Profile(
         sheetPeekHeight = ((heightDp * 42) / 100).dp,
     ) {
         Image(
-            painter = rememberImagePainter(data = "https://uupload.ir/files/2fk9_6087f98a3cd34_(2).jpg"),
+            painter = rememberImagePainter(data = user.value?.avatar),
             contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth()
