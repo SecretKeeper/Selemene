@@ -54,7 +54,7 @@ class ConversationRepository @Inject constructor(
 								last_message_time = newMessage.created_at ?: Date(),
 								unread_messages = 0,
 								username = it.username,
-								user_image = it.avatar ?: ""
+								avatar = it.avatar ?: ""
 							)
 						)
 					}
@@ -89,7 +89,7 @@ class ConversationRepository @Inject constructor(
 				val result = it.findFirst()
 				if (result != null) {
 					result.username = user.username
-					result.user_image = user.avatar ?: ""
+					result.avatar = user.avatar ?: ""
 					conversationBox.put(result)
 				}
 			}
