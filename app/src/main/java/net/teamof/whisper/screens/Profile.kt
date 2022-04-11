@@ -37,13 +37,13 @@ import net.teamof.whisper.viewModel.ProfileViewModel
 
 
 val gridImages = listOf(
-    "https://c4.wallpaperflare.com/wallpaper/607/463/825/world-of-warcraft-jaina-proudmoore-magic-mazert-young-turquoise-hd-wallpaper-preview.jpg",
-    "https://million-wallpapers.com/wallpapers/1/65/16175274567205625182.jpg",
-    "https://c4.wallpaperflare.com/wallpaper/607/463/825/world-of-warcraft-jaina-proudmoore-magic-mazert-young-turquoise-hd-wallpaper-preview.jpg",
-    "https://million-wallpapers.com/wallpapers/1/65/16175274567205625182.jpg",
-    "https://c4.wallpaperflare.com/wallpaper/607/463/825/world-of-warcraft-jaina-proudmoore-magic-mazert-young-turquoise-hd-wallpaper-preview.jpg",
-    "https://million-wallpapers.com/wallpapers/1/65/16175274567205625182.jpg",
-    "https://c4.wallpaperflare.com/wallpaper/607/463/825/world-of-warcraft-jaina-proudmoore-magic-mazert-young-turquoise-hd-wallpaper-preview.jpg",
+	"https://c4.wallpaperflare.com/wallpaper/607/463/825/world-of-warcraft-jaina-proudmoore-magic-mazert-young-turquoise-hd-wallpaper-preview.jpg",
+	"https://million-wallpapers.com/wallpapers/1/65/16175274567205625182.jpg",
+	"https://c4.wallpaperflare.com/wallpaper/607/463/825/world-of-warcraft-jaina-proudmoore-magic-mazert-young-turquoise-hd-wallpaper-preview.jpg",
+	"https://million-wallpapers.com/wallpapers/1/65/16175274567205625182.jpg",
+	"https://c4.wallpaperflare.com/wallpaper/607/463/825/world-of-warcraft-jaina-proudmoore-magic-mazert-young-turquoise-hd-wallpaper-preview.jpg",
+	"https://million-wallpapers.com/wallpapers/1/65/16175274567205625182.jpg",
+	"https://c4.wallpaperflare.com/wallpaper/607/463/825/world-of-warcraft-jaina-proudmoore-magic-mazert-young-turquoise-hd-wallpaper-preview.jpg",
 )
 
 
@@ -53,403 +53,405 @@ val gridImages = listOf(
 @ExperimentalMaterialApi
 @Composable
 fun Profile(
-    navController: NavController,
-    profileViewModel: ProfileViewModel,
-    to_user_id: String
+	navController: NavController,
+	profileViewModel: ProfileViewModel,
+	to_user_id: String
 ) {
 
-    val user = profileViewModel.userState
-    val displayMetrics = Resources.getSystem().displayMetrics
-    val heightDp = displayMetrics.heightPixels / displayMetrics.density
+	val user = profileViewModel.userState
+	val displayMetrics = Resources.getSystem().displayMetrics
+	val heightDp = displayMetrics.heightPixels / displayMetrics.density
 
-    val scaffoldState = rememberBottomSheetScaffoldState()
+	val scaffoldState = rememberBottomSheetScaffoldState()
 
-    val expanded = remember { mutableStateOf(false) }
+	val expanded = remember { mutableStateOf(false) }
 
-    val scaleFab = remember { Animatable(1F) }
-    LaunchedEffect(
-        key1 = scaffoldState.bottomSheetState.isAnimationRunning,
-        key2 = scaffoldState.bottomSheetState.isExpanded
-    ) {
-        scaleFab.animateTo(
-            if (
-                scaffoldState.bottomSheetState.isAnimationRunning ||
-                scaffoldState.bottomSheetState.isExpanded
-            )
-                0.001F else 1F
-        )
-    }
+	val scaleFab = remember { Animatable(1F) }
+	LaunchedEffect(
+		key1 = scaffoldState.bottomSheetState.isAnimationRunning,
+		key2 = scaffoldState.bottomSheetState.isExpanded
+	) {
+		scaleFab.animateTo(
+			if (
+				scaffoldState.bottomSheetState.isAnimationRunning ||
+				scaffoldState.bottomSheetState.isExpanded
+			)
+				0.001F else 1F
+		)
+	}
 
-    BottomSheetScaffold(
-        sheetContent = {
-            LazyColumn() {
-                item {
-                    Column(modifier = Modifier.padding(vertical = 25.dp, horizontal = 25.dp)) {
-                        Text(
-                            text = user.value?.username!!,
-                            fontSize = 18.sp,
-                            fontFamily = fontFamily,
-                            fontWeight = FontWeight.SemiBold,
-                            color = Color.DarkGray
-                        )
-                        Text(
-                            text = user.value!!.profile.target.status ?: "",
-                            fontSize = 14.sp,
-                            fontFamily = fontFamily,
-                            fontWeight = FontWeight.Medium,
-                            color = Color(red = 23, green = 155, blue = 128),
-                            modifier = Modifier.padding(vertical = 10.dp)
-                        )
-                        Row {
-                            ClickableText(
-                                text = AnnotatedString(
-                                    "${user.value!!.counters.target.feeds} Feeds",
-                                    spanStyle = SpanStyle(
-                                        fontSize = 14.sp,
-                                        fontFamily = fontFamily,
-                                        fontWeight = FontWeight.SemiBold,
-                                        color = MaterialTheme.colors.primary
-                                    )
-                                ),
-                                onClick = {},
-                                modifier = Modifier.padding(vertical = 0.dp)
-                            )
-                            Divider(
-                                modifier = Modifier
+	BottomSheetScaffold(
+		sheetContent = {
+			LazyColumn() {
+				item {
+					Column(modifier = Modifier.padding(vertical = 25.dp, horizontal = 25.dp)) {
+						Text(
+							text = user.value?.username!!,
+							fontSize = 18.sp,
+							fontFamily = fontFamily,
+							fontWeight = FontWeight.SemiBold,
+							color = Color.DarkGray,
+							modifier = Modifier.padding(bottom = 10.dp)
+						)
+						if (user.value!!.profile.target.status != "")
+							Text(
+								text = user.value!!.profile.target.status ?: "",
+								fontSize = 14.sp,
+								fontFamily = fontFamily,
+								fontWeight = FontWeight.Medium,
+								color = Color(red = 23, green = 155, blue = 128),
+								modifier = Modifier.padding(bottom = 10.dp)
+							)
+						Row {
+							ClickableText(
+								text = AnnotatedString(
+									"${user.value!!.counters.target.feeds} Feeds",
+									spanStyle = SpanStyle(
+										fontSize = 14.sp,
+										fontFamily = fontFamily,
+										fontWeight = FontWeight.SemiBold,
+										color = MaterialTheme.colors.primary
+									)
+								),
+								onClick = {},
+								modifier = Modifier.padding(vertical = 0.dp)
+							)
+							Divider(
+								modifier = Modifier
                                     .fillMaxHeight()
                                     .width(10.dp)
                                     .padding(horizontal = 15.dp)
-                            )
-                            ClickableText(
-                                text = AnnotatedString(
-                                    "${user.value!!.counters.target.followers} Followers",
-                                    spanStyle = SpanStyle(
-                                        fontSize = 14.sp,
-                                        fontFamily = fontFamily,
-                                        fontWeight = FontWeight.SemiBold,
-                                        color = MaterialTheme.colors.primary
-                                    )
-                                ),
-                                onClick = {},
-                                modifier = Modifier.padding(vertical = 0.dp)
-                            )
-                        }
+							)
+							ClickableText(
+								text = AnnotatedString(
+									"${user.value!!.counters.target.followers} Followers",
+									spanStyle = SpanStyle(
+										fontSize = 14.sp,
+										fontFamily = fontFamily,
+										fontWeight = FontWeight.SemiBold,
+										color = MaterialTheme.colors.primary
+									)
+								),
+								onClick = {},
+								modifier = Modifier.padding(vertical = 0.dp)
+							)
+						}
 
-                        for (i in 1..3) {
-                            Text(
-                                text = user.value!!.profile.target.description ?: "",
-                                color = Color(red = 130, green = 130, blue = 130),
-                                fontFamily = fontFamily,
-                                fontWeight = FontWeight.Normal,
-                                fontSize = 14.sp,
-                                lineHeight = 20.sp,
-                                modifier = Modifier.padding(vertical = 15.dp)
-                            )
-                        }
+						for (i in 1..3) {
+							Text(
+								text = user.value!!.profile.target.description ?: "",
+								color = Color(red = 130, green = 130, blue = 130),
+								fontFamily = fontFamily,
+								fontWeight = FontWeight.Normal,
+								fontSize = 14.sp,
+								lineHeight = 20.sp,
+								modifier = Modifier.padding(vertical = 15.dp)
+							)
+						}
 
-                        Divider(modifier = Modifier.padding(vertical = 15.dp))
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Image(
-                                painter = rememberImagePainter(data = "https://upload.wikimedia.org/wikipedia/en/thumb/d/d3/Starbucks_Corporation_Logo_2011.svg/1200px-Starbucks_Corporation_Logo_2011.svg.png",
-                                    builder = { transformations(CircleCropTransformation()) }),
-                                contentDescription = null,
-                                modifier = Modifier
+						Divider(modifier = Modifier.padding(vertical = 15.dp))
+						Row(verticalAlignment = Alignment.CenterVertically) {
+							Image(
+								painter = rememberImagePainter(data = "https://upload.wikimedia.org/wikipedia/en/thumb/d/d3/Starbucks_Corporation_Logo_2011.svg/1200px-Starbucks_Corporation_Logo_2011.svg.png",
+									builder = { transformations(CircleCropTransformation()) }),
+								contentDescription = null,
+								modifier = Modifier
                                     .width(90.dp)
                                     .height(90.dp)
                                     .padding(horizontal = 5.dp)
-                            )
-                            Column(Modifier.padding(start = 10.dp)) {
-                                Text(
-                                    text = "Starbucks Major Guild",
-                                    color = MaterialTheme.colors.onPrimary,
-                                    fontFamily = fontFamily,
-                                    fontWeight = FontWeight.SemiBold,
-                                    modifier = Modifier.padding(bottom = 5.dp)
-                                )
-                                Text(
-                                    text = "Rank 2",
-                                    color = MaterialTheme.colors.onSecondary,
-                                    fontSize = 14.sp,
-                                    fontFamily = fontFamily,
-                                    fontWeight = FontWeight.Medium,
-                                    modifier = Modifier.padding(bottom = 5.dp)
-                                )
-                                Text(
-                                    text = "546 Members",
-                                    color = MaterialTheme.colors.onSecondary,
-                                    fontSize = 14.sp,
-                                    fontFamily = fontFamily,
-                                    fontWeight = FontWeight.Medium,
-                                )
-                            }
-                        }
-                        Divider(Modifier.padding(vertical = 15.dp))
-                        Row(Modifier.padding(vertical = 15.dp)) {
-                            Text(
-                                text = "Phone",
-                                color = MaterialTheme.colors.onSecondary,
-                                fontSize = 14.sp,
-                                fontFamily = fontFamily,
-                                fontWeight = FontWeight.Normal,
-                                lineHeight = 20.sp,
-                                modifier = Modifier
+							)
+							Column(Modifier.padding(start = 10.dp)) {
+								Text(
+									text = "Starbucks Major Guild",
+									color = MaterialTheme.colors.onPrimary,
+									fontFamily = fontFamily,
+									fontWeight = FontWeight.SemiBold,
+									modifier = Modifier.padding(bottom = 5.dp)
+								)
+								Text(
+									text = "Rank 2",
+									color = MaterialTheme.colors.onSecondary,
+									fontSize = 14.sp,
+									fontFamily = fontFamily,
+									fontWeight = FontWeight.Medium,
+									modifier = Modifier.padding(bottom = 5.dp)
+								)
+								Text(
+									text = "546 Members",
+									color = MaterialTheme.colors.onSecondary,
+									fontSize = 14.sp,
+									fontFamily = fontFamily,
+									fontWeight = FontWeight.Medium,
+								)
+							}
+						}
+						Divider(Modifier.padding(vertical = 15.dp))
+						Row(Modifier.padding(vertical = 15.dp)) {
+							Text(
+								text = "Phone",
+								color = MaterialTheme.colors.onSecondary,
+								fontSize = 14.sp,
+								fontFamily = fontFamily,
+								fontWeight = FontWeight.Normal,
+								lineHeight = 20.sp,
+								modifier = Modifier
                                     .padding(end = 35.dp)
                                     .weight(0.4f)
-                            )
-                            Text(
-                                text = "+989339419119",
-                                color = MaterialTheme.colors.onSecondary,
-                                fontSize = 14.sp,
-                                fontFamily = fontFamily,
-                                fontWeight = FontWeight.Normal,
-                                lineHeight = 20.sp,
-                                modifier = Modifier.weight(1f)
-                            )
-                        }
-                        Row(Modifier.padding(vertical = 15.dp)) {
-                            Text(
-                                text = "Location",
-                                color = MaterialTheme.colors.onSecondary,
-                                fontFamily = fontFamily,
-                                fontWeight = FontWeight.Normal,
-                                fontSize = 14.sp,
-                                lineHeight = 20.sp,
-                                modifier = Modifier
+							)
+							Text(
+								text = "+989339419119",
+								color = MaterialTheme.colors.onSecondary,
+								fontSize = 14.sp,
+								fontFamily = fontFamily,
+								fontWeight = FontWeight.Normal,
+								lineHeight = 20.sp,
+								modifier = Modifier.weight(1f)
+							)
+						}
+						Row(Modifier.padding(vertical = 15.dp)) {
+							Text(
+								text = "Location",
+								color = MaterialTheme.colors.onSecondary,
+								fontFamily = fontFamily,
+								fontWeight = FontWeight.Normal,
+								fontSize = 14.sp,
+								lineHeight = 20.sp,
+								modifier = Modifier
                                     .padding(end = 35.dp)
                                     .weight(0.4f)
-                            )
-                            Text(
-                                text = "Tottenham, England",
-                                color = MaterialTheme.colors.onSecondary,
-                                fontFamily = fontFamily,
-                                fontWeight = FontWeight.Normal,
-                                fontSize = 14.sp,
-                                lineHeight = 20.sp,
-                                modifier = Modifier.weight(1f)
-                            )
-                        }
-                        Row(Modifier.padding(vertical = 15.dp)) {
-                            Text(
-                                text = "Last Seen",
-                                color = MaterialTheme.colors.onSecondary,
-                                fontSize = 14.sp,
-                                fontFamily = fontFamily,
-                                fontWeight = FontWeight.Normal,
-                                lineHeight = 20.sp,
-                                modifier = Modifier
+							)
+							Text(
+								text = "Tottenham, England",
+								color = MaterialTheme.colors.onSecondary,
+								fontFamily = fontFamily,
+								fontWeight = FontWeight.Normal,
+								fontSize = 14.sp,
+								lineHeight = 20.sp,
+								modifier = Modifier.weight(1f)
+							)
+						}
+						Row(Modifier.padding(vertical = 15.dp)) {
+							Text(
+								text = "Last Seen",
+								color = MaterialTheme.colors.onSecondary,
+								fontSize = 14.sp,
+								fontFamily = fontFamily,
+								fontWeight = FontWeight.Normal,
+								lineHeight = 20.sp,
+								modifier = Modifier
                                     .padding(end = 35.dp)
                                     .weight(0.4f)
-                            )
-                            Text(
-                                text = "2 hours ago",
-                                color = MaterialTheme.colors.onSecondary,
-                                fontSize = 14.sp,
-                                fontFamily = fontFamily,
-                                fontWeight = FontWeight.Normal,
-                                lineHeight = 20.sp,
-                                modifier = Modifier.weight(1f)
-                            )
-                        }
-                        Row(Modifier.padding(vertical = 15.dp)) {
-                            Text(
-                                text = "Groups",
-                                color = MaterialTheme.colors.onSecondary,
-                                fontSize = 14.sp,
-                                fontFamily = fontFamily,
-                                fontWeight = FontWeight.Normal,
-                                lineHeight = 20.sp,
-                                modifier = Modifier
+							)
+							Text(
+								text = "2 hours ago",
+								color = MaterialTheme.colors.onSecondary,
+								fontSize = 14.sp,
+								fontFamily = fontFamily,
+								fontWeight = FontWeight.Normal,
+								lineHeight = 20.sp,
+								modifier = Modifier.weight(1f)
+							)
+						}
+						Row(Modifier.padding(vertical = 15.dp)) {
+							Text(
+								text = "Groups",
+								color = MaterialTheme.colors.onSecondary,
+								fontSize = 14.sp,
+								fontFamily = fontFamily,
+								fontWeight = FontWeight.Normal,
+								lineHeight = 20.sp,
+								modifier = Modifier
                                     .padding(end = 35.dp)
                                     .weight(0.4f)
-                            )
-                            Column(modifier = Modifier.weight(1f)) {
-                                Text(
-                                    text = "Global Anime Chat",
-                                    color = MaterialTheme.colors.onSecondary,
-                                    fontSize = 14.sp,
-                                    fontFamily = fontFamily,
-                                    fontWeight = FontWeight.Normal,
-                                    lineHeight = 20.sp,
-                                    modifier = Modifier.padding(bottom = 15.dp)
-                                )
-                                Text(
-                                    text = "Margin Whales",
-                                    color = MaterialTheme.colors.onSecondary,
-                                    fontSize = 14.sp,
-                                    fontFamily = fontFamily,
-                                    fontWeight = FontWeight.Normal,
-                                    lineHeight = 20.sp,
-                                    modifier = Modifier.padding(bottom = 15.dp)
-                                )
-                                Text(
-                                    text = "Vahid Azizi Studio",
-                                    color = MaterialTheme.colors.onSecondary,
-                                    fontSize = 14.sp,
-                                    fontFamily = fontFamily,
-                                    fontWeight = FontWeight.Normal,
-                                    lineHeight = 20.sp,
-                                    modifier = Modifier.padding(bottom = 15.dp)
-                                )
-                            }
-                        }
-                        Divider(Modifier.padding(vertical = 15.dp))
-                        Row(Modifier.padding(bottom = 5.dp)) {
-                            Text(
-                                text = "Shared Media",
-                                color = Color.DarkGray,
-                                fontSize = 15.sp,
-                                fontFamily = fontFamily,
-                                fontWeight = FontWeight.Medium,
-                                modifier = Modifier
+							)
+							Column(modifier = Modifier.weight(1f)) {
+								Text(
+									text = "Global Anime Chat",
+									color = MaterialTheme.colors.onSecondary,
+									fontSize = 14.sp,
+									fontFamily = fontFamily,
+									fontWeight = FontWeight.Normal,
+									lineHeight = 20.sp,
+									modifier = Modifier.padding(bottom = 15.dp)
+								)
+								Text(
+									text = "Margin Whales",
+									color = MaterialTheme.colors.onSecondary,
+									fontSize = 14.sp,
+									fontFamily = fontFamily,
+									fontWeight = FontWeight.Normal,
+									lineHeight = 20.sp,
+									modifier = Modifier.padding(bottom = 15.dp)
+								)
+								Text(
+									text = "Vahid Azizi Studio",
+									color = MaterialTheme.colors.onSecondary,
+									fontSize = 14.sp,
+									fontFamily = fontFamily,
+									fontWeight = FontWeight.Normal,
+									lineHeight = 20.sp,
+									modifier = Modifier.padding(bottom = 15.dp)
+								)
+							}
+						}
+						Divider(Modifier.padding(vertical = 15.dp))
+						Row(Modifier.padding(bottom = 5.dp)) {
+							Text(
+								text = "Shared Media",
+								color = Color.DarkGray,
+								fontSize = 15.sp,
+								fontFamily = fontFamily,
+								fontWeight = FontWeight.Medium,
+								modifier = Modifier
                                     .weight(1f)
                                     .wrapContentWidth(Alignment.Start)
-                            )
-                            ClickableText(
-                                text = AnnotatedString(
-                                    "Show More",
-                                    spanStyle = SpanStyle(
-                                        fontSize = 13.sp,
-                                        fontFamily = fontFamily,
-                                        fontWeight = FontWeight.Medium,
-                                        color = MaterialTheme.colors.primary
-                                    )
-                                ),
-                                onClick = {},
-                                modifier = Modifier
+							)
+							ClickableText(
+								text = AnnotatedString(
+									"Show More",
+									spanStyle = SpanStyle(
+										fontSize = 13.sp,
+										fontFamily = fontFamily,
+										fontWeight = FontWeight.Medium,
+										color = MaterialTheme.colors.primary
+									)
+								),
+								onClick = {},
+								modifier = Modifier
                                     .weight(1f)
                                     .wrapContentWidth(Alignment.End)
-                            )
-                        }
-                        LazyRow() {
-                            itemsIndexed(gridImages) { _, image ->
-                                Image(
-                                    painter = rememberImagePainter(data = image,
-                                        builder = { transformations(CircleCropTransformation()) }),
-                                    contentDescription = null,
-                                    modifier = Modifier
+							)
+						}
+						LazyRow() {
+							itemsIndexed(gridImages) { _, image ->
+								Image(
+									painter = rememberImagePainter(data = image,
+										builder = { transformations(CircleCropTransformation()) }),
+									contentDescription = null,
+									modifier = Modifier
                                         .width(100.dp)
                                         .height(100.dp)
                                         .padding(end = 10.dp)
-                                )
-                            }
-                        }
-                        Divider(Modifier.padding(vertical = 15.dp))
-                    } // Column Container
-                }
-            }
-        },
-        scaffoldState = scaffoldState,
-        floatingActionButton = {
-            FloatingActionButton(
-                backgroundColor = MaterialTheme.colors.primary,
-                elevation = FloatingActionButtonDefaults.elevation(0.dp),
-                onClick = {
-                    navController.navigate("Messaging/${to_user_id}")
-                },
-                modifier = Modifier.scale(scaleFab.value)
-            ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_flash),
-                    contentDescription = null,
-                    tint = Color.White,
-                    modifier = Modifier
+								)
+							}
+						}
+						Divider(Modifier.padding(vertical = 15.dp))
+					} // Column Container
+				}
+			}
+		},
+		scaffoldState = scaffoldState,
+		floatingActionButton = {
+			FloatingActionButton(
+				backgroundColor = MaterialTheme.colors.primary,
+				elevation = FloatingActionButtonDefaults.elevation(0.dp),
+				onClick = {
+					navController.navigate("Messaging/${to_user_id}")
+				},
+				modifier = Modifier.scale(scaleFab.value)
+			) {
+				Icon(
+					imageVector = ImageVector.vectorResource(id = R.drawable.ic_flash),
+					contentDescription = null,
+					tint = Color.White,
+					modifier = Modifier
                         .width(25.dp)
                         .height(25.dp)
-                )
-            }
-        },
-        floatingActionButtonPosition = FabPosition.End,
-        sheetPeekHeight = ((heightDp * 42) / 100).dp,
-    ) {
-        Image(
-            painter = rememberImagePainter(data = user.value?.avatar),
-            contentDescription = null,
-            modifier = Modifier
+				)
+			}
+		},
+		floatingActionButtonPosition = FabPosition.End,
+		sheetPeekHeight = ((heightDp * 42) / 100).dp,
+	) {
+		Image(
+			painter = rememberImagePainter(data = user.value?.avatar),
+			contentDescription = null,
+			modifier = Modifier
                 .fillMaxWidth()
                 .height(((heightDp * 59) / 100).dp)
-        )
-        Row(
+		)
+		Row(
             Modifier
                 .offset(y = (-(heightDp * 57) / 100).dp)
                 .padding(horizontal = 10.dp)
-        ) {
-            IconButton(onClick = { navController.navigateUp() }) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_chevron_left),
-                    contentDescription = null,
-                    tint = Color.White,
-                    modifier = Modifier
+		) {
+			IconButton(onClick = { navController.navigateUp() }) {
+				Icon(
+					imageVector = ImageVector.vectorResource(id = R.drawable.ic_chevron_left),
+					contentDescription = null,
+					tint = Color.White,
+					modifier = Modifier
                         .width(25.dp)
                         .height(25.dp)
-                )
-            }
-            Row(horizontalArrangement = Arrangement.End, modifier = Modifier.weight(1f)) {
-                Box(modifier = Modifier.wrapContentSize(Alignment.CenterEnd)) {
-                    IconButton(onClick = { expanded.value = !expanded.value }) {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_more_vertical),
-                            contentDescription = null,
-                            tint = Color.White,
-                            modifier = Modifier
+				)
+			}
+			Row(horizontalArrangement = Arrangement.End, modifier = Modifier.weight(1f)) {
+				Box(modifier = Modifier.wrapContentSize(Alignment.CenterEnd)) {
+					IconButton(onClick = { expanded.value = !expanded.value }) {
+						Icon(
+							imageVector = ImageVector.vectorResource(id = R.drawable.ic_more_vertical),
+							contentDescription = null,
+							tint = Color.White,
+							modifier = Modifier
                                 .width(25.dp)
                                 .height(25.dp)
-                        )
-                    }
-                    DropdownMenu(
-                        expanded = expanded.value,
-                        onDismissRequest = { expanded.value = false }
-                    ) {
-                        DropdownMenuItem(onClick = { /* Handle refresh! */ }) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Icon(
-                                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_eraser),
-                                    contentDescription = null,
-                                    modifier = Modifier
+						)
+					}
+					DropdownMenu(
+						expanded = expanded.value,
+						onDismissRequest = { expanded.value = false }
+					) {
+						DropdownMenuItem(onClick = { /* Handle refresh! */ }) {
+							Row(verticalAlignment = Alignment.CenterVertically) {
+								Icon(
+									imageVector = ImageVector.vectorResource(id = R.drawable.ic_eraser),
+									contentDescription = null,
+									modifier = Modifier
                                         .width(25.dp)
                                         .height(25.dp)
-                                )
-                                Text(
-                                    "Clear History",
-                                    fontSize = 14.sp,
-                                    modifier = Modifier.padding(start = 15.dp, end = 10.dp)
-                                )
-                            }
-                        }
-                        DropdownMenuItem(onClick = { /* Handle send feedback! */ }) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Icon(
-                                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_add_user),
-                                    contentDescription = null,
-                                    modifier = Modifier
+								)
+								Text(
+									"Clear History",
+									fontSize = 14.sp,
+									modifier = Modifier.padding(start = 15.dp, end = 10.dp)
+								)
+							}
+						}
+						DropdownMenuItem(onClick = { /* Handle send feedback! */ }) {
+							Row(verticalAlignment = Alignment.CenterVertically) {
+								Icon(
+									imageVector = ImageVector.vectorResource(id = R.drawable.ic_add_user),
+									contentDescription = null,
+									modifier = Modifier
                                         .width(24.dp)
                                         .height(24.dp)
-                                )
-                                Text(
-                                    "Add Contact",
-                                    fontSize = 14.sp,
-                                    modifier = Modifier.padding(start = 15.dp, end = 10.dp)
-                                )
-                            }
-                        }
-                        DropdownMenuItem(onClick = { /* Handle settings! */ }) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Icon(
-                                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_blocked),
-                                    contentDescription = null,
-                                    modifier = Modifier
+								)
+								Text(
+									"Add Contact",
+									fontSize = 14.sp,
+									modifier = Modifier.padding(start = 15.dp, end = 10.dp)
+								)
+							}
+						}
+						DropdownMenuItem(onClick = { /* Handle settings! */ }) {
+							Row(verticalAlignment = Alignment.CenterVertically) {
+								Icon(
+									imageVector = ImageVector.vectorResource(id = R.drawable.ic_blocked),
+									contentDescription = null,
+									modifier = Modifier
                                         .width(23.dp)
                                         .height(23.dp)
-                                )
-                                Text(
-                                    "Block",
-                                    fontSize = 14.sp,
-                                    modifier = Modifier.padding(start = 15.dp, end = 10.dp)
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+								)
+								Text(
+									"Block",
+									fontSize = 14.sp,
+									modifier = Modifier.padding(start = 15.dp, end = 10.dp)
+								)
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }
