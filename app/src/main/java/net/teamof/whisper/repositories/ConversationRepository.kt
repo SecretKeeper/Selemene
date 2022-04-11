@@ -95,18 +95,28 @@ class ConversationRepository @Inject constructor(
 
     fun deleteByToUserIDs(user_ids: List<Long>) =
 
-        conversationBox.query().run {
-            `in`(Conversation_.to_user_id, user_ids.toLongArray())
-            build()
-        }.use { it ->
-            it.remove()
-            // Also remove history messages
-            messageBox.query().run {
-                (Message_.to_user_id oneOf user_ids.toLongArray()
-                        or (Message_.user_id oneOf user_ids.toLongArray()))
-                build()
-            }.use {
-                it.remove()
-            }
-        }
+		conversationBox.query().run {
+			`in`(Conversation_.to_user_id, user_ids.toLongArray())
+			build()
+		}.use { it ->
+			it.remove()
+			// Also remove history messages
+			messageBox.query().run {
+				(Message_.to_user_id oneOf user_ids.toLongArray()
+						or (Message_.user_id oneOf user_ids.toLongArray()))
+				build()
+			}.use {
+				it.remove()
+			}
+		}
+
+	fun getAllUsers(): LongArray {
+		val allConversations = conversationBox.all
+
+		val usersIDs = allConversations.map { conversation ->
+			conversation.to_user_id
+		}
+
+		return usersIDs.toLongArray()
+	}
 }
