@@ -93,7 +93,7 @@ fun Conversation(
 			verticalAlignment = Alignment.CenterVertically,
 			modifier = Modifier
 				.fillMaxWidth()
-				.padding(vertical = 10.dp, horizontal = 10.dp)
+				.padding(vertical = 10.dp, horizontal = 12.dp)
 		) {
 			Box {
 				Avatar(cachedConversation.value.avatar, cachedConversation.value.username)
@@ -113,7 +113,9 @@ fun Conversation(
 					.weight(2f)
 					.padding(start = 15.dp)
 			) {
-				Row(verticalAlignment = Alignment.CenterVertically) {
+				Row(
+					verticalAlignment = Alignment.CenterVertically,
+				) {
 					Text(
 						text = cachedConversation.value.username,
 						fontFamily = fontFamily,
@@ -121,20 +123,20 @@ fun Conversation(
 						fontSize = 16.sp,
 						modifier = Modifier
 							.weight(1f)
-							.padding(bottom = 10.dp)
+							.padding(bottom = 5.dp)
 					)
 					Text(
 						text = PrettyTime().format(conversation.last_message_time),
 						fontSize = 13.sp,
 						fontFamily = fontFamily,
 						fontWeight = FontWeight.Normal,
-						modifier = Modifier.padding(bottom = 7.dp)
+						modifier = Modifier.padding(bottom = 5.dp)
 					)
 				}
 				Row(verticalAlignment = Alignment.CenterVertically) {
 					Text(
 						text = conversation.last_message,
-						fontSize = 14.sp,
+						fontSize = 13.sp,
 						fontFamily = fontFamily,
 						fontWeight = FontWeight.Normal,
 						color = MaterialTheme.colors.onSecondary,
