@@ -15,70 +15,70 @@ import java.util.*
 import javax.inject.Inject
 
 class ConversationRepository @Inject constructor(
-    private val usersAPI: UsersAPI
+	private val usersAPI: UsersAPI
 ) {
-    private val conversationBox: Box<Conversation> =
-        ObjectBox.store.boxFor(Conversation::class.java)
+	private val conversationBox: Box<Conversation> =
+		ObjectBox.store.boxFor(Conversation::class.java)
 
-    private val messageBox: Box<Message> = ObjectBox.store.boxFor(Message::class.java)
+	private val messageBox: Box<Message> = ObjectBox.store.boxFor(Message::class.java)
 
-    private fun isConversationExist(to_user_id: Long): Long {
-        val query = conversationBox.query().equal(Conversation_.to_user_id, to_user_id).build()
-        val result = query.count()
-        query.close()
+	private fun isConversationExist(to_user_id: Long): Long {
+		val query = conversationBox.query().equal(Conversation_.to_user_id, to_user_id).build()
+		val result = query.count()
+		query.close()
 
-        return result
-    }
+		return result
+	}
 
-    fun update(side: MessageSide, newMessage: Message) {
-        if (isConversationExist(
-                when (side) {
-                    MessageSide.THEMSELVES -> newMessage.user_id
-                    MessageSide.MYSELF -> newMessage.to_user_id
-                }
-            ) == 0L
-        ) {
-            val response =
-                usersAPI.getUserProfile(if (side == MessageSide.THEMSELVES) newMessage.user_id.toString() else newMessage.to_user_id.toString())
+	fun update(side: MessageSide, newMessage: Message) {
+		if (isConversationExist(
+				when (side) {
+					MessageSide.THEMSELVES -> newMessage.user_id
+					MessageSide.MYSELF -> newMessage.to_user_id
+				}
+			) == 0L
+		) {
+			val response =
+				usersAPI.getUserProfile(if (side == MessageSide.THEMSELVES) newMessage.user_id.toString() else newMessage.to_user_id.toString())
 
-            response.enqueue(object : Callback<UserAPI> {
-                override fun onResponse(
-                    call: Call<UserAPI>,
-                    response: Response<UserAPI>
-                ) {
-                    response.body()?.let {
-                        create(
-                            Conversation(
-                                to_user_id = if (side == MessageSide.THEMSELVES) newMessage.user_id else newMessage.to_user_id,
-                                last_message = newMessage.content,
-                                last_message_time = newMessage.created_at ?: Date(),
-                                unread_messages = 0,
-                                username = it.username,
-                                user_image = it.avatar ?: ""
-                            )
-                        )
-                    }
-                }
+			response.enqueue(object : Callback<UserAPI> {
+				override fun onResponse(
+					call: Call<UserAPI>,
+					response: Response<UserAPI>
+				) {
+					response.body()?.let {
+						create(
+							Conversation(
+								to_user_id = if (side == MessageSide.THEMSELVES) newMessage.user_id else newMessage.to_user_id,
+								last_message = newMessage.content,
+								last_message_time = newMessage.created_at ?: Date(),
+								unread_messages = 0,
+								username = it.username,
+								user_image = it.avatar ?: ""
+							)
+						)
+					}
+				}
 
-                override fun onFailure(call: Call<UserAPI>, t: Throwable) {
-                    Timber.d(t)
-                }
+				override fun onFailure(call: Call<UserAPI>, t: Throwable) {
+					Timber.d(t)
+				}
 
-            })
-        } else {
-            conversationBox.query().run {
-                (Conversation_.to_user_id equal if (side == MessageSide.THEMSELVES) newMessage.user_id else newMessage.to_user_id)
-                build()
-            }.use {
-                val result = it.findFirst()
-                if (result != null) {
-                    result.last_message = newMessage.content
-                    result.last_message_time = newMessage.created_at ?: Date()
-                    conversationBox.put(result)
-                }
-            }
-        }
-    }
+			})
+		} else {
+			conversationBox.query().run {
+				(Conversation_.to_user_id equal if (side == MessageSide.THEMSELVES) newMessage.user_id else newMessage.to_user_id)
+				build()
+			}.use {
+				val result = it.findFirst()
+				if (result != null) {
+					result.last_message = newMessage.content
+					result.last_message_time = newMessage.created_at ?: Date()
+					conversationBox.put(result)
+				}
+			}
+		}
+	}
 
 	fun updateUserData(usersAPIWithoutCounters: List<UserAPIWithoutCounters>) {
 		usersAPIWithoutCounters.map { user ->
@@ -100,16 +100,16 @@ class ConversationRepository @Inject constructor(
 		conversationBox.put(conversation)
 	}
 
-    fun delete(conversation_id: Long) {
-        conversationBox.query().run {
-            equal(Conversation_.id, conversation_id)
-            build()
-        }.use {
-            it.remove()
-        }
-    }
+	fun delete(conversation_id: Long) {
+		conversationBox.query().run {
+			equal(Conversation_.id, conversation_id)
+			build()
+		}.use {
+			it.remove()
+		}
+	}
 
-    fun deleteByToUserIDs(user_ids: List<Long>) =
+	fun deleteByToUserIDs(user_ids: List<Long>) =
 
 		conversationBox.query().run {
 			`in`(Conversation_.to_user_id, user_ids.toLongArray())
