@@ -80,9 +80,25 @@ class ConversationRepository @Inject constructor(
         }
     }
 
-    fun create(conversation: Conversation) {
-        conversationBox.put(conversation)
-    }
+	fun updateUserData(usersAPIWithoutCounters: List<UserAPIWithoutCounters>) {
+		usersAPIWithoutCounters.map { user ->
+			conversationBox.query().run {
+				(Conversation_.to_user_id equal user.user_id)
+				build()
+			}.use {
+				val result = it.findFirst()
+				if (result != null) {
+					result.username = user.username
+					result.user_image = user.avatar ?: ""
+					conversationBox.put(result)
+				}
+			}
+		}
+	}
+
+	fun create(conversation: Conversation) {
+		conversationBox.put(conversation)
+	}
 
     fun delete(conversation_id: Long) {
         conversationBox.query().run {
