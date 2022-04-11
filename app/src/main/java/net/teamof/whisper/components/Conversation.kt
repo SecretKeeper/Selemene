@@ -38,117 +38,117 @@ import org.ocpsoft.prettytime.PrettyTime
 @ExperimentalMaterialApi
 @Composable
 fun Conversation(
-    conversation: Conversation,
-    navController: NavController,
-    conversationActionsViewModel: ConversationActionsViewModel,
-    profileViewModel: ProfileViewModel
+	conversation: Conversation,
+	navController: NavController,
+	conversationActionsViewModel: ConversationActionsViewModel,
+	profileViewModel: ProfileViewModel
 ) {
 
-    val cachedConversation = remember(conversation) { mutableStateOf(conversation) }
-    val selectedConversationsState: List<Long> by conversationActionsViewModel.selectedConversations.observeAsState(
-        listOf()
-    )
-    val showConversationActions: Boolean by conversationActionsViewModel.showActionsState.observeAsState(
-        false
-    )
+	val cachedConversation = remember(conversation) { mutableStateOf(conversation) }
+	val selectedConversationsState: List<Long> by conversationActionsViewModel.selectedConversations.observeAsState(
+		listOf()
+	)
+	val showConversationActions: Boolean by conversationActionsViewModel.showActionsState.observeAsState(
+		false
+	)
 
-    val selectIconScaleState =
-        animateFloatAsState(if (cachedConversation.value.to_user_id in selectedConversationsState) 1f else 0.0f)
+	val selectIconScaleState =
+		animateFloatAsState(if (cachedConversation.value.to_user_id in selectedConversationsState) 1f else 0.0f)
 
-    if (showConversationActions) {
-        BackPressHandler {
-            conversationActionsViewModel.hideActions()
-        }
-    }
+	if (showConversationActions) {
+		BackPressHandler {
+			conversationActionsViewModel.hideActions()
+		}
+	}
 
 
-    Card(
-        shape = RoundedCornerShape(0.dp),
-        modifier = Modifier
-            .pointerInput(Unit) {
-                detectTapGestures(
-                    onTap = {
-                        if (!showConversationActions) {
-                            profileViewModel.setUserStateByUserID(cachedConversation.value.to_user_id) {
-                                navController.navigate("Messaging/${cachedConversation.value.to_user_id}")
-                            }
-                        } else
-                            if (cachedConversation.value.to_user_id in selectedConversationsState)
-                                conversationActionsViewModel.unselectConversationByToUserID(
-                                    cachedConversation.value.to_user_id
-                                )
-                            else
-                                conversationActionsViewModel.selectConversationByToUserID(
-                                    cachedConversation.value.to_user_id
-                                )
-                    },
-                    onLongPress = {
-                        conversationActionsViewModel.showActions(cachedConversation.value.to_user_id)
-                    }
-                )
-            }
-            .fillMaxWidth()
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 10.dp, horizontal = 10.dp)
-        ) {
-            Box {
-                Avatar(cachedConversation.value.user_image, cachedConversation.value.username)
+	Card(
+		shape = RoundedCornerShape(0.dp),
+		modifier = Modifier
+			.pointerInput(Unit) {
+				detectTapGestures(
+					onTap = {
+						if (!showConversationActions) {
+							profileViewModel.setUserStateByUserID(cachedConversation.value.to_user_id) {
+								navController.navigate("Messaging/${cachedConversation.value.to_user_id}")
+							}
+						} else
+							if (cachedConversation.value.to_user_id in selectedConversationsState)
+								conversationActionsViewModel.unselectConversationByToUserID(
+									cachedConversation.value.to_user_id
+								)
+							else
+								conversationActionsViewModel.selectConversationByToUserID(
+									cachedConversation.value.to_user_id
+								)
+					},
+					onLongPress = {
+						conversationActionsViewModel.showActions(cachedConversation.value.to_user_id)
+					}
+				)
+			}
+			.fillMaxWidth()
+	) {
+		Row(
+			verticalAlignment = Alignment.CenterVertically,
+			modifier = Modifier
+				.fillMaxWidth()
+				.padding(vertical = 10.dp, horizontal = 10.dp)
+		) {
+			Box {
+				Avatar(cachedConversation.value.avatar, cachedConversation.value.username)
 
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_checkmark_conversation),
-                    tint = Color.Unspecified,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .width(22.dp)
-                        .scale(selectIconScaleState.value)
-                )
-            }
+				Icon(
+					imageVector = ImageVector.vectorResource(id = R.drawable.ic_checkmark_conversation),
+					tint = Color.Unspecified,
+					contentDescription = null,
+					modifier = Modifier
+						.width(22.dp)
+						.scale(selectIconScaleState.value)
+				)
+			}
 
-            Column(
-                Modifier
-                    .weight(2f)
-                    .padding(start = 15.dp)
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = cachedConversation.value.username,
-                        fontFamily = fontFamily,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp,
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(bottom = 10.dp)
-                    )
-                    Text(
-                        text = PrettyTime().format(conversation.last_message_time),
-                        fontSize = 13.sp,
-                        fontFamily = fontFamily,
-                        fontWeight = FontWeight.Normal,
-                        modifier = Modifier.padding(bottom = 7.dp)
-                    )
-                }
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = conversation.last_message,
-                        fontSize = 14.sp,
-                        fontFamily = fontFamily,
-                        fontWeight = FontWeight.Normal,
-                        color = MaterialTheme.colors.onSecondary,
-                        lineHeight = 18.sp,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.weight(1f)
-                    )
-                    Text(
-                        text = if (cachedConversation.value.unread_messages > 0) cachedConversation.value.unread_messages.toString() else "",
-                        fontSize = 13.sp
-                    )
-                }
-            }
-        }
-    }
+			Column(
+				Modifier
+					.weight(2f)
+					.padding(start = 15.dp)
+			) {
+				Row(verticalAlignment = Alignment.CenterVertically) {
+					Text(
+						text = cachedConversation.value.username,
+						fontFamily = fontFamily,
+						fontWeight = FontWeight.Bold,
+						fontSize = 16.sp,
+						modifier = Modifier
+							.weight(1f)
+							.padding(bottom = 10.dp)
+					)
+					Text(
+						text = PrettyTime().format(conversation.last_message_time),
+						fontSize = 13.sp,
+						fontFamily = fontFamily,
+						fontWeight = FontWeight.Normal,
+						modifier = Modifier.padding(bottom = 7.dp)
+					)
+				}
+				Row(verticalAlignment = Alignment.CenterVertically) {
+					Text(
+						text = conversation.last_message,
+						fontSize = 14.sp,
+						fontFamily = fontFamily,
+						fontWeight = FontWeight.Normal,
+						color = MaterialTheme.colors.onSecondary,
+						lineHeight = 18.sp,
+						maxLines = 1,
+						overflow = TextOverflow.Ellipsis,
+						modifier = Modifier.weight(1f)
+					)
+					Text(
+						text = if (cachedConversation.value.unread_messages > 0) cachedConversation.value.unread_messages.toString() else "",
+						fontSize = 13.sp
+					)
+				}
+			}
+		}
+	}
 }
