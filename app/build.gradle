@@ -133,6 +133,8 @@ dependencies {
     // Pretty Time
     implementation 'org.ocpsoft.prettytime:prettytime:4.0.4.Final'
 
+    // CanHub image cropper
+    implementation 'com.github.CanHub:Android-Image-Cropper:4.2.1'
 }
 
 // Should be defined here or will Duplicate class error according to https://docs.objectbox.io/data-browser
