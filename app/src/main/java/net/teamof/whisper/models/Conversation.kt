@@ -13,7 +13,7 @@ data class Conversation(
 	var to_user_id: Long = 0,
 	@Unique
 	var username: String,
-	var avatar: String,
+	var avatar: String? = "",
 	var last_message: String = "There is no messages",
 	var last_message_time: Date = Date(),
 	val unread_messages: Int = 0
