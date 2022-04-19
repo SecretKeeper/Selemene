@@ -96,7 +96,7 @@ fun Conversation(
 				.padding(vertical = 10.dp, horizontal = 12.dp)
 		) {
 			Box {
-				Avatar(cachedConversation.value.avatar, cachedConversation.value.username)
+				Avatar(cachedConversation.value.avatar ?: "", cachedConversation.value.username)
 
 				Icon(
 					imageVector = ImageVector.vectorResource(id = R.drawable.ic_checkmark_conversation),
