@@ -10,6 +10,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import net.teamof.whisper.api.UsersAPI
 import net.teamof.whisper.repositories.ConversationRepository
+import net.teamof.whisper.repositories.KeyValueRepository
 import net.teamof.whisper.repositories.UserRepository
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
@@ -24,7 +25,8 @@ class UpdateProfilePhoto @AssistedInject constructor(
 	@Assisted workerParams: WorkerParameters,
 	private val usersAPI: UsersAPI,
 	private val userRepository: UserRepository,
-	private val conversationRepository: ConversationRepository
+	private val conversationRepository: ConversationRepository,
+	private val keyValueRepository: KeyValueRepository
 ) :
 	CoroutineWorker(appContext, workerParams) {
 	override suspend fun doWork(): Result {
@@ -42,14 +44,13 @@ class UpdateProfilePhoto @AssistedInject constructor(
 			)
 
 			val part = MultipartBody.Part.createFormData(
-				"avatar", "myPic.${type}", RequestBody.create(
+				"avatar", "avatar.${type}", RequestBody.create(
 					"image/${type}".toMediaType(),
 					imageFileStream!!.readBytes()
 				)
 			)
-			usersAPI.setAvatar(part)
 
-			val response = usersAPI.setAvatar(part)
+			val response = usersAPI.setAvatar(part, keyValueRepository.getToken())
 
 			response.enqueue(object : Callback<Void> {
 				override fun onResponse(
