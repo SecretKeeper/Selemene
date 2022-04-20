@@ -19,40 +19,40 @@ import net.teamof.whisper.services.MessageListenerService
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    @OptIn(
-        ExperimentalAnimationApi::class,
-        ExperimentalFoundationApi::class,
-        ExperimentalMaterialApi::class,
-        ExperimentalCoilApi::class,
-        ExperimentalPermissionsApi::class
-    )
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            CompositionLocalProvider(
-                LocalBackPressedDispatcher provides this.onBackPressedDispatcher
-            ) {
-                MainScreen()
-            }
-        }
-    }
+	@OptIn(
+		ExperimentalAnimationApi::class,
+		ExperimentalFoundationApi::class,
+		ExperimentalMaterialApi::class,
+		ExperimentalCoilApi::class,
+		ExperimentalPermissionsApi::class
+	)
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		setContent {
+			CompositionLocalProvider(
+				LocalBackPressedDispatcher provides this.onBackPressedDispatcher
+			) {
+				MainScreen()
+			}
+		}
+	}
 
-    private fun isMyServiceRunning(serviceClass: Class<*>): Boolean {
-        val manager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
-        for (service in manager.getRunningServices(Int.MAX_VALUE)) {
-            if (serviceClass.name == service.service.className) {
-                return true
-            }
-        }
-        return false
-    }
+	private fun isMyServiceRunning(serviceClass: Class<*>): Boolean {
+		val manager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
+		for (service in manager.getRunningServices(Int.MAX_VALUE)) {
+			if (serviceClass.name == service.service.className) {
+				return true
+			}
+		}
+		return false
+	}
 
 
-    override fun onStart() {
-        super.onStart()
+	override fun onStart() {
+		super.onStart()
 
-        if (!isMyServiceRunning(MessageListenerService::class.java))
-            startService(Intent(this, MessageListenerService::class.java))
-    }
+		if (!isMyServiceRunning(MessageListenerService::class.java))
+			startService(Intent(this, MessageListenerService::class.java))
+	}
 
 }
