@@ -24,28 +24,28 @@ import net.teamof.whisper.viewModel.ProfileViewModel
 @ExperimentalMaterialApi
 @Composable
 fun Conversations(
-    navController: NavController,
-    conversationsViewModel: ConversationsViewModel,
-    conversationActionsViewModel: ConversationActionsViewModel,
-    profileViewModel: ProfileViewModel
+	navController: NavController,
+	conversationsViewModel: ConversationsViewModel,
+	conversationActionsViewModel: ConversationActionsViewModel,
+	profileViewModel: ProfileViewModel
 ) {
 
-    val conversations: List<Conversation> by conversationsViewModel.conversations.observeAsState(
-        listOf()
-    )
+	val conversations: List<Conversation> by conversationsViewModel.conversations.observeAsState(
+		listOf()
+	)
 
-    Column(
-        Modifier
-            .padding(bottom = BottomNavigationHeight)
-            .verticalScroll(rememberScrollState())
-    ) {
-        conversations.forEachIndexed { _, conversation ->
-            Conversation(
-                conversation,
-                navController,
-                conversationActionsViewModel,
-                profileViewModel
-            )
-        }
-    }
+	Column(
+		Modifier
+			.padding(bottom = BottomNavigationHeight)
+			.verticalScroll(rememberScrollState())
+	) {
+		conversations.forEachIndexed { _, conversation ->
+			Conversation(
+				conversation,
+				navController,
+				conversationActionsViewModel,
+				profileViewModel
+			)
+		}
+	}
 }
