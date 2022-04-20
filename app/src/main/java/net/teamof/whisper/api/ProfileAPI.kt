@@ -7,17 +7,17 @@ import retrofit2.http.Path
 
 @JsonClass(generateAdapter = true)
 data class ProfileAPIResponse(
-    val id: Long,
-    val user_id: Long,
-    val status: String,
-    val description: String,
-    val created_at: String,
-    val updated_at: String?,
-    val deleted_at: String?,
+	val id: Long,
+	val user_id: Long,
+	val status: String,
+	val description: String,
+	val created_at: String,
+	val updated_at: String?,
+	val deleted_at: String?,
 )
 
 interface ProfileAPI {
-    @GET("profiles/{id}")
-    @Headers("Content-Type: application/json")
-    suspend fun getProfileByID(@Path("id") id: Long): ProfileAPIResponse
+	@GET("profiles/{id}")
+	@Headers("Content-Type: application/json")
+	suspend fun getProfileByID(@Path("id") id: Long): ProfileAPIResponse
 }
