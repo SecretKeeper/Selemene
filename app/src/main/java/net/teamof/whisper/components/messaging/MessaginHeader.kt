@@ -34,186 +34,186 @@ import net.teamof.whisper.viewModel.ProfileViewModel
 @ExperimentalMaterialApi
 @Composable
 fun MessagingHeader(
-    navController: NavController,
-    profileViewModel: ProfileViewModel,
-    to_user_id: Long,
-    selection: MutableState<Boolean>
+	navController: NavController,
+	profileViewModel: ProfileViewModel,
+	to_user_id: Long,
+	selection: MutableState<Boolean>
 ) {
-    val user = profileViewModel.getUserByUserID(to_user_id)
+	val user = profileViewModel.getUserByUserID(to_user_id)
 
-    Column(Modifier.height(75.dp)) {
+	Column(Modifier.height(75.dp)) {
 
-        AnimatedContent(
-            targetState = selection.value,
-            transitionSpec = {
-                if (selection.value) {
-                    slideInVertically(initialOffsetY = { height -> height }) + fadeIn() with
-                            slideOutVertically(targetOffsetY = { height -> -height }) + fadeOut()
-                } else {
-                    slideInVertically(initialOffsetY = { height -> -height }) + fadeIn() with
-                            slideOutVertically(targetOffsetY = { height -> -height }) + fadeOut()
-                }.using(
-                    SizeTransform(clip = true)
-                )
-            }
-        ) { showActions ->
-            if (showActions)
-                MessagingActions(selection)
-            else
-                MainHeader(navController, profileViewModel, user)
-        }
-    }
+		AnimatedContent(
+			targetState = selection.value,
+			transitionSpec = {
+				if (selection.value) {
+					slideInVertically(initialOffsetY = { height -> height }) + fadeIn() with
+							slideOutVertically(targetOffsetY = { height -> -height }) + fadeOut()
+				} else {
+					slideInVertically(initialOffsetY = { height -> -height }) + fadeIn() with
+							slideOutVertically(targetOffsetY = { height -> -height }) + fadeOut()
+				}.using(
+					SizeTransform(clip = true)
+				)
+			}
+		) { showActions ->
+			if (showActions)
+				MessagingActions(selection)
+			else
+				MainHeader(navController, profileViewModel, user)
+		}
+	}
 }
 
 
 @Composable
 fun MainHeader(
-    navController: NavController,
-    profileViewModel: ProfileViewModel,
-    user: User?
+	navController: NavController,
+	profileViewModel: ProfileViewModel,
+	user: User?
 ) {
 
-    val interactionSource = remember { MutableInteractionSource() }
-    val expanded = remember { mutableStateOf(false) }
+	val interactionSource = remember { MutableInteractionSource() }
+	val expanded = remember { mutableStateOf(false) }
 
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(vertical = 15.dp, horizontal = 10.dp)
-    ) {
-        IconButton(onClick = { navController.navigate("Conversations") }) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_chevron_left),
-                contentDescription = null,
-                Modifier
-                    .width(22.dp)
-                    .height(22.dp)
-            )
-        }
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = 15.dp)
-                .clickable(
-                    interactionSource = interactionSource,
-                    indication = null
-                ) {
-                    if (user != null) {
-                        profileViewModel.setUserStateByUserID(
-                            user.user_id,
-                        ) { navController.navigate("Profile/${user.user_id}") }
-                    }
-                }
-        ) {
-            Image(
-                painter = rememberImagePainter(data = user?.avatar,
-                    builder = {
-                        transformations(CircleCropTransformation())
-                    }
-                ),
-                contentDescription = null,
-                modifier = Modifier
-                    .width(50.dp)
-                    .height(50.dp)
-            )
-            Column(
-                Modifier
-                    .padding(start = 15.dp)
-            ) {
-                Text(
-                    text = user?.username!!,
-                    fontFamily = fontFamily,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp,
-                    modifier = Modifier.padding(bottom = 5.dp)
-                )
+	Row(
+		verticalAlignment = Alignment.CenterVertically,
+		modifier = Modifier.padding(vertical = 15.dp, horizontal = 10.dp)
+	) {
+		IconButton(onClick = { navController.navigate("Conversations") }) {
+			Icon(
+				painter = painterResource(id = R.drawable.ic_chevron_left),
+				contentDescription = null,
+				Modifier
+					.width(22.dp)
+					.height(22.dp)
+			)
+		}
+		Row(
+			verticalAlignment = Alignment.CenterVertically,
+			modifier = Modifier
+				.weight(1f)
+				.padding(horizontal = 15.dp)
+				.clickable(
+					interactionSource = interactionSource,
+					indication = null
+				) {
+					if (user != null) {
+						profileViewModel.setUserStateByUserID(
+							user.user_id,
+						) { navController.navigate("Profile/${user.user_id}") }
+					}
+				}
+		) {
+			Image(
+				painter = rememberImagePainter(data = user?.avatar,
+					builder = {
+						transformations(CircleCropTransformation())
+					}
+				),
+				contentDescription = null,
+				modifier = Modifier
+					.width(50.dp)
+					.height(50.dp)
+			)
+			Column(
+				Modifier
+					.padding(start = 15.dp)
+			) {
+				Text(
+					text = user?.username!!,
+					fontFamily = fontFamily,
+					fontWeight = FontWeight.Bold,
+					fontSize = 16.sp,
+					modifier = Modifier.padding(bottom = 5.dp)
+				)
 
-                Text(
-                    text = "Last seen recently",
-                    fontSize = 13.sp,
-                    fontFamily = fontFamily,
-                    fontWeight = FontWeight.Normal,
-                    color = MaterialTheme.colors.onSecondary
-                )
-            }
-        }
-        Box {
-            IconButton(onClick = { expanded.value = true }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_more_vertical),
-                    contentDescription = null,
-                    Modifier
-                        .width(23.dp)
-                        .height(23.dp)
-                )
-            }
-            DropdownMenu(
-                expanded = expanded.value,
-                onDismissRequest = { expanded.value = false }
-            ) {
-                DropdownMenuItem(onClick = {
+				Text(
+					text = "Last seen recently",
+					fontSize = 13.sp,
+					fontFamily = fontFamily,
+					fontWeight = FontWeight.Normal,
+					color = MaterialTheme.colors.onSecondary
+				)
+			}
+		}
+		Box {
+			IconButton(onClick = { expanded.value = true }) {
+				Icon(
+					painter = painterResource(id = R.drawable.ic_more_vertical),
+					contentDescription = null,
+					Modifier
+						.width(23.dp)
+						.height(23.dp)
+				)
+			}
+			DropdownMenu(
+				expanded = expanded.value,
+				onDismissRequest = { expanded.value = false }
+			) {
+				DropdownMenuItem(onClick = {
 
-                }) {
-                    Text("Refresh")
-                }
-                DropdownMenuItem(onClick = { /* Handle settings! */ }) {
-                    Text("Settings")
-                }
-                Divider()
-                DropdownMenuItem(onClick = { /* Handle send feedback! */ }) {
-                    Text("Send Feedback")
-                }
-            }
-        }
-    }
+				}) {
+					Text("Refresh")
+				}
+				DropdownMenuItem(onClick = { /* Handle settings! */ }) {
+					Text("Settings")
+				}
+				Divider()
+				DropdownMenuItem(onClick = { /* Handle send feedback! */ }) {
+					Text("Send Feedback")
+				}
+			}
+		}
+	}
 }
 
 
 @Composable
 fun MessagingActions(selection: MutableState<Boolean>) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(vertical = 15.dp, horizontal = 10.dp)
-    ) {
-        IconButton(onClick = {
-            selection.value = false
-        }) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_x),
-                contentDescription = null,
-                Modifier
-                    .width(25.dp)
-                    .height(25.dp)
-            )
-        }
-        Row(Modifier.weight(1f), Arrangement.End, Alignment.CenterVertically) {
-            IconButton(onClick = { }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_forward),
-                    contentDescription = null,
-                    Modifier
-                        .width(22.dp)
-                        .height(22.dp)
-                )
-            }
-            IconButton(onClick = { }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_copy),
-                    contentDescription = null,
-                    Modifier
-                        .width(20.dp)
-                        .height(20.dp)
-                )
-            }
-            IconButton(onClick = { }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_trash),
-                    contentDescription = null,
-                    Modifier
-                        .width(23.dp)
-                        .height(23.dp)
-                )
-            }
-        }
-    }
+	Row(
+		verticalAlignment = Alignment.CenterVertically,
+		modifier = Modifier.padding(vertical = 15.dp, horizontal = 10.dp)
+	) {
+		IconButton(onClick = {
+			selection.value = false
+		}) {
+			Icon(
+				painter = painterResource(id = R.drawable.ic_x),
+				contentDescription = null,
+				Modifier
+					.width(25.dp)
+					.height(25.dp)
+			)
+		}
+		Row(Modifier.weight(1f), Arrangement.End, Alignment.CenterVertically) {
+			IconButton(onClick = { }) {
+				Icon(
+					painter = painterResource(id = R.drawable.ic_forward),
+					contentDescription = null,
+					Modifier
+						.width(22.dp)
+						.height(22.dp)
+				)
+			}
+			IconButton(onClick = { }) {
+				Icon(
+					painter = painterResource(id = R.drawable.ic_copy),
+					contentDescription = null,
+					Modifier
+						.width(20.dp)
+						.height(20.dp)
+				)
+			}
+			IconButton(onClick = { }) {
+				Icon(
+					painter = painterResource(id = R.drawable.ic_trash),
+					contentDescription = null,
+					Modifier
+						.width(23.dp)
+						.height(23.dp)
+				)
+			}
+		}
+	}
 }
