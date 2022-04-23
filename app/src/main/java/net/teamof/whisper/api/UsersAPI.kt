@@ -12,6 +12,11 @@ data class GetMultipleUsers(
 	val ids: List<Long>
 )
 
+@JsonClass(generateAdapter = true)
+data class SetAvatarResponse(
+	val avatar: String
+)
+
 interface UsersAPI {
 	@GET("users/id/{id}")
 	@Headers("Content-Type: application/json")
@@ -26,5 +31,5 @@ interface UsersAPI {
 	fun setAvatar(
 		@Part() avatar: MultipartBody.Part,
 		@Header("Authorization") token: String
-	): Call<Void>
+	): Call<SetAvatarResponse>
 }
