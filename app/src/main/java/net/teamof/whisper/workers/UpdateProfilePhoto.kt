@@ -8,6 +8,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import net.teamof.whisper.api.SetAvatarResponse
 import net.teamof.whisper.api.UsersAPI
 import net.teamof.whisper.repositories.ConversationRepository
 import net.teamof.whisper.repositories.KeyValueRepository
@@ -52,15 +53,18 @@ class UpdateProfilePhoto @AssistedInject constructor(
 
 			val response = usersAPI.setAvatar(part, keyValueRepository.getToken())
 
-			response.enqueue(object : Callback<Void> {
+			response.enqueue(object : Callback<SetAvatarResponse> {
 				override fun onResponse(
-					call: Call<Void>,
-					response: Response<Void>
+					call: Call<SetAvatarResponse>,
+					response: Response<SetAvatarResponse>
 				) {
+					response.body()?.let {
+						keyValueRepository.setAvatar(it.avatar)
+					}
 					Result.success()
 				}
 
-				override fun onFailure(call: Call<Void>, t: Throwable) {
+				override fun onFailure(call: Call<SetAvatarResponse>, t: Throwable) {
 					Result.retry()
 				}
 			})
