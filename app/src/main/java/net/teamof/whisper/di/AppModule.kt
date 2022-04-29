@@ -117,7 +117,8 @@ class AppModule {
 
 	@Singleton
 	@Provides
-	fun provideAccountAPI(retrofit: Retrofit): AccountAPI = retrofit.create(AccountAPI::class.java)
+	fun provideAccountAPI(@Named("Gateway") retrofit: Retrofit): AccountAPI =
+		retrofit.create(AccountAPI::class.java)
 
 	@Singleton
 	@Provides
