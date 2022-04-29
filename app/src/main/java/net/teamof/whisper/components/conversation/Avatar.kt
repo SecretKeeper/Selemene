@@ -53,8 +53,8 @@ fun Avatar(
 	else
 		Box(
 			Modifier
-				.width(58.dp)
-				.height(58.dp)
+				.width(width?.dp ?: 60.dp)
+				.height(width?.dp ?: 60.dp)
 				.clip(shape = CircleShape)
 				.background(MaterialTheme.colors.primary)
 				.pointerInput(Unit) {
