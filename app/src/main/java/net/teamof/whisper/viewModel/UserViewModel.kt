@@ -221,6 +221,7 @@ class UserViewModel @Inject constructor(
 	suspend fun changeUsername(
 		navController: NavController,
 		newUsername: String,
+		current_password: String,
 		buttonLoading: (Boolean) -> Unit,
 		buttonText: (String) -> Unit,
 		buttonColor: (Long) -> Unit,
@@ -232,18 +233,26 @@ class UserViewModel @Inject constructor(
 		CoroutineScope(Dispatchers.IO).launch {
 			val response = accountAPI.changeUsername(
 				ChangeUsernameRequest(
-					newUsername
+					newUsername,
+					current_password
 				)
 			)
 			withContext(Dispatchers.Main) {
 				if (response.isSuccessful) {
 					buttonLoading(false)
 					buttonEnabled(false)
-					buttonText("Done..")
-//                    navController.navigate("Conversations") {
-//                        launchSingleTop = true
-//                        popUpTo("Login") { inclusive = true }
-//                    }
+					buttonText("Username Changed")
+					buttonColor(AccentGreenLong)
+
+					if (response.code() == 200) keyValueRepository.setUsername(
+						newUsername
+					)
+
+					Timer().schedule(2000) {
+						buttonColor(0xFF0336FF)
+						buttonText("Change Username")
+						buttonEnabled(true)
+					}
 				} else {
 					buttonLoading(false)
 					buttonEnabled(false)
@@ -251,7 +260,7 @@ class UserViewModel @Inject constructor(
 					buttonColor(0xFFe11d48)
 					Timer().schedule(2500) {
 						buttonColor(0xFF0336FF)
-						buttonText("Sign Username")
+						buttonText("Change Username")
 						buttonEnabled(true)
 					}
 				}
@@ -447,5 +456,9 @@ class UserViewModel @Inject constructor(
 
 		workManager.beginUniqueWork("SET_AVATAR", ExistingWorkPolicy.REPLACE, setAvatarRequest)
 			.enqueue()
+	}
+
+	fun removeAvatar() {
+		keyValueRepository.removeAvatar()
 	}
 }
