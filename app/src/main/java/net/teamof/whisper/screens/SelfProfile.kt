@@ -9,7 +9,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,6 +27,7 @@ import com.canhub.cropper.CropImageOptions
 import com.canhub.cropper.CropImageView
 import net.teamof.whisper.components.conversation.Avatar
 import net.teamof.whisper.components.settings.SettingsItem
+import net.teamof.whisper.ui.theme.RedAlertColor
 import net.teamof.whisper.ui.theme.fontFamily
 import net.teamof.whisper.viewModel.UserViewModel
 
@@ -33,9 +36,11 @@ import net.teamof.whisper.viewModel.UserViewModel
 fun SelfProfile(navController: NavController, userViewModel: UserViewModel) {
 
 	val context = LocalContext.current
+	val openDialog = remember { mutableStateOf(false) }
+
 	val showToast = Toast.makeText(context, "This feature is not available yet", Toast.LENGTH_SHORT)
 	val username = userViewModel.gePair("username")?.value ?: ""
-	val avatar = userViewModel.gePair("avatar")?.value ?: ""
+	val avatar = remember { mutableStateOf(userViewModel.gePair("avatar")?.value ?: "") }
 
 	var imageUri by remember {
 		mutableStateOf<Uri?>(null)
@@ -64,7 +69,6 @@ fun SelfProfile(navController: NavController, userViewModel: UserViewModel) {
 				.setGuidelines(CropImageView.Guidelines.ON)
 				.setCropCornerShape(cornerShape = CropImageView.CropCornerShape.RECTANGLE)
 				.setAspectRatio(3, 4)
-				.setOutputCompressFormat(Bitmap.CompressFormat.PNG)
 
 			imageCropLauncher.launch(
 				cropOptions
@@ -81,11 +85,66 @@ fun SelfProfile(navController: NavController, userViewModel: UserViewModel) {
 					if (imageUri != null)
 						Uri.parse(imageUri.toString()).toString()
 					else
-						avatar,
+						avatar.value,
 					username,
 					90,
 					90
-				) { imagePickerLauncher.launch("image/*") }
+				) { openDialog.value = true }
+
+				if (openDialog.value) {
+					AlertDialog(
+						onDismissRequest = {
+							openDialog.value = false
+						},
+						title = {
+							Text(text = "Avatar")
+						},
+						text = {
+							Text(
+								"which presents the details regarding the Dialog's purpose.",
+								fontSize = 14.sp,
+								fontFamily = fontFamily,
+								fontWeight = FontWeight.Normal,
+								lineHeight = 22.sp,
+							)
+						},
+						confirmButton = {
+							TextButton(
+								onClick = {
+									avatar.value = ""
+									userViewModel.removeAvatar()
+									openDialog.value = false
+								}
+							) {
+								Text(
+									"Remove",
+									color = RedAlertColor,
+									fontSize = 14.sp,
+									fontFamily = fontFamily,
+									fontWeight = FontWeight.SemiBold,
+									letterSpacing = 0.sp
+								)
+							}
+						},
+						dismissButton = {
+							TextButton(
+								onClick = {
+									imagePickerLauncher.launch("image/*")
+									openDialog.value = false
+								}
+							) {
+								Text(
+									"Set Image",
+									fontSize = 14.sp,
+									fontFamily = fontFamily,
+									fontWeight = FontWeight.SemiBold,
+									letterSpacing = 0.sp
+								)
+							}
+						}
+					)
+				}
+
 				Column(modifier = Modifier.padding(start = 20.dp)) {
 					Text(
 						text = username,
