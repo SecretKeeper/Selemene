@@ -94,4 +94,18 @@ class KeyValueRepository {
 		}
 
 	}
+
+	private fun createOrUpdatedSpecificKey(key: String, value: String) {
+		val query = oBKeyValueBox.query(OBKeyValue_.key equal key).build()
+		val result = query.findFirst()
+
+		if (result != null) {
+			val uQuery = oBKeyValueBox.get(result.id)
+			uQuery.value = value
+			oBKeyValueBox.put(uQuery)
+		} else
+			oBKeyValueBox.put(OBKeyValue(key = key, value = value))
+
+		query.close()
+	}
 }
