@@ -65,16 +65,17 @@ class KeyValueRepository {
 		return result?.value ?: ""
 	}
 
-	fun setAvatar(avatar: String) {
-		val query = oBKeyValueBox.query(OBKeyValue_.key equal "avatar").build()
-		val result = query.findFirst()
+	fun setUsername(username: String) = createOrUpdatedSpecificKey("username", username)
 
-		if (result != null) {
-			val uQuery = oBKeyValueBox.get(result.id)
-			uQuery.value = avatar
-			oBKeyValueBox.put(uQuery)
-		} else
-			oBKeyValueBox.put(OBKeyValue(key = "avatar", value = avatar))
+	fun setStatus(status: String) = createOrUpdatedSpecificKey("status", status)
+
+	fun setAvatar(avatar: String) = createOrUpdatedSpecificKey("avatar", avatar)
+
+	fun removeAvatar() {
+		val query = oBKeyValueBox.query(OBKeyValue_.key equal "avatar").build()
+		query.remove()
+
+		query.close()
 	}
 
 	fun delete(key: String) {
