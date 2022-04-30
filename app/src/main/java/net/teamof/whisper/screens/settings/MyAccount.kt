@@ -20,93 +20,97 @@ import net.teamof.whisper.viewModel.UserViewModel
 @Composable
 fun MyAccount(navController: NavController, userViewModel: UserViewModel) {
 
-    val context = LocalContext.current
+	val context = LocalContext.current
 
-    Column {
-        Column(modifier = Modifier.padding(top = 30.dp, start = 20.dp, end = 20.dp)) {
-            Text(
-                text = "Account Information",
-                fontFamily = fontFamily,
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                modifier = Modifier.padding(bottom = 30.dp)
-            )
-            SettingsItem(
-                title = "Username",
-                subTitle = userViewModel.gePair("username")?.value,
-                event = { navController.navigate("ChangeUsername") }
-            )
-            SettingsItem(
-                title = "Email",
-                subTitle = userViewModel.gePair("email")?.value,
-                event = { navController.navigate("ChangeEmail") }
-            )
-            SettingsItem(
-                title = "Change Password",
-                event = { navController.navigate("ChangePassword") }
-            )
-        }
+	Column {
+		Column(modifier = Modifier.padding(top = 30.dp, start = 20.dp, end = 20.dp)) {
+			Text(
+				text = "Account Information",
+				fontFamily = fontFamily,
+				fontWeight = FontWeight.Bold,
+				fontSize = 18.sp,
+				modifier = Modifier.padding(bottom = 30.dp)
+			)
+			SettingsItem(
+				title = "Username",
+				subTitle = userViewModel.gePair("username")?.value,
+				event = { navController.navigate("ChangeUsername") }
+			)
+			SettingsItem(
+				title = "Email",
+				subTitle = userViewModel.gePair("email")?.value,
+				event = { navController.navigate("ChangeEmail") }
+			)
+			SettingsItem(
+				title = "Change Password",
+				event = { navController.navigate("ChangePassword") }
+			)
+			SettingsItem(
+				title = "Set Status",
+				event = { navController.navigate("SetStatus") }
+			)
+		}
 
-        Box(
-            modifier = Modifier
+		Box(
+			modifier = Modifier
                 .fillMaxWidth()
                 .background(Color(red = 235, green = 235, blue = 235))
                 .height(1.dp)
-        )
+		)
 
-        Column(modifier = Modifier.padding(top = 30.dp, start = 20.dp, end = 20.dp)) {
-            SettingsItem(
-                title = "Blocked Users",
-                event = {
-                    Toast.makeText(
-                        context,
-                        "This feature is not available yet",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            )
-        }
+		Column(modifier = Modifier.padding(top = 30.dp, start = 20.dp, end = 20.dp)) {
+			SettingsItem(
+				title = "Blocked Users",
+				event = {
+					Toast.makeText(
+						context,
+						"This feature is not available yet",
+						Toast.LENGTH_SHORT
+					).show()
+				}
+			)
+		}
 
-        Box(
-            modifier = Modifier
+		Box(
+			modifier = Modifier
                 .fillMaxWidth()
                 .background(Color(red = 235, green = 235, blue = 235))
                 .height(1.dp)
-        )
+		)
 
-        Column(modifier = Modifier.padding(top = 30.dp, start = 20.dp, end = 20.dp)) {
-            SettingsItem(
-                title = "Deactivate Account",
-                event = {
-                    Toast.makeText(
-                        context,
-                        "This feature is not available yet",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            )
+		Column(modifier = Modifier.padding(top = 30.dp, start = 20.dp, end = 20.dp)) {
+			SettingsItem(
+				title = "Deactivate Account",
+				event = {
+					Toast.makeText(
+						context,
+						"This feature is not available yet",
+						Toast.LENGTH_SHORT
+					).show()
+				}
+			)
 
-            SettingsItem(
-                title = "Delete Your Account",
-                event = {
-                    Toast.makeText(
-                        context,
-                        "This feature is not available yet",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                },
-            )
-        }
+			SettingsItem(
+				title = "Delete Your Account",
+				event = {
+					Toast.makeText(
+						context,
+						"This feature is not available yet",
+						Toast.LENGTH_SHORT
+					).show()
+				},
+			)
+		}
 
-        Box(
-            modifier = Modifier
+		Box(
+			modifier = Modifier
                 .fillMaxWidth()
                 .background(Color(red = 235, green = 235, blue = 235))
                 .height(1.dp)
-        )
+		)
 
-        Column(modifier = Modifier.padding(top = 30.dp, start = 20.dp, end = 20.dp)) {
-            Logout(navController, userViewModel)
-        }
-    }
+		Column(modifier = Modifier.padding(top = 30.dp, start = 20.dp, end = 20.dp)) {
+			Logout(navController, userViewModel)
+		}
+	}
 }
