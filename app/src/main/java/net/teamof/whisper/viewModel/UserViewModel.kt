@@ -198,11 +198,14 @@ class UserViewModel @Inject constructor(
 				if (response.isSuccessful) {
 					buttonLoading(false)
 					buttonEnabled(false)
-					buttonText("Done..")
-//                    navController.navigate("Conversations") {
-//                        launchSingleTop = true
-//                        popUpTo("Login") { inclusive = true }
-//                    }
+					buttonText("Password Change Successfully")
+					buttonColor(AccentGreenLong)
+
+					Timer().schedule(2000) {
+						buttonColor(0xFF0336FF)
+						buttonText("Change Password")
+						buttonEnabled(true)
+					}
 				} else {
 					buttonLoading(false)
 					buttonEnabled(false)
