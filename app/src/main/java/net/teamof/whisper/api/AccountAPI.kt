@@ -14,7 +14,8 @@ data class ChangeUsernameResponse(
 
 @JsonClass(generateAdapter = true)
 data class ChangeUsernameRequest(
-    val username: String,
+	val new_username: String,
+	val password: String
 )
 
 
