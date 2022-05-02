@@ -128,7 +128,7 @@ dependencies {
     implementation "io.objectbox:objectbox-kotlin:$objectbox_version"
 
     // Auth0 JWT Decode Android
-    implementation 'com.auth0.android:jwtdecode:2.0.0'
+    implementation 'com.auth0.android:jwtdecode:2.0.1'
 
     // Pretty Time
     implementation 'org.ocpsoft.prettytime:prettytime:4.0.4.Final'
