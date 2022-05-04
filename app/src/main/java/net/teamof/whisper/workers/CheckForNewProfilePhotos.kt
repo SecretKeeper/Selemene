@@ -26,7 +26,6 @@ class CheckForNewProfilePhotos @AssistedInject constructor(
 ) :
 	CoroutineWorker(appContext, workerParams) {
 	override suspend fun doWork(): Result {
-		Timber.e("MYYYY F WORKER IS F EXECUTING!!!!!")
 		return try {
 			val usersIdsToFetch = inputData.getLongArray("usersIdsToFetch")
 
