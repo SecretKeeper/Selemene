@@ -1,0 +1,47 @@
+![Selemene Cover](https://github.com/SecretKeeper/Selemene/raw/master/assets/selemene.png)
+
+<!--
+# Roadmap
+- [x] Login
+- [x] Register
+- Messages
+  - [x] Private Messaging
+  - [ ] Edit Message
+  - [ ] Forward Message
+  - [ ] Delete Message
+  - [ ] Reply Message
+- Group Messaging
+    - [ ] Create Group
+    - [ ] Implement Group Messaging
+    - [ ] Add Member
+    - [ ] Remove Member and Ban for specific time
+    - [ ] Silence Members or Group
+- Feeds
+  - [ ] Create Text Feed
+  - [ ] Create Audio Feed
+  - [ ] Create Images Feed
+  - [ ] Edit Feed
+  - [ ] Delete Feed
+  - [ ] Comment
+  - [ ] Like
+  - [ ] Favorite
+  - [ ] Forward
+- Activities
+  - [ ] Show Mentions
+  - [ ] Show Gifts
+  - [ ] Show Subscribes
+- Settings
+  - [x] Change Username
+  - [x] Change Password
+  - [x] Set Status
+  - [x] Set Profile Photo
+  - [ ] Write Description
+  - [ ] List of Blocked Members
+  - [ ] Deactive Account
+  - [ ] Delete Account
+  - [ ] Logout
+  - [ ] Devices (manage sessions)
+  - [ ] Notifications
+  - [ ] Privacy
+  - [ ] Contact Support
+-->
