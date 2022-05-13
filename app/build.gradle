@@ -118,7 +118,7 @@ dependencies {
 
 
     // Coil Compose
-    implementation("io.coil-kt:coil-compose:1.4.0")
+    implementation("io.coil-kt:coil-compose:2.0.0")
 
     // ObjectBox Browser Debug
     debugImplementation "io.objectbox:objectbox-android-objectbrowser:$objectbox_version"
