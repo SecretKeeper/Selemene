@@ -1,6 +1,5 @@
 package net.teamof.whisper.components.conversation
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
@@ -16,10 +15,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.rememberImagePainter
-import coil.transform.CircleCropTransformation
+import coil.compose.AsyncImage
 
 @Composable
 fun Avatar(
@@ -30,16 +29,14 @@ fun Avatar(
 	onClick: (() -> Unit)? = null
 ) {
 	if (user_image != "")
-		Image(
-			painter = rememberImagePainter(data = user_image,
-				builder = {
-					transformations(CircleCropTransformation())
-				}
-			),
+		AsyncImage(
+			model = user_image,
 			contentDescription = null,
+			contentScale = ContentScale.Crop,
 			modifier = Modifier
 				.width(width?.dp ?: 60.dp)
 				.height(height?.dp ?: 60.dp)
+				.clip(CircleShape)
 				.pointerInput(Unit) {
 					detectTapGestures(
 						onTap = {
