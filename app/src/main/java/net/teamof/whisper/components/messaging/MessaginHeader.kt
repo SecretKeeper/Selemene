@@ -21,9 +21,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.AsyncImage
 import kotlinx.coroutines.DelicateCoroutinesApi
 import net.teamof.whisper.R
+import net.teamof.whisper.components.conversation.Avatar
 import net.teamof.whisper.models.User
 import net.teamof.whisper.ui.theme.fontFamily
 import net.teamof.whisper.viewModel.ProfileViewModel
@@ -106,21 +106,13 @@ fun MainHeader(
 					}
 				}
 		) {
-			AsyncImage(
-				model = user?.avatar,
-				contentDescription = null,
-				contentScale = ContentScale.Crop,
-				modifier = Modifier
-					.width(50.dp)
-					.height(50.dp)
-					.clip(CircleShape)
-			)
+			Avatar(user_image = user!!.avatar, username = user.username, width = 50, height = 50)
 			Column(
 				Modifier
 					.padding(start = 15.dp)
 			) {
 				Text(
-					text = user?.username!!,
+					text = user.username,
 					fontFamily = fontFamily,
 					fontWeight = FontWeight.Bold,
 					fontSize = 16.sp,
