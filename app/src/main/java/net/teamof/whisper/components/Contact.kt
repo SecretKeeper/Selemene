@@ -1,7 +1,6 @@
 package net.teamof.whisper.components
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -10,17 +9,15 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.AsyncImage
 import net.teamof.whisper.R
+import net.teamof.whisper.components.conversation.Avatar
 import net.teamof.whisper.models.UserAPI
 import net.teamof.whisper.ui.theme.fontFamily
 import net.teamof.whisper.viewModel.ProfileViewModel
@@ -58,15 +55,7 @@ fun Contact(
 				.fillMaxWidth()
 				.padding(vertical = 10.dp, horizontal = 10.dp)
 		) {
-			AsyncImage(
-				model = data.avatar,
-				contentDescription = null,
-				contentScale = ContentScale.Crop,
-				modifier = Modifier
-					.width(60.dp)
-					.height(60.dp)
-					.clip(CircleShape)
-			)
+			Avatar(user_image = data.avatar, username = data.username)
 			Column(
 				Modifier
 					.weight(2f)
