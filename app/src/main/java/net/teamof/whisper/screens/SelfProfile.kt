@@ -68,7 +68,7 @@ fun SelfProfile(navController: NavController, userViewModel: UserViewModel) {
 				.setImageSource(includeCamera = false, includeGallery = true)
 				.setGuidelines(CropImageView.Guidelines.ON)
 				.setCropCornerShape(cornerShape = CropImageView.CropCornerShape.RECTANGLE)
-				.setAspectRatio(3, 4)
+				.setAspectRatio(4, 5)
 
 			imageCropLauncher.launch(
 				cropOptions
