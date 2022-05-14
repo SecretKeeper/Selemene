@@ -5,11 +5,9 @@ import android.content.res.Resources
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -18,9 +16,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -29,8 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberImagePainter
-import coil.transform.CircleCropTransformation
+import coil.compose.AsyncImage
 import net.teamof.whisper.R
 import net.teamof.whisper.ui.theme.fontFamily
 import net.teamof.whisper.viewModel.ProfileViewModel
@@ -363,12 +362,13 @@ fun Profile(
 		floatingActionButtonPosition = FabPosition.End,
 		sheetPeekHeight = ((heightDp * 42) / 100).dp,
 	) {
-		Image(
-			painter = rememberImagePainter(data = user.value?.avatar),
+		AsyncImage(
+			model = user.value?.avatar,
 			contentDescription = null,
 			modifier = Modifier
-                .fillMaxWidth()
-                .height(((heightDp * 59) / 100).dp)
+				.fillMaxWidth()
+				.height(((heightDp * 59) / 100).dp),
+			contentScale = ContentScale.FillWidth
 		)
 		Row(
             Modifier
