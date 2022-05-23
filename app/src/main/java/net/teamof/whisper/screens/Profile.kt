@@ -150,14 +150,14 @@ fun Profile(
 
 						Divider(modifier = Modifier.padding(vertical = 15.dp))
 						Row(verticalAlignment = Alignment.CenterVertically) {
-							Image(
-								painter = rememberImagePainter(data = "https://upload.wikimedia.org/wikipedia/en/thumb/d/d3/Starbucks_Corporation_Logo_2011.svg/1200px-Starbucks_Corporation_Logo_2011.svg.png",
-									builder = { transformations(CircleCropTransformation()) }),
+							AsyncImage(
+								model = "https://upload.wikimedia.org/wikipedia/en/thumb/d/d3/Starbucks_Corporation_Logo_2011.svg/1200px-Starbucks_Corporation_Logo_2011.svg.png",
 								contentDescription = null,
+								contentScale = ContentScale.Crop,
 								modifier = Modifier
-                                    .width(90.dp)
-                                    .height(90.dp)
-                                    .padding(horizontal = 5.dp)
+									.width(90.dp)
+									.height(90.dp)
+									.clip(CircleShape)
 							)
 							Column(Modifier.padding(start = 10.dp)) {
 								Text(
