@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -158,6 +159,8 @@ fun SelfProfile(navController: NavController, userViewModel: UserViewModel) {
 						fontFamily = fontFamily,
 						fontWeight = FontWeight.Normal,
 						fontSize = 16.sp,
+						overflow = TextOverflow.Ellipsis,
+						maxLines = 1
 					)
 				}
 			}
