@@ -97,8 +97,9 @@ fun Profile(
 								text = user.value!!.profile.target.status ?: "",
 								fontSize = 14.sp,
 								fontFamily = fontFamily,
-								fontWeight = FontWeight.Medium,
+								fontWeight = FontWeight.SemiBold,
 								color = Color(red = 23, green = 155, blue = 128),
+								lineHeight = 20.sp,
 								modifier = Modifier.padding(bottom = 10.dp)
 							)
 						Row {
