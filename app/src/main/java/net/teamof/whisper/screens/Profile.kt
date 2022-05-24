@@ -137,17 +137,15 @@ fun Profile(
 							)
 						}
 
-						for (i in 1..3) {
-							Text(
-								text = user.value!!.profile.target.description ?: "",
-								color = Color(red = 130, green = 130, blue = 130),
-								fontFamily = fontFamily,
-								fontWeight = FontWeight.Normal,
-								fontSize = 14.sp,
-								lineHeight = 20.sp,
-								modifier = Modifier.padding(vertical = 15.dp)
-							)
-						}
+						Text(
+							text = user.value!!.profile.target.description ?: "",
+							color = Color(red = 130, green = 130, blue = 130),
+							fontFamily = fontFamily,
+							fontWeight = FontWeight.Normal,
+							fontSize = 14.sp,
+							lineHeight = 20.sp,
+							modifier = Modifier.padding(vertical = 15.dp)
+						)
 
 						Divider(modifier = Modifier.padding(vertical = 15.dp))
 						Row(verticalAlignment = Alignment.CenterVertically) {
