@@ -7,6 +7,8 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
@@ -322,14 +324,13 @@ fun Profile(
 						}
 						LazyRow() {
 							itemsIndexed(gridImages) { _, image ->
-								Image(
-									painter = rememberImagePainter(data = image,
-										builder = { transformations(CircleCropTransformation()) }),
+								AsyncImage(
+									model = image,
 									contentDescription = null,
+									contentScale = ContentScale.Crop,
 									modifier = Modifier
-                                        .width(100.dp)
-                                        .height(100.dp)
-                                        .padding(end = 10.dp)
+										.width(100.dp)
+										.height(100.dp)
 								)
 							}
 						}
