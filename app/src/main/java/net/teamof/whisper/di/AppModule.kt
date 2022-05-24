@@ -27,7 +27,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.*
 import java.util.concurrent.TimeUnit
-import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -86,21 +85,12 @@ class AppModule {
 
 	@Singleton
 	@Provides
-	@Named("Gateway")
-	fun provideGatewayRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
-		.addConverterFactory(MoshiConverterFactory.create())
-		.baseUrl(baseGatewayAddress)
-		.client(okHttpClient)
-		.build()
-
-	@Singleton
-	@Provides
 	fun provideWhisperSocket(getUserToken: String): Socket {
 		return Socket.Builder.with("ws://10.0.2.2:3335/ws/")
 			.addHeader("Authorization", "Bearer $getUserToken")
 			.build().connect()
 	}
-	
+
 	@Singleton
 	@Provides
 	fun provideSocketBroadcastListener(
