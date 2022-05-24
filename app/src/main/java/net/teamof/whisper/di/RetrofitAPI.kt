@@ -6,7 +6,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import net.teamof.whisper.api.*
 import retrofit2.Retrofit
-import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -14,7 +13,7 @@ import javax.inject.Singleton
 class RetrofitAPI {
 	@Singleton
 	@Provides
-	fun provideAuthAPI(@Named("Gateway") retrofit: Retrofit): AuthAPI =
+	fun provideAuthAPI(retrofit: Retrofit): AuthAPI =
 		retrofit.create(AuthAPI::class.java)
 
 	@Singleton
@@ -27,7 +26,7 @@ class RetrofitAPI {
 
 	@Singleton
 	@Provides
-	fun provideAccountAPI(@Named("Gateway") retrofit: Retrofit): AccountAPI =
+	fun provideAccountAPI(retrofit: Retrofit): AccountAPI =
 		retrofit.create(AccountAPI::class.java)
 
 	@Singleton
