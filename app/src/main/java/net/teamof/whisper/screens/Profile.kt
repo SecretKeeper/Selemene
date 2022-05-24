@@ -118,9 +118,9 @@ fun Profile(
 							)
 							Divider(
 								modifier = Modifier
-                                    .fillMaxHeight()
-                                    .width(10.dp)
-                                    .padding(horizontal = 15.dp)
+									.fillMaxHeight()
+									.width(10.dp)
+									.padding(horizontal = 15.dp)
 							)
 							ClickableText(
 								text = AnnotatedString(
@@ -193,8 +193,8 @@ fun Profile(
 								fontWeight = FontWeight.Normal,
 								lineHeight = 20.sp,
 								modifier = Modifier
-                                    .padding(end = 35.dp)
-                                    .weight(0.4f)
+									.padding(end = 35.dp)
+									.weight(0.4f)
 							)
 							Text(
 								text = "+989339419119",
@@ -215,8 +215,8 @@ fun Profile(
 								fontSize = 14.sp,
 								lineHeight = 20.sp,
 								modifier = Modifier
-                                    .padding(end = 35.dp)
-                                    .weight(0.4f)
+									.padding(end = 35.dp)
+									.weight(0.4f)
 							)
 							Text(
 								text = "Tottenham, England",
@@ -237,8 +237,8 @@ fun Profile(
 								fontWeight = FontWeight.Normal,
 								lineHeight = 20.sp,
 								modifier = Modifier
-                                    .padding(end = 35.dp)
-                                    .weight(0.4f)
+									.padding(end = 35.dp)
+									.weight(0.4f)
 							)
 							Text(
 								text = "2 hours ago",
@@ -259,8 +259,8 @@ fun Profile(
 								fontWeight = FontWeight.Normal,
 								lineHeight = 20.sp,
 								modifier = Modifier
-                                    .padding(end = 35.dp)
-                                    .weight(0.4f)
+									.padding(end = 35.dp)
+									.weight(0.4f)
 							)
 							Column(modifier = Modifier.weight(1f)) {
 								Text(
@@ -301,8 +301,8 @@ fun Profile(
 								fontFamily = fontFamily,
 								fontWeight = FontWeight.Medium,
 								modifier = Modifier
-                                    .weight(1f)
-                                    .wrapContentWidth(Alignment.Start)
+									.weight(1f)
+									.wrapContentWidth(Alignment.Start)
 							)
 							ClickableText(
 								text = AnnotatedString(
@@ -316,8 +316,8 @@ fun Profile(
 								),
 								onClick = {},
 								modifier = Modifier
-                                    .weight(1f)
-                                    .wrapContentWidth(Alignment.End)
+									.weight(1f)
+									.wrapContentWidth(Alignment.End)
 							)
 						}
 						LazyRow() {
@@ -353,8 +353,8 @@ fun Profile(
 					contentDescription = null,
 					tint = Color.White,
 					modifier = Modifier
-                        .width(25.dp)
-                        .height(25.dp)
+						.width(25.dp)
+						.height(25.dp)
 				)
 			}
 		},
@@ -370,9 +370,9 @@ fun Profile(
 			contentScale = ContentScale.FillWidth
 		)
 		Row(
-            Modifier
-                .offset(y = (-(heightDp * 57) / 100).dp)
-                .padding(horizontal = 10.dp)
+			Modifier
+				.offset(y = (-(heightDp * 57) / 100).dp)
+				.padding(horizontal = 10.dp)
 		) {
 			IconButton(onClick = { navController.navigateUp() }) {
 				Icon(
@@ -380,8 +380,8 @@ fun Profile(
 					contentDescription = null,
 					tint = Color.White,
 					modifier = Modifier
-                        .width(25.dp)
-                        .height(25.dp)
+						.width(25.dp)
+						.height(25.dp)
 				)
 			}
 			Row(horizontalArrangement = Arrangement.End, modifier = Modifier.weight(1f)) {
@@ -392,8 +392,8 @@ fun Profile(
 							contentDescription = null,
 							tint = Color.White,
 							modifier = Modifier
-                                .width(25.dp)
-                                .height(25.dp)
+								.width(25.dp)
+								.height(25.dp)
 						)
 					}
 					DropdownMenu(
@@ -406,8 +406,8 @@ fun Profile(
 									imageVector = ImageVector.vectorResource(id = R.drawable.ic_eraser),
 									contentDescription = null,
 									modifier = Modifier
-                                        .width(25.dp)
-                                        .height(25.dp)
+										.width(25.dp)
+										.height(25.dp)
 								)
 								Text(
 									"Clear History",
@@ -422,8 +422,8 @@ fun Profile(
 									imageVector = ImageVector.vectorResource(id = R.drawable.ic_add_user),
 									contentDescription = null,
 									modifier = Modifier
-                                        .width(24.dp)
-                                        .height(24.dp)
+										.width(24.dp)
+										.height(24.dp)
 								)
 								Text(
 									"Add Contact",
@@ -438,8 +438,8 @@ fun Profile(
 									imageVector = ImageVector.vectorResource(id = R.drawable.ic_blocked),
 									contentDescription = null,
 									modifier = Modifier
-                                        .width(23.dp)
-                                        .height(23.dp)
+										.width(23.dp)
+										.height(23.dp)
 								)
 								Text(
 									"Block",
