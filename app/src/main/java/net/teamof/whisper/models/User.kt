@@ -6,6 +6,8 @@ import io.objectbox.annotation.Id
 import io.objectbox.annotation.Index
 import io.objectbox.annotation.Unique
 import io.objectbox.relation.ToOne
+import io.realm.RealmDictionary
+import io.realm.RealmObject
 
 @Entity
 @JsonClass(generateAdapter = true)
@@ -36,3 +38,14 @@ data class Counters(
 	var feeds: Int = 0,
 	var followers: Int = 0
 )
+
+open class RUser : RealmObject() {
+	var userId: String? = null
+	var username: String? = null
+	var email: String? = null
+	var avatar: String? = null
+	var accessToken: String? = null
+	var refreshToken: String? = null
+	var accessTokenExpiresAt: String? = null
+	var trophies: RealmDictionary<String> = RealmDictionary()
+}
