@@ -6,8 +6,6 @@ plugins {
     id 'dagger.hilt.android.plugin'
 }
 
-apply plugin: 'realm-android'
-
 android {
     compileSdk 31
     buildToolsVersion "30.0.3"
