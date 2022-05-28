@@ -27,7 +27,7 @@ fun SetStatus(navController: NavController, userViewModel: UserViewModel) {
 
 	val composableScope = rememberCoroutineScope()
 
-	val status = remember { mutableStateOf(userViewModel.gePair("status")?.value ?: "") }
+	val status = remember { mutableStateOf(userViewModel.getStatus()) }
 
 	val buttonEnabled = remember { mutableStateOf(true) }
 	val buttonText = remember { mutableStateOf("Set Status") }
