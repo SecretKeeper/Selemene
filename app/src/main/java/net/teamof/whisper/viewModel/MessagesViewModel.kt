@@ -14,101 +14,98 @@ import io.objectbox.kotlin.equal
 import io.objectbox.kotlin.or
 import io.objectbox.query.Query
 import net.teamof.whisper.ObjectBox
-import net.teamof.whisper.models.*
+import net.teamof.whisper.models.DeliveryReport
+import net.teamof.whisper.models.Message
+import net.teamof.whisper.models.MessageSide
+import net.teamof.whisper.models.Message_
 import net.teamof.whisper.repositories.ConversationRepository
 import net.teamof.whisper.repositories.MessageRepository
+import net.teamof.whisper.sharedprefrences.SharedPreferencesManagerImpl
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class MessagesViewModel @Inject constructor(
-    private val application: Application,
-    private val messageRepository: MessageRepository,
-    private val conversationRepository: ConversationRepository
+	private val application: Application,
+	private val messageRepository: MessageRepository,
+	private val conversationRepository: ConversationRepository,
+	private val sharedPreferencesManagerImpl: SharedPreferencesManagerImpl
 ) : ViewModel() {
 
-    private val broadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            val message = intent.getSerializableExtra("RECEIVE_MESSAGE") as? Message
+	private val broadcastReceiver = object : BroadcastReceiver() {
+		override fun onReceive(context: Context, intent: Intent) {
+			val message = intent.getSerializableExtra("RECEIVE_MESSAGE") as? Message
 
-            val assignedMessage =
-                intent.getSerializableExtra("RECEIVE_ASSIGNED_MESSAGE") as? Message
+			val assignedMessage =
+				intent.getSerializableExtra("RECEIVE_ASSIGNED_MESSAGE") as? Message
 
-            if (message != null) {
-                conversationRepository.update(MessageSide.THEMSELVES, message)
-                messageRepository.create(message)
-                application.sendBroadcast(
-                    Intent("SEND_DELIVERY_REPORT").putExtra(
-                        "DELIVERY_REPORT_MODEL",
-                        DeliveryReport(ids = listOf(message.id))
-                    )
-                )
-            }
+			if (message != null) {
+				conversationRepository.update(MessageSide.THEMSELVES, message)
+				messageRepository.create(message)
+				application.sendBroadcast(
+					Intent("SEND_DELIVERY_REPORT").putExtra(
+						"DELIVERY_REPORT_MODEL",
+						DeliveryReport(ids = listOf(message.id))
+					)
+				)
+			}
 
-            if (assignedMessage != null) messageRepository.updateAssignedMessage(assignedMessage)
+			if (assignedMessage != null) messageRepository.updateAssignedMessage(assignedMessage)
 
-        }
-    }
+		}
+	}
 
-    init {
-        application.registerReceiver(
-            broadcastReceiver,
-            IntentFilter("WhisperLocalMessageCommunication")
-        )
-    }
+	init {
+		application.registerReceiver(
+			broadcastReceiver,
+			IntentFilter("WhisperLocalMessageCommunication")
+		)
+	}
 
-    private val oBKeyValueBox: Box<OBKeyValue> = ObjectBox.store.boxFor(OBKeyValue::class.java)
+	private val messageBox: Box<Message> = ObjectBox.store.boxFor(Message::class.java)
 
-    private val messageBox: Box<Message> = ObjectBox.store.boxFor(Message::class.java)
+	private val currentUserId = getCurrentUserId()
 
-    private val currentUserId = getCurrentUserId()
+	private fun getCurrentUserId(): Long =
+		sharedPreferencesManagerImpl.getLong("userId", 0L)
 
-    private fun getCurrentUserId(): Long {
+	private var _messages: ObjectBoxLiveData<Message> =
+		ObjectBoxLiveData(fetchAndObserveMessages())
 
-        val query = oBKeyValueBox.query(OBKeyValue_.key equal "user_id").build()
-        val result = query.findFirst()
-        query.close()
+	val messages: ObjectBoxLiveData<Message> = _messages
 
-        return result?.value?.toLong() ?: 0
-    }
+	private fun fetchAndObserveMessages(): Query<Message>? {
+		val query = messageBox.query().build()
 
-    private var _messages: ObjectBoxLiveData<Message> =
-        ObjectBoxLiveData(fetchAndObserveMessages())
+		query.subscribe().on(AndroidScheduler.mainThread()).observer {
+			Timber.d("QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ ")
+		}
 
-    val messages: ObjectBoxLiveData<Message> = _messages
+		return query
+	}
 
-    private fun fetchAndObserveMessages(): Query<Message>? {
-        val query = messageBox.query().build()
+	fun sendMessage(message: Message) {
 
-        query.subscribe().on(AndroidScheduler.mainThread()).observer {
-            Timber.d("QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ ")
-        }
+		messageRepository.create(message)
 
-        return query
-    }
+		conversationRepository.update(MessageSide.MYSELF, message)
 
-    fun sendMessage(message: Message) {
+		application.sendBroadcast(
+			Intent("SEND_MESSAGE").putExtra(
+				"MESSAGE_MODEL",
+				message
+			)
+		)
+	}
 
-        messageRepository.create(message)
-
-        conversationRepository.update(MessageSide.MYSELF, message)
-
-        application.sendBroadcast(
-            Intent("SEND_MESSAGE").putExtra(
-                "MESSAGE_MODEL",
-                message
-            )
-        )
-    }
-
-    fun getConversationMessages(to_user_id: Long) {
-        _messages = ObjectBoxLiveData(
-            messageBox.query().run {
-                (Message_.content equal to_user_id
-                        or (Message_.user_id equal currentUserId))
-                order(Message_.id)
-                build()
-            }
-        )
-    }
+	fun getConversationMessages(to_user_id: Long) {
+		_messages = ObjectBoxLiveData(
+			messageBox.query().run {
+				(Message_.content equal to_user_id
+						or (Message_.user_id equal currentUserId))
+				order(Message_.id)
+				build()
+			}
+		)
+	}
 }
