@@ -16,8 +16,8 @@ import net.teamof.whisper.api.UserTokenInterceptor
 import net.teamof.whisper.models.OBKeyValue
 import net.teamof.whisper.models.OBKeyValue_
 import net.teamof.whisper.repositories.ConversationRepository
-import net.teamof.whisper.repositories.KeyValueRepository
 import net.teamof.whisper.repositories.MessageRepository
+import net.teamof.whisper.sharedprefrences.SharedPreferencesManagerImpl
 import net.teamof.whisper.sockets.Socket
 import net.teamof.whisper.sockets.SocketBroadcastListener
 import net.teamof.whisper.utils.DateMoshiAdapter
@@ -62,13 +62,13 @@ class AppModule {
 	}
 
 	@Provides
-	fun provideHttpClient(keyValueRepository: KeyValueRepository): OkHttpClient {
+	fun provideHttpClient(sharedPreferencesManagerImpl: SharedPreferencesManagerImpl): OkHttpClient {
 		val logging = HttpLoggingInterceptor()
 		logging.setLevel(HttpLoggingInterceptor.Level.BODY)
 
 		return OkHttpClient.Builder()
 			.addInterceptor(logging)
-			.addInterceptor(UserTokenInterceptor(keyValueRepository))
+			.addInterceptor(UserTokenInterceptor(sharedPreferencesManagerImpl))
 			.connectTimeout(120, TimeUnit.SECONDS)
 			.readTimeout(120, TimeUnit.SECONDS)
 			.writeTimeout(120, TimeUnit.SECONDS)
