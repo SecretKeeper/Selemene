@@ -33,12 +33,12 @@ fun MyAccount(navController: NavController, userViewModel: UserViewModel) {
 			)
 			SettingsItem(
 				title = "Username",
-				subTitle = userViewModel.gePair("username")?.value,
+				subTitle = userViewModel.getUsername(),
 				event = { navController.navigate("ChangeUsername") }
 			)
 			SettingsItem(
 				title = "Email",
-				subTitle = userViewModel.gePair("email")?.value,
+				subTitle = userViewModel.getEmail(),
 				event = { navController.navigate("ChangeEmail") }
 			)
 			SettingsItem(
@@ -53,9 +53,9 @@ fun MyAccount(navController: NavController, userViewModel: UserViewModel) {
 
 		Box(
 			modifier = Modifier
-                .fillMaxWidth()
-                .background(Color(red = 235, green = 235, blue = 235))
-                .height(1.dp)
+				.fillMaxWidth()
+				.background(Color(red = 235, green = 235, blue = 235))
+				.height(1.dp)
 		)
 
 		Column(modifier = Modifier.padding(top = 30.dp, start = 20.dp, end = 20.dp)) {
@@ -73,9 +73,9 @@ fun MyAccount(navController: NavController, userViewModel: UserViewModel) {
 
 		Box(
 			modifier = Modifier
-                .fillMaxWidth()
-                .background(Color(red = 235, green = 235, blue = 235))
-                .height(1.dp)
+				.fillMaxWidth()
+				.background(Color(red = 235, green = 235, blue = 235))
+				.height(1.dp)
 		)
 
 		Column(modifier = Modifier.padding(top = 30.dp, start = 20.dp, end = 20.dp)) {
@@ -104,9 +104,9 @@ fun MyAccount(navController: NavController, userViewModel: UserViewModel) {
 
 		Box(
 			modifier = Modifier
-                .fillMaxWidth()
-                .background(Color(red = 235, green = 235, blue = 235))
-                .height(1.dp)
+				.fillMaxWidth()
+				.background(Color(red = 235, green = 235, blue = 235))
+				.height(1.dp)
 		)
 
 		Column(modifier = Modifier.padding(top = 30.dp, start = 20.dp, end = 20.dp)) {
