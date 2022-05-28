@@ -6,7 +6,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import net.teamof.whisper.api.UsersAPI
 import net.teamof.whisper.repositories.ConversationRepository
-import net.teamof.whisper.repositories.KeyValueRepository
 import net.teamof.whisper.repositories.MessageRepository
 import net.teamof.whisper.repositories.UserRepository
 import javax.inject.Singleton
@@ -21,10 +20,6 @@ class Repositories {
 	@Singleton
 	@Provides
 	fun provideMessageRepository() = MessageRepository()
-
-	@Singleton
-	@Provides
-	fun provideKeyValueRepository() = KeyValueRepository()
 
 	@Singleton
 	@Provides
