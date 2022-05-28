@@ -5,7 +5,7 @@ import androidx.room.*
 
 
 @Dao
-public abstract class UserDAO : BaseDao<User>() {
+abstract class UserDAO : BaseDao<User>() {
 
 	@Query("SELECT * FROM users")
 	abstract fun getAll(): LiveData<List<User>>;
@@ -16,12 +16,12 @@ public abstract class UserDAO : BaseDao<User>() {
 	@Query("SELECT * FROM users WHERE user_id IN (:userIds)")
 	abstract fun loadAllByIds(userIds: IntArray): List<User>
 
-	@Insert
+	@Insert(onConflict = OnConflictStrategy.IGNORE)
 	abstract override fun insert(obj: User): Long
 
 	@Update
 	abstract override fun update(obj: User)
-	
+
 	@Delete
 	abstract override fun delete(obj: User)
 }
