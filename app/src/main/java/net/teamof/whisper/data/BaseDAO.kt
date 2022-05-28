@@ -21,7 +21,7 @@ abstract class BaseDao<T> {
 	 * @return The SQLite row ids
 	 */
 	@Insert(onConflict = OnConflictStrategy.IGNORE)
-	abstract fun insert(obj: List<T>?): List<Long>
+	abstract fun insert(obj: MutableList<T>?): MutableList<Long>
 
 	/**
 	 * Update an object from the database.
@@ -37,7 +37,7 @@ abstract class BaseDao<T> {
 	 * @param obj the object to be updated
 	 */
 	@Update
-	abstract fun update(obj: List<T>?)
+	abstract fun update(obj: MutableList<T>?)
 
 	/**
 	 * Delete an object from the database
@@ -56,7 +56,7 @@ abstract class BaseDao<T> {
 	}
 
 	@Transaction
-	open fun upsert(objList: List<T>) {
+	open fun upsert(objList: MutableList<T>) {
 		val insertResult = insert(objList)
 		val updateList: MutableList<T> = ArrayList()
 		for (i in insertResult.indices) {
