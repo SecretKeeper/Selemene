@@ -5,7 +5,7 @@ import javax.inject.Singleton
 
 
 @Singleton
-class RKeyValueRepository @Inject constructor(private val keyValueDAO: KeyValueDAO) {
+class KeyValueRepository @Inject constructor(private val keyValueDAO: KeyValueDAO) {
 	fun upsert(pair: KeyValue) =
 		keyValueDAO.upsert(pair)
 
