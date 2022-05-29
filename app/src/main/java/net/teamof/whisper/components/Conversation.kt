@@ -27,7 +27,7 @@ import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import net.teamof.whisper.R
 import net.teamof.whisper.components.conversation.Avatar
-import net.teamof.whisper.models.Conversation
+import net.teamof.whisper.data.Conversation
 import net.teamof.whisper.ui.theme.fontFamily
 import net.teamof.whisper.viewModel.ConversationActionsViewModel
 import net.teamof.whisper.viewModel.ProfileViewModel
@@ -53,7 +53,7 @@ fun Conversation(
 	)
 
 	val selectIconScaleState =
-		animateFloatAsState(if (cachedConversation.value.to_user_id in selectedConversationsState) 1f else 0.0f)
+		animateFloatAsState(if (cachedConversation.value.target_user in selectedConversationsState) 1f else 0.0f)
 
 	if (showConversationActions) {
 		BackPressHandler {
@@ -69,21 +69,21 @@ fun Conversation(
 				detectTapGestures(
 					onTap = {
 						if (!showConversationActions) {
-							profileViewModel.setUserStateByUserID(cachedConversation.value.to_user_id) {
-								navController.navigate("Messaging/${cachedConversation.value.to_user_id}")
-							}
+//							profileViewModel.setUserStateByUserID(cachedConversation.value.target_user) {
+//								navController.navigate("Messaging/${cachedConversation.value.target_user}")
+//							}
 						} else
-							if (cachedConversation.value.to_user_id in selectedConversationsState)
+							if (cachedConversation.value.target_user in selectedConversationsState)
 								conversationActionsViewModel.unselectConversationByToUserID(
-									cachedConversation.value.to_user_id
+									cachedConversation.value.target_user
 								)
 							else
 								conversationActionsViewModel.selectConversationByToUserID(
-									cachedConversation.value.to_user_id
+									cachedConversation.value.target_user
 								)
 					},
 					onLongPress = {
-						conversationActionsViewModel.showActions(cachedConversation.value.to_user_id)
+						conversationActionsViewModel.showActions(cachedConversation.value.target_user)
 					}
 				)
 			}
