@@ -6,6 +6,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import net.teamof.whisper.data.AppDatabase
+import net.teamof.whisper.data.ConversationDAO
 import net.teamof.whisper.data.KeyValueDAO
 import net.teamof.whisper.data.UserDAO
 import javax.inject.Singleton
@@ -28,5 +29,10 @@ class DatabaseModule {
 	@Provides
 	fun provideKeyValueDAO(appDatabase: AppDatabase): KeyValueDAO {
 		return appDatabase.keyValueDao()
+	}
+
+	@Provides
+	fun provideConversationDAO(appDatabase: AppDatabase): ConversationDAO {
+		return appDatabase.conversationDao()
 	}
 }
