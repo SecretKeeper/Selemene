@@ -11,7 +11,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import net.teamof.whisper.Whisper
 import net.teamof.whisper.api.UserTokenInterceptor
-import net.teamof.whisper.repositories.ConversationRepository
+import net.teamof.whisper.data.ConversationRepository
 import net.teamof.whisper.repositories.MessageRepository
 import net.teamof.whisper.sharedprefrences.SharedPreferencesManagerImpl
 import net.teamof.whisper.sockets.Socket
