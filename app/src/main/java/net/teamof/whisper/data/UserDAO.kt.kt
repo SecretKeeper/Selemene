@@ -19,8 +19,14 @@ abstract class UserDAO : BaseDao<User>() {
 	@Insert(onConflict = OnConflictStrategy.IGNORE)
 	abstract override fun insert(obj: User): Long
 
+	@Insert(onConflict = OnConflictStrategy.IGNORE)
+	abstract override fun insert(obj: MutableList<User>?): MutableList<Long>
+
 	@Update
 	abstract override fun update(obj: User)
+
+	@Update
+	abstract override fun update(obj: MutableList<User>?)
 
 	@Delete
 	abstract override fun delete(obj: User)
