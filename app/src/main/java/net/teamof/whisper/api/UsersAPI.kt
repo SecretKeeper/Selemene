@@ -1,8 +1,8 @@
 package net.teamof.whisper.api
 
 import com.squareup.moshi.JsonClass
+import net.teamof.whisper.data.User
 import net.teamof.whisper.models.UserAPI
-import net.teamof.whisper.models.UserAPIWithoutCounters
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.*
@@ -24,7 +24,7 @@ interface UsersAPI {
 
 	@POST("users/multiple")
 	@Headers("Content-Type: application/json")
-	fun getMultipleUsers(@Body ids: GetMultipleUsers): Call<List<UserAPIWithoutCounters>>
+	fun getMultipleUsers(@Body ids: GetMultipleUsers): Call<List<User>>
 
 	@Multipart
 	@POST("user/set-avatar")
