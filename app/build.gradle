@@ -140,13 +140,6 @@ dependencies {
     // Coil Compose
     implementation("io.coil-kt:coil-compose:2.0.0")
 
-    // ObjectBox Browser Debug
-    debugImplementation "io.objectbox:objectbox-android-objectbrowser:$objectbox_version"
-    releaseImplementation "io.objectbox:objectbox-android:$objectbox_version"
-
-    // ObjectBox kotlin ext
-    implementation "io.objectbox:objectbox-kotlin:$objectbox_version"
-
     // Auth0 JWT Decode Android
     implementation 'com.auth0.android:jwtdecode:2.0.1'
 
@@ -156,6 +149,3 @@ dependencies {
     // CanHub image cropper
     implementation 'com.github.CanHub:Android-Image-Cropper:4.2.1'
 }
-
-// Should be defined here or will Duplicate class error according to https://docs.objectbox.io/data-browser
-apply plugin: 'io.objectbox'
