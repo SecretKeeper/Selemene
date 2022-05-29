@@ -11,7 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import net.teamof.whisper.api.*
-import net.teamof.whisper.data.RKeyValueRepository
+import net.teamof.whisper.data.KeyValueRepository
 import net.teamof.whisper.data.RUserRepository
 import net.teamof.whisper.models.UserAPI
 import net.teamof.whisper.sharedprefrences.SharedPreferencesManagerImpl
@@ -34,7 +34,7 @@ class UserViewModel @Inject constructor(
 	private val searchAPI: SearchAPI,
 	private val accountAPI: AccountAPI,
 	private val profileAPI: ProfileAPI,
-	private val rKeyValueRepository: RKeyValueRepository,
+	private val keyValueRepository: KeyValueRepository,
 	private val rUserRepository: RUserRepository,
 	private val sharedPreferences: SharedPreferencesManagerImpl
 ) :
