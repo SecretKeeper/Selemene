@@ -11,7 +11,7 @@ import net.teamof.whisper.utils.DATABASE_NAME
  * The Room database for this app
  */
 @Database(
-	entities = [User::class, KeyValue::class, Conversation::class],
+	entities = [User::class, KeyValue::class, Conversation::class, Message::class],
 	version = 1,
 	exportSchema = false
 )
@@ -22,6 +22,8 @@ abstract class AppDatabase : RoomDatabase() {
 	abstract fun keyValueDao(): KeyValueDAO
 
 	abstract fun conversationDao(): ConversationDAO
+
+	abstract fun messageDao(): MessageDAO
 
 	companion object {
 
