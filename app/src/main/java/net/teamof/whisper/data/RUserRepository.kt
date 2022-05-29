@@ -9,19 +9,21 @@ class RUserRepository @Inject constructor(private val userDAO: UserDAO) {
 
 	val readAllData: LiveData<List<User>> = userDAO.getAll()
 
-	fun upsert(user: User) =
-		userDAO.upsert(user)
+	fun upsert(pair: User) =
+		userDAO.upsert(pair)
 
+	fun upsert(pairs: MutableList<User>) =
+		userDAO.upsert(pairs)
 
-	suspend fun getByUsername(username: String): User =
+	fun getByUsername(username: String): User =
 		userDAO.getByUsername(username)
 
 
-	suspend fun updateUser(user: User) =
+	fun updateUser(user: User) =
 		userDAO.update(user)
 
 
-	suspend fun deleteUser(user: User) =
+	fun deleteUser(user: User) =
 		userDAO.delete(user)
 
 
