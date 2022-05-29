@@ -10,8 +10,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import net.teamof.whisper.api.SetAvatarResponse
 import net.teamof.whisper.api.UsersAPI
-import net.teamof.whisper.repositories.ConversationRepository
-import net.teamof.whisper.repositories.UserRepository
 import net.teamof.whisper.sharedprefrences.SharedPreferencesManagerImpl
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
@@ -25,8 +23,6 @@ class UpdateProfilePhoto @AssistedInject constructor(
 	@Assisted appContext: Context,
 	@Assisted workerParams: WorkerParameters,
 	private val usersAPI: UsersAPI,
-	private val userRepository: UserRepository,
-	private val conversationRepository: ConversationRepository,
 	private val sharedPreferencesManagerImpl: SharedPreferencesManagerImpl
 ) :
 	CoroutineWorker(appContext, workerParams) {
