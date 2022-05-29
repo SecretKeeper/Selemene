@@ -5,7 +5,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class RUserRepository @Inject constructor(private val userDAO: UserDAO) {
+class UserRepository @Inject constructor(private val userDAO: UserDAO) {
 
 	val readAllData: LiveData<List<User>> = userDAO.getAll()
 

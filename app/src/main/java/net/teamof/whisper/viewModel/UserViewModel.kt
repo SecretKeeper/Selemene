@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import net.teamof.whisper.api.*
 import net.teamof.whisper.data.KeyValueRepository
-import net.teamof.whisper.data.RUserRepository
+import net.teamof.whisper.data.UserRepository
 import net.teamof.whisper.models.UserAPI
 import net.teamof.whisper.sharedprefrences.SharedPreferencesManagerImpl
 import net.teamof.whisper.ui.theme.AccentGreenLong
@@ -35,7 +35,7 @@ class UserViewModel @Inject constructor(
 	private val accountAPI: AccountAPI,
 	private val profileAPI: ProfileAPI,
 	private val keyValueRepository: KeyValueRepository,
-	private val rUserRepository: RUserRepository,
+	private val userRepository: UserRepository,
 	private val sharedPreferences: SharedPreferencesManagerImpl
 ) :
 	AndroidViewModel(application) {
