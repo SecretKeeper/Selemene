@@ -5,7 +5,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.teamof.whisper.api.UsersAPI
-import net.teamof.whisper.models.Message
 import net.teamof.whisper.models.MessageSide
 import net.teamof.whisper.models.UserAPI
 import retrofit2.Call
@@ -49,12 +48,12 @@ class ConversationRepository @Inject constructor(
 		if (isConversationExist(
 				when (side) {
 					MessageSide.THEMSELVES -> newMessage.user_id
-					MessageSide.MYSELF -> newMessage.to_user_id
+					MessageSide.MYSELF -> newMessage.target_user
 				}
 			) == 0L
 		) {
 			val response =
-				usersAPI.getUserProfile(if (side == MessageSide.THEMSELVES) newMessage.user_id.toString() else newMessage.to_user_id.toString())
+				usersAPI.getUserProfile(if (side == MessageSide.THEMSELVES) newMessage.user_id.toString() else newMessage.target_user.toString())
 
 			response.enqueue(object : Callback<UserAPI> {
 				override fun onResponse(
@@ -65,7 +64,7 @@ class ConversationRepository @Inject constructor(
 						response.body()?.let {
 							upsert(
 								Conversation(
-									target_user = if (side == MessageSide.THEMSELVES) newMessage.user_id else newMessage.to_user_id,
+									target_user = if (side == MessageSide.THEMSELVES) newMessage.user_id else newMessage.target_user,
 									last_message = newMessage.content,
 									last_message_time = newMessage.created_at ?: Date(),
 									unread_messages = 0,
@@ -84,7 +83,7 @@ class ConversationRepository @Inject constructor(
 			})
 		} else {
 			val getConversation =
-				conversationDAO.getConversationByUseId(if (side == MessageSide.THEMSELVES) newMessage.user_id else newMessage.to_user_id)
+				conversationDAO.getConversationByUseId(if (side == MessageSide.THEMSELVES) newMessage.user_id else newMessage.target_user)
 
 			getConversation.last_message = newMessage.content
 			getConversation.last_message_time = newMessage.created_at ?: Date()
