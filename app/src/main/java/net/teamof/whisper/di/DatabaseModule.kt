@@ -37,4 +37,9 @@ class DatabaseModule {
 	fun provideMessageDAO(appDatabase: AppDatabase): MessageDAO {
 		return appDatabase.messageDao()
 	}
+
+	@Provides
+	fun provideProfileDAO(appDatabase: AppDatabase): ProfileDAO {
+		return appDatabase.profileDao()
+	}
 }
