@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -18,15 +19,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import coil.annotation.ExperimentalCoilApi
 import kotlinx.coroutines.DelicateCoroutinesApi
 import net.teamof.whisper.R
 import net.teamof.whisper.components.conversation.Avatar
-import net.teamof.whisper.models.User
+import net.teamof.whisper.data.UserWithProfileAndCounters
 import net.teamof.whisper.ui.theme.fontFamily
 import net.teamof.whisper.viewModel.ProfileViewModel
 
-@OptIn(ExperimentalCoilApi::class)
 @SuppressLint("CoroutineCreationDuringComposition")
 @DelicateCoroutinesApi
 @ExperimentalAnimationApi
@@ -38,7 +37,7 @@ fun MessagingHeader(
 	to_user_id: Long,
 	selection: MutableState<Boolean>
 ) {
-	val user = profileViewModel.getUserByUserID(to_user_id)
+	val user = profileViewModel.userState.observeAsState()
 
 	Column {
 
@@ -59,7 +58,7 @@ fun MessagingHeader(
 			if (showActions)
 				MessagingActions(selection)
 			else
-				MainHeader(navController, profileViewModel, user)
+				MainHeader(navController, profileViewModel, user.value!!)
 		}
 	}
 }
@@ -69,7 +68,7 @@ fun MessagingHeader(
 fun MainHeader(
 	navController: NavController,
 	profileViewModel: ProfileViewModel,
-	user: User?
+	user: UserWithProfileAndCounters
 ) {
 
 	val interactionSource = remember { MutableInteractionSource() }
@@ -97,20 +96,23 @@ fun MainHeader(
 					interactionSource = interactionSource,
 					indication = null
 				) {
-					if (user != null) {
-						profileViewModel.setUserStateByUserID(
-							user.user_id,
-						) { navController.navigate("Profile/${user.user_id}") }
-					}
+					profileViewModel.getUserWithProfileByIdBeforeNavigate(
+						user.user.userId,
+					) { navController.navigate("Profile/${user.user.userId}") }
 				}
 		) {
-			Avatar(user_image = user!!.avatar, username = user.username, width = 50, height = 50)
+			Avatar(
+				user_image = user.user.avatar!!,
+				username = user.user.username!!,
+				width = 50,
+				height = 50
+			)
 			Column(
 				Modifier
 					.padding(start = 15.dp)
 			) {
 				Text(
-					text = user.username,
+					text = user.user.username,
 					fontFamily = fontFamily,
 					fontWeight = FontWeight.Bold,
 					fontSize = 16.sp,
@@ -118,7 +120,7 @@ fun MainHeader(
 				)
 
 				Text(
-					text = user.profile.target.status,
+					text = user.profile.profile.status!!,
 					fontSize = 13.sp,
 					fontFamily = fontFamily,
 					fontWeight = FontWeight.Normal,

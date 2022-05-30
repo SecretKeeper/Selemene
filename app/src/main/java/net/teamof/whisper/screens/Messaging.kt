@@ -25,6 +25,7 @@ import net.teamof.whisper.components.messaging.MessagingHeader
 import net.teamof.whisper.data.Message
 import net.teamof.whisper.viewModel.MessagesViewModel
 import net.teamof.whisper.viewModel.ProfileViewModel
+import net.teamof.whisper.viewModel.UserViewModel
 
 
 @ExperimentalPermissionsApi
@@ -39,9 +40,9 @@ fun Messaging(
 	to_user_id: String,
 	messagesViewModel: MessagesViewModel,
 	currentUserId: Long,
+	userViewModel: UserViewModel,
 	profileViewModel: ProfileViewModel
 ) {
-
 
 	val messages: List<Message> by messagesViewModel.getConversationMessages(to_user_id.toLong())
 		.observeAsState(

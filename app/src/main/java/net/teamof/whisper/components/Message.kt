@@ -36,37 +36,37 @@ fun Message(
 	enableSelectionMode: () -> Unit
 ) {
 
-	val isOwnMessage = data.user_id == currentUserId
+	val isOwnMessage = data.sender == currentUserId
 	val messageSelected = remember { mutableStateOf(false) }
 	val selectIconScaleState =
 		animateFloatAsState(if (selection && messageSelected.value) 1f else if (selection && !messageSelected.value) 0.25f else 0.0f)
 
 	Box(
 		modifier = Modifier
-            .padding(start = 10.dp, end = 15.dp)
-            .fillMaxWidth()
-            .pointerInput(Unit) {
-                detectTapGestures(
-                    onLongPress = { enableSelectionMode() },
-                    onTap = {
-                        messageSelected.value = !messageSelected.value
-                    }
-                )
-            }
+			.padding(start = 10.dp, end = 15.dp)
+			.fillMaxWidth()
+			.pointerInput(Unit) {
+				detectTapGestures(
+					onLongPress = { enableSelectionMode() },
+					onTap = {
+						messageSelected.value = !messageSelected.value
+					}
+				)
+			}
 	) {
 		Icon(
 			imageVector = ImageVector.vectorResource(id = R.drawable.ic_checkmark_conversation),
 			tint = Color.Unspecified,
 			contentDescription = null,
 			modifier = Modifier
-                .width(22.dp)
-                .scale(selectIconScaleState.value)
+				.width(22.dp)
+				.scale(selectIconScaleState.value)
 		)
 		Row(
 			horizontalArrangement = if (isOwnMessage) Arrangement.End else Arrangement.Start,
 			modifier = Modifier
-                .padding(start = 15.dp)
-                .fillMaxWidth()
+				.padding(start = 15.dp)
+				.fillMaxWidth()
 		) {
 			Box {
 				Text(
@@ -77,21 +77,21 @@ fun Message(
 					fontFamily = fontFamily,
 					fontWeight = FontWeight.Normal,
 					modifier = Modifier
-                        .padding(vertical = 15.dp)
-                        .clip(
-                            shape = RoundedCornerShape(
-                                topStart = 25.dp,
-                                topEnd = 25.dp,
-                                bottomStart = if (isOwnMessage) 25.dp else 2.dp,
-                                bottomEnd = if (isOwnMessage) 2.dp else 25.dp
-                            )
-                        )
-                        .background(
-                            if (isOwnMessage) MaterialTheme.colors.primary else Color(
-                                0xfff7f8f7
-                            )
-                        )
-                        .padding(vertical = 10.dp, horizontal = 15.dp)
+						.padding(vertical = 15.dp)
+						.clip(
+							shape = RoundedCornerShape(
+								topStart = 25.dp,
+								topEnd = 25.dp,
+								bottomStart = if (isOwnMessage) 25.dp else 2.dp,
+								bottomEnd = if (isOwnMessage) 2.dp else 25.dp
+							)
+						)
+						.background(
+							if (isOwnMessage) MaterialTheme.colors.primary else Color(
+								0xfff7f8f7
+							)
+						)
+						.padding(vertical = 10.dp, horizontal = 15.dp)
 				)
 			}
 		}

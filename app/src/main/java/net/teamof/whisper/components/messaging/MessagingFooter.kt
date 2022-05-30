@@ -57,35 +57,35 @@ fun MessagingFooter(
 		) {
 			Box(
 				modifier = Modifier
-                    .width(32.dp)
-                    .height(32.dp)
-                    .clip(shape = CircleShape)
-                    .background(MaterialTheme.colors.primary)
-                    .clickable {
-                        when {
-                            cameraPermissionState.hasPermission -> scope.launch { bottomSheetState.show() }
+					.width(32.dp)
+					.height(32.dp)
+					.clip(shape = CircleShape)
+					.background(MaterialTheme.colors.primary)
+					.clickable {
+						when {
+							cameraPermissionState.hasPermission -> scope.launch { bottomSheetState.show() }
 
-                            cameraPermissionState.shouldShowRationale ||
-                                    !cameraPermissionState.permissionRequested -> cameraPermissionState.launchPermissionRequest()
-                        }
-                    }
+							cameraPermissionState.shouldShowRationale ||
+									!cameraPermissionState.permissionRequested -> cameraPermissionState.launchPermissionRequest()
+						}
+					}
 			) {
 				Icon(
 					painter = painterResource(id = R.drawable.ic_add),
 					contentDescription = null,
 					tint = Color.White,
 					modifier = Modifier
-                        .width(23.dp)
-                        .height(23.dp)
-                        .align(Alignment.Center)
+						.width(23.dp)
+						.height(23.dp)
+						.align(Alignment.Center)
 				)
 			}
 			OutlinedTextField(
 				value = text.value,
 				onValueChange = { text.value = it },
 				modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 8.dp),
+					.weight(1f)
+					.padding(horizontal = 8.dp),
 				textStyle = TextStyle(fontSize = 14.sp),
 				placeholder = {
 					Text(
@@ -105,8 +105,8 @@ fun MessagingFooter(
 				if (text.value.isNotEmpty()) {
 
 					val message = Message(
-						user_id = currentUserId,
-						target_user = toUserID,
+						sender = currentUserId,
+						receiver = toUserID,
 						content = text.value,
 					)
 
@@ -118,9 +118,9 @@ fun MessagingFooter(
 				Icon(
 					painter = painterResource(id = R.drawable.ic_send),
 					contentDescription = null,
-                    Modifier
-                        .width(23.dp)
-                        .height(23.dp)
+					Modifier
+						.width(23.dp)
+						.height(23.dp)
 				)
 			}
 		}

@@ -1,6 +1,7 @@
 package net.teamof.whisper.workers
 
 import android.content.Context
+import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
@@ -17,7 +18,6 @@ import net.teamof.whisper.data.UserRepository
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import timber.log.Timber
 
 @HiltWorker
 class CheckForNewProfilePhotos @AssistedInject constructor(
@@ -45,8 +45,8 @@ class CheckForNewProfilePhotos @AssistedInject constructor(
 				) {
 					CoroutineScope(Dispatchers.IO).launch {
 						response.body()?.let {
-							conversationRepository.update(it.toMutableList() as MutableList<Conversation>)
 							CoroutineScope(Dispatchers.IO).launch {
+								conversationRepository.update(it.toMutableList() as MutableList<Conversation>)
 								userRepository.upsert(it.toMutableList())
 							}
 						}
@@ -61,7 +61,7 @@ class CheckForNewProfilePhotos @AssistedInject constructor(
 			Result.success()
 
 		} catch (throwable: Throwable) {
-			Timber.e(throwable)
+			Log.e("CheckForNewProfilePhoto.kt", throwable.toString())
 
 			Result.retry()
 		}

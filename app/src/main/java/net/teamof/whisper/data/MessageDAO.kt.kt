@@ -10,7 +10,7 @@ abstract class MessageDAO : BaseDao<Message>() {
 	@Query("SELECT * FROM messages")
 	abstract fun getAllMessages(): LiveData<List<Message>>
 
-	@Query("SELECT * FROM messages WHERE target_user = :targetUserId OR user_id = :targetUserId ORDER BY created_at")
+	@Query("SELECT * FROM messages WHERE receiver = :targetUserId OR sender = :targetUserId ORDER BY createdAt")
 	abstract fun getMessagesByTargetUserId(targetUserId: Long): LiveData<List<Message>>
 
 	@Insert(onConflict = OnConflictStrategy.IGNORE)

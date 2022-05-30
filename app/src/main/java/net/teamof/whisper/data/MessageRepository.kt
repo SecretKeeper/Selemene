@@ -26,7 +26,7 @@ class MessageRepository @Inject constructor(private val messageDAO: MessageDAO) 
 		messageDAO.upsert(messages)
 
 
-	fun updateUser(message: Message) =
+	fun update(message: Message) =
 		messageDAO.update(message)
 
 
