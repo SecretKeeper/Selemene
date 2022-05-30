@@ -2,11 +2,11 @@ package net.teamof.whisper.sharedprefrences
 
 import android.app.Application
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.core.content.edit
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 import net.teamof.whisper.utils.ENCRYPTED_PREFERENCES_NAME
-import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -42,7 +42,7 @@ class SharedPreferencesManagerImpl @Inject constructor(private val application: 
 				is Float -> putFloat(key, value.toFloat())
 				is Long -> putLong(key, value.toLong())
 				else -> {
-					Timber.e("Unsupported Type: $value")
+					Log.e("SharedPreferences", "Unsupported Type: $value")
 				}
 			}
 			apply()

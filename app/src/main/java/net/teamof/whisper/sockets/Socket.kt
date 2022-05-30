@@ -2,12 +2,12 @@ package net.teamof.whisper.sockets
 
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import okhttp3.*
 import okhttp3.internal.ws.RealWebSocket
 import okio.ByteString
 import org.json.JSONException
 import org.json.JSONObject
-import timber.log.Timber
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -107,10 +107,10 @@ class Socket private constructor(request: Request) {
 			val text = JSONObject()
 			text.put("event", event)
 			text.put("data", JSONObject(data))
-			Timber.d("Try to send data $text")
+			Log.e("Socket", "Try to send data $text")
 			return realWebSocket!!.send(text.toString())
 		} catch (e: JSONException) {
-			Timber.d("Try to send data with wrong JSON format, data: $data")
+			Log.e("Socket", "Try to send data with wrong JSON format, data: $data")
 		}
 		return false
 	}
@@ -247,7 +247,7 @@ class Socket private constructor(request: Request) {
 
 	private val webSocketListener: WebSocketListener = object : WebSocketListener() {
 		override fun onOpen(webSocket: WebSocket, response: Response) {
-			Timber.d("Socket has been opened successfully.")
+			Log.e("Socket", "Socket has been opened successfully.")
 			// reset connections attempts counter
 			reconnectionAttempts = 0
 
@@ -275,7 +275,7 @@ class Socket private constructor(request: Request) {
 		 */
 		override fun onMessage(webSocket: WebSocket, text: String) {
 			// print received message in log
-			Timber.e("New Message received $text")
+			Log.e("Socket.kt", "New Message received $text")
 
 			// call message listener
 			if (messageListener != null) messageListener!!.onMessage(this@Socket, text)
@@ -297,7 +297,7 @@ class Socket private constructor(request: Request) {
 				}
 			} catch (e: JSONException) {
 				// Message text not in JSON format or don't have {event}|{data} object
-				Timber.d("Unknown message format.")
+				Log.e("Socket.kt", "Unknown message format.")
 			}
 		}
 
@@ -306,13 +306,13 @@ class Socket private constructor(request: Request) {
 		}
 
 		override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
-			Timber.d("Close request from server with reason $reason")
+			Log.e("Socket.kt", "Close request from server with reason $reason")
 			changeState(State.CLOSING)
 			webSocket.close(1000, reason)
 		}
 
 		override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
-			Timber.d("Socket connection closed with reason $reason")
+			Log.e("Socket.kt", "Socket connection closed with reason $reason")
 			changeState(State.CLOSED)
 			if (eventListener[EVENT_CLOSED] != null) {
 				eventListener[EVENT_CLOSED]!!
@@ -332,7 +332,7 @@ class Socket private constructor(request: Request) {
 		override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
 			if (!skipOnFailure) {
 				skipOnFailure = false // reset flag
-				Timber.d("Socket connection fail, try to reconnect $reconnectionAttempts")
+				Log.e("Socket.kt", "Socket connection fail, try to reconnect $reconnectionAttempts")
 				changeState(State.CONNECT_ERROR)
 				reconnect()
 			}

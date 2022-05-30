@@ -5,6 +5,7 @@ import android.app.Application
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
@@ -18,7 +19,6 @@ import net.teamof.whisper.data.MessageRepository
 import net.teamof.whisper.data.MessagesArray
 import net.teamof.whisper.models.DeliveryReport
 import net.teamof.whisper.models.MessageSide
-import timber.log.Timber
 import javax.inject.Inject
 
 class SocketBroadcastListener @Inject constructor(
@@ -51,9 +51,7 @@ class SocketBroadcastListener @Inject constructor(
 
 	fun broadcastSubscribe(): Socket.OnEventListener =
 		object : Socket.OnEventListener() {
-			override fun onMessage(event: String?) {
-				Timber.e("Socket OPen Happened")
-			}
+			override fun onMessage(event: String?) {}
 		}
 
 	fun onMessageListener(): Socket.OnEventResponseListener =
@@ -77,7 +75,7 @@ class SocketBroadcastListener @Inject constructor(
 
 						val notificationManager =
 							application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-						notificationManager.notify(it.user_id.toInt(), builder.build())
+						notificationManager.notify(it.sender.toInt(), builder.build())
 					} else {
 						application.sendBroadcast(
 							Intent("WhisperLocalMessageCommunication").putExtra(
@@ -93,7 +91,6 @@ class SocketBroadcastListener @Inject constructor(
 	fun onAssignedMessageListener(): Socket.OnEventResponseListener =
 		object : Socket.OnEventResponseListener() {
 			override fun onMessage(event: String?, data: String?) {
-				Timber.e("Get Real Data: $data")
 				messageAdapter.fromJson(data)?.let {
 					if (!isAppRunning(application, "net.teamof.whisper")) {
 						CoroutineScope(Dispatchers.IO).launch {
@@ -114,7 +111,7 @@ class SocketBroadcastListener @Inject constructor(
 	fun onNewMessagesArrayListener(): Socket.OnEventResponseListener =
 		object : Socket.OnEventResponseListener() {
 			override fun onMessage(event: String?, data: String?) {
-				Timber.e("OHHHOHHHHOOHO: $data")
+				Log.e("SocketBroadCastListener", "ArrayMessageListener: $data")
 				arrayMessageAdapter.fromJson(data)?.let { it ->
 
 					application.sendBroadcast(
@@ -138,7 +135,7 @@ class SocketBroadcastListener @Inject constructor(
 
 							val notificationManager =
 								application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-							notificationManager.notify(message.user_id.toInt(), builder.build())
+							notificationManager.notify(message.sender.toInt(), builder.build())
 						}
 
 					} else {
