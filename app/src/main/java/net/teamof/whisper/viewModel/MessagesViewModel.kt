@@ -50,7 +50,11 @@ class MessagesViewModel @Inject constructor(
 				)
 			}
 
-			if (assignedMessage != null) messageRepository.upsert(assignedMessage)
+			if (assignedMessage != null) CoroutineScope(Dispatchers.IO).launch {
+				messageRepository.update(
+					assignedMessage
+				)
+			}
 
 		}
 	}

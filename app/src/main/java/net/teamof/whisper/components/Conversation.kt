@@ -69,9 +69,9 @@ fun Conversation(
 				detectTapGestures(
 					onTap = {
 						if (!showConversationActions) {
-//							profileViewModel.setUserStateByUserID(cachedConversation.value.target_user) {
-//								navController.navigate("Messaging/${cachedConversation.value.target_user}")
-//							}
+							profileViewModel.getUserWithProfileByIdBeforeNavigate(cachedConversation.value.target_user) {
+								navController.navigate("Messaging/${cachedConversation.value.target_user}")
+							}
 						} else
 							if (cachedConversation.value.target_user in selectedConversationsState)
 								conversationActionsViewModel.unselectConversationByToUserID(

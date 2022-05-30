@@ -2,6 +2,7 @@ package net.teamof.whisper.viewModel
 
 import android.app.Application
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.navigation.NavController
 import androidx.work.*
@@ -11,7 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import net.teamof.whisper.api.*
-import net.teamof.whisper.data.KeyValueRepository
+import net.teamof.whisper.data.ProfileRepository
 import net.teamof.whisper.data.UserRepository
 import net.teamof.whisper.models.UserAPI
 import net.teamof.whisper.sharedprefrences.SharedPreferencesManagerImpl
@@ -22,7 +23,6 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 import kotlin.concurrent.schedule
@@ -34,7 +34,8 @@ class UserViewModel @Inject constructor(
 	private val searchAPI: SearchAPI,
 	private val accountAPI: AccountAPI,
 	private val profileAPI: ProfileAPI,
-	private val keyValueRepository: KeyValueRepository,
+	private val usersAPI: UsersAPI,
+	private val profileRepository: ProfileRepository,
 	private val userRepository: UserRepository,
 	private val sharedPreferences: SharedPreferencesManagerImpl
 ) :
@@ -383,11 +384,10 @@ class UserViewModel @Inject constructor(
 				response: Response<List<UserAPI>>
 			) {
 				response.body()?.let { fetchedUsers(it) }
-				Timber.d(response.code().toString())
 			}
 
 			override fun onFailure(call: Call<List<UserAPI>>, t: Throwable) {
-				Timber.d(t)
+				Log.e("UserViewModel.kt", "onFailure")
 			}
 
 		})

@@ -1,5 +1,6 @@
 package net.teamof.whisper.data
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -10,7 +11,6 @@ import net.teamof.whisper.models.UserAPI
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -47,13 +47,14 @@ class ConversationRepository @Inject constructor(
 	fun updateConversationByReceivingMessage(side: MessageSide, newMessage: Message) {
 		if (isConversationExist(
 				when (side) {
-					MessageSide.THEMSELVES -> newMessage.user_id
-					MessageSide.MYSELF -> newMessage.target_user
+					MessageSide.THEMSELVES -> newMessage.sender
+					MessageSide.MYSELF -> newMessage.receiver
 				}
 			) == 0L
 		) {
+			// we can also query from our room db before making any request!
 			val response =
-				usersAPI.getUserProfile(if (side == MessageSide.THEMSELVES) newMessage.user_id.toString() else newMessage.target_user.toString())
+				usersAPI.getUserProfile(if (side == MessageSide.THEMSELVES) newMessage.sender.toString() else newMessage.receiver.toString())
 
 			response.enqueue(object : Callback<UserAPI> {
 				override fun onResponse(
@@ -64,9 +65,9 @@ class ConversationRepository @Inject constructor(
 						response.body()?.let {
 							upsert(
 								Conversation(
-									target_user = if (side == MessageSide.THEMSELVES) newMessage.user_id else newMessage.target_user,
+									target_user = if (side == MessageSide.THEMSELVES) newMessage.sender else newMessage.receiver,
 									last_message = newMessage.content,
-									last_message_time = newMessage.created_at ?: Date(),
+									last_message_time = newMessage.createdAt ?: Date(),
 									unread_messages = 0,
 									username = it.username,
 									avatar = it.avatar ?: ""
@@ -77,16 +78,16 @@ class ConversationRepository @Inject constructor(
 				}
 
 				override fun onFailure(call: Call<UserAPI>, t: Throwable) {
-					Timber.d(t)
+					Log.e("On Failure usersAPI.getUserProfile", t.toString())
 				}
 
 			})
 		} else {
 			val getConversation =
-				conversationDAO.getConversationByUseId(if (side == MessageSide.THEMSELVES) newMessage.user_id else newMessage.target_user)
+				conversationDAO.getConversationByUseId(if (side == MessageSide.THEMSELVES) newMessage.sender else newMessage.receiver)
 
 			getConversation.last_message = newMessage.content
-			getConversation.last_message_time = newMessage.created_at ?: Date()
+			getConversation.last_message_time = newMessage.createdAt ?: Date()
 
 			update(getConversation)
 		}
