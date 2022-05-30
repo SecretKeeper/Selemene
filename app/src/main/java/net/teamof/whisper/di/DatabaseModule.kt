@@ -42,4 +42,9 @@ class DatabaseModule {
 	fun provideProfileDAO(appDatabase: AppDatabase): ProfileDAO {
 		return appDatabase.profileDao()
 	}
+
+	@Provides
+	fun provideUserCountersDAO(appDatabase: AppDatabase): UserCountersDAO {
+		return appDatabase.userCountersDAO()
+	}
 }
