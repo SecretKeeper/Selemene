@@ -15,16 +15,19 @@ class UserRepository @Inject constructor(private val userDAO: UserDAO) {
 	fun upsert(pairs: MutableList<User>) =
 		userDAO.upsert(pairs)
 
+	fun getUserWithProfileById(userId: Long): UserWithProfileAndCounters? =
+		userDAO.getUserWithProfileById(userId)
+
+
 	fun getByUsername(username: String): User =
 		userDAO.getByUsername(username)
 
 
-	fun updateUser(user: User) =
+	fun update(user: User) =
 		userDAO.update(user)
 
 
 	fun deleteUser(user: User) =
 		userDAO.delete(user)
-
 
 }

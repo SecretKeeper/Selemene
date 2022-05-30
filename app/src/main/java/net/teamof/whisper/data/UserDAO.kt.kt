@@ -10,10 +10,14 @@ abstract class UserDAO : BaseDao<User>() {
 	@Query("SELECT * FROM users")
 	abstract fun getAll(): LiveData<List<User>>;
 
+	@Transaction
+	@Query("SELECT * FROM users WHERE userId = :userId")
+	abstract fun getUserWithProfileById(userId: Long): UserWithProfileAndCounters?
+
 	@Query("SELECT * FROM users where username = :username")
 	abstract fun getByUsername(username: String): User
 
-	@Query("SELECT * FROM users WHERE user_id IN (:userIds)")
+	@Query("SELECT * FROM users WHERE userId IN (:userIds)")
 	abstract fun loadAllByIds(userIds: IntArray): List<User>
 
 	@Insert(onConflict = OnConflictStrategy.IGNORE)
