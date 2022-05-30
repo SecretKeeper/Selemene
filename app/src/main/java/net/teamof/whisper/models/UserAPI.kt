@@ -9,7 +9,7 @@ data class UserAPI(
 	val email: String,
 	val avatar: String = "",
 	val profile: Profile,
-	val _count: Counters? // make it optional for now but in next steps must implement each service follower for own
+	val counters: Counters? // make it optional for now but in next steps must implement each service follower for own
 )
 
 @JsonClass(generateAdapter = true)
