@@ -7,13 +7,12 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -30,7 +29,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import coil.annotation.ExperimentalCoilApi
 import coil.compose.AsyncImage
 import net.teamof.whisper.R
 import net.teamof.whisper.ui.theme.fontFamily
@@ -48,7 +46,6 @@ val gridImages = listOf(
 )
 
 
-@OptIn(ExperimentalCoilApi::class)
 @ExperimentalAnimationApi
 @ExperimentalFoundationApi
 @ExperimentalMaterialApi
@@ -56,10 +53,10 @@ val gridImages = listOf(
 fun Profile(
 	navController: NavController,
 	profileViewModel: ProfileViewModel,
-	to_user_id: String
+	targetUser: String
 ) {
 
-	val user = profileViewModel.userState
+	val user = profileViewModel.userState.observeAsState()
 	val displayMetrics = Resources.getSystem().displayMetrics
 	val heightDp = displayMetrics.heightPixels / displayMetrics.density
 
@@ -87,16 +84,16 @@ fun Profile(
 				item {
 					Column(modifier = Modifier.padding(vertical = 25.dp, horizontal = 25.dp)) {
 						Text(
-							text = user.value?.username!!,
+							text = user.value?.user?.username ?: "",
 							fontSize = 18.sp,
 							fontFamily = fontFamily,
 							fontWeight = FontWeight.SemiBold,
 							color = Color.DarkGray,
 							modifier = Modifier.padding(bottom = 10.dp)
 						)
-						if (user.value!!.profile.target.status != "")
+						if (user.value!!.profile.profile.status != "")
 							Text(
-								text = user.value!!.profile.target.status ?: "",
+								text = user.value!!.profile.profile.status ?: "",
 								fontSize = 14.sp,
 								fontFamily = fontFamily,
 								fontWeight = FontWeight.SemiBold,
@@ -107,7 +104,7 @@ fun Profile(
 						Row {
 							ClickableText(
 								text = AnnotatedString(
-									"${user.value!!.counters.target.feeds} Feeds",
+									"${user.value!!.profile.userCounters.feeds} Feeds",
 									spanStyle = SpanStyle(
 										fontSize = 14.sp,
 										fontFamily = fontFamily,
@@ -126,7 +123,7 @@ fun Profile(
 							)
 							ClickableText(
 								text = AnnotatedString(
-									"${user.value!!.counters.target.followers} Followers",
+									"${user.value!!.profile.userCounters.followers} Followers",
 									spanStyle = SpanStyle(
 										fontSize = 14.sp,
 										fontFamily = fontFamily,
@@ -140,8 +137,10 @@ fun Profile(
 						}
 
 						Text(
-							text = user.value!!.profile.target.description ?: "",
-							color = Color(red = 130, green = 130, blue = 130),
+							text = user.value!!.profile.profile.description ?: "",
+							color = Color(
+								red = 130, green = 130, blue = 130
+							),
 							fontFamily = fontFamily,
 							fontWeight = FontWeight.Normal,
 							fontSize = 14.sp,
@@ -322,18 +321,18 @@ fun Profile(
 									.wrapContentWidth(Alignment.End)
 							)
 						}
-						LazyRow() {
-							itemsIndexed(gridImages) { _, image ->
-								AsyncImage(
-									model = image,
-									contentDescription = null,
-									contentScale = ContentScale.Crop,
-									modifier = Modifier
-										.width(100.dp)
-										.height(100.dp)
-								)
-							}
-						}
+//						LazyRow() {
+//							itemsIndexed(gridImages) { _, image ->
+//								AsyncImage(
+//									model = image,
+//									contentDescription = null,
+//									contentScale = ContentScale.Crop,
+//									modifier = Modifier
+//										.width(100.dp)
+//										.height(100.dp)
+//								)
+//							}
+//						}
 						Divider(Modifier.padding(vertical = 15.dp))
 					} // Column Container
 				}
@@ -345,7 +344,9 @@ fun Profile(
 				backgroundColor = MaterialTheme.colors.primary,
 				elevation = FloatingActionButtonDefaults.elevation(0.dp),
 				onClick = {
-					navController.navigate("Messaging/${to_user_id}")
+					profileViewModel.getUserWithProfileByIdBeforeNavigate(user.value!!.user.userId) {
+						navController.navigate("Messaging/${user.value!!.user.userId}")
+					}
 				},
 				modifier = Modifier.scale(scaleFab.value)
 			) {
@@ -363,7 +364,7 @@ fun Profile(
 		sheetPeekHeight = ((heightDp * 42) / 100).dp,
 	) {
 		AsyncImage(
-			model = user.value?.avatar,
+			model = user.value?.user?.avatar ?: "",
 			contentDescription = null,
 			modifier = Modifier
 				.fillMaxWidth()

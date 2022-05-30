@@ -1,28 +1,31 @@
 package net.teamof.whisper.workers
 
 import android.content.Context
+import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import net.teamof.whisper.api.GetMultipleUsers
 import net.teamof.whisper.api.UsersAPI
-import net.teamof.whisper.models.UserAPIWithoutCounters
-import net.teamof.whisper.repositories.ConversationRepository
-import net.teamof.whisper.repositories.UserRepository
+import net.teamof.whisper.data.Conversation
+import net.teamof.whisper.data.User
+import net.teamof.whisper.data.UserRepository
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import timber.log.Timber
 
 @HiltWorker
 class CheckForNewProfilePhotos @AssistedInject constructor(
 	@Assisted appContext: Context,
 	@Assisted workerParams: WorkerParameters,
 	private val usersAPI: UsersAPI,
-	private val userRepository: UserRepository,
-	private val conversationRepository: ConversationRepository
+	private val conversationRepository: net.teamof.whisper.data.ConversationRepository,
+	private val userRepository: UserRepository
 ) :
 	CoroutineWorker(appContext, workerParams) {
 	override suspend fun doWork(): Result {
@@ -35,18 +38,22 @@ class CheckForNewProfilePhotos @AssistedInject constructor(
 				)
 			}
 
-			response?.enqueue(object : Callback<List<UserAPIWithoutCounters>> {
+			response?.enqueue(object : Callback<List<User>> {
 				override fun onResponse(
-					call: Call<List<UserAPIWithoutCounters>>,
-					response: Response<List<UserAPIWithoutCounters>>
+					call: Call<List<User>>,
+					response: Response<List<User>>
 				) {
-					response.body()?.let {
-						userRepository.update(it)
-						conversationRepository.updateUserData(it)
+					CoroutineScope(Dispatchers.IO).launch {
+						response.body()?.let {
+							CoroutineScope(Dispatchers.IO).launch {
+								conversationRepository.update(it.toMutableList() as MutableList<Conversation>)
+								userRepository.upsert(it.toMutableList())
+							}
+						}
 					}
 				}
 
-				override fun onFailure(call: Call<List<UserAPIWithoutCounters>>, t: Throwable) {
+				override fun onFailure(call: Call<List<User>>, t: Throwable) {
 					Result.retry()
 				}
 			})
@@ -54,7 +61,7 @@ class CheckForNewProfilePhotos @AssistedInject constructor(
 			Result.success()
 
 		} catch (throwable: Throwable) {
-			Timber.e(throwable)
+			Log.e("CheckForNewProfilePhoto.kt", throwable.toString())
 
 			Result.retry()
 		}

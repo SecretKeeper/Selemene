@@ -40,8 +40,8 @@ fun SelfProfile(navController: NavController, userViewModel: UserViewModel) {
 	val openDialog = remember { mutableStateOf(false) }
 
 	val showToast = Toast.makeText(context, "This feature is not available yet", Toast.LENGTH_SHORT)
-	val username = userViewModel.gePair("username")?.value ?: ""
-	val avatar = remember { mutableStateOf(userViewModel.gePair("avatar")?.value ?: "") }
+	val username = userViewModel.getUsername()
+	val avatar = remember { mutableStateOf(userViewModel.getAvatar()) }
 
 	var imageUri by remember {
 		mutableStateOf<Uri?>(null)
@@ -155,7 +155,7 @@ fun SelfProfile(navController: NavController, userViewModel: UserViewModel) {
 						modifier = Modifier.padding(bottom = 10.dp)
 					)
 					Text(
-						text = userViewModel.gePair("status")?.value ?: "",
+						text = userViewModel.getStatus(),
 						fontFamily = fontFamily,
 						fontWeight = FontWeight.Normal,
 						fontSize = 16.sp,

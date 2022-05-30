@@ -27,7 +27,7 @@ fun ChangeUsername(navController: NavController, userViewModel: UserViewModel) {
 
 	val composableScope = rememberCoroutineScope()
 
-	val username = remember { mutableStateOf(userViewModel.gePair("username")?.value ?: "") }
+	val username = remember { mutableStateOf(userViewModel.getUsername()) }
 	val usernameError = remember { mutableStateOf(false) }
 
 	val password = remember { mutableStateOf("") }

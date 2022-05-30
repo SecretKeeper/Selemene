@@ -16,14 +16,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import coil.annotation.ExperimentalCoilApi
 import net.teamof.whisper.R
 import net.teamof.whisper.components.conversation.Avatar
 import net.teamof.whisper.models.UserAPI
 import net.teamof.whisper.ui.theme.fontFamily
 import net.teamof.whisper.viewModel.ProfileViewModel
 
-@OptIn(ExperimentalCoilApi::class)
 @ExperimentalMaterialApi
 @Composable
 fun Contact(
@@ -44,7 +42,7 @@ fun Contact(
 			when (action) {
 				"CreateGroup" -> checked = !checked
 				"Messaging" -> {
-					profileViewModel.setUserStateByUserID(
+					profileViewModel.getUserWithProfileByIdBeforeNavigate(
 						data.user_id
 					) { navController.navigate("Profile/${data.user_id}") }
 				}

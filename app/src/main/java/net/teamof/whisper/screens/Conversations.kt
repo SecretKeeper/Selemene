@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import net.teamof.whisper.components.Conversation
-import net.teamof.whisper.models.Conversation
+import net.teamof.whisper.data.Conversation
 import net.teamof.whisper.ui.theme.BottomNavigationHeight
 import net.teamof.whisper.viewModel.ConversationActionsViewModel
 import net.teamof.whisper.viewModel.ConversationsViewModel

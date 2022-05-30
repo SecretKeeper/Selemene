@@ -2,22 +2,20 @@ package net.teamof.whisper.viewModel
 
 import android.app.Application
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.navigation.NavController
 import androidx.work.*
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.objectbox.Box
-import io.objectbox.kotlin.boxFor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import net.teamof.whisper.ObjectBox
 import net.teamof.whisper.api.*
-import net.teamof.whisper.models.OBKeyValue
-import net.teamof.whisper.models.OBKeyValue_
+import net.teamof.whisper.data.ProfileRepository
+import net.teamof.whisper.data.UserRepository
 import net.teamof.whisper.models.UserAPI
-import net.teamof.whisper.repositories.KeyValueRepository
+import net.teamof.whisper.sharedprefrences.SharedPreferencesManagerImpl
 import net.teamof.whisper.ui.theme.AccentGreenLong
 import net.teamof.whisper.workers.RevokeTokenWorker
 import net.teamof.whisper.workers.UpdateProfilePhoto
@@ -25,7 +23,6 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 import kotlin.concurrent.schedule
@@ -33,29 +30,30 @@ import kotlin.concurrent.schedule
 @HiltViewModel
 class UserViewModel @Inject constructor(
 	application: Application,
-	private val keyValueRepository: KeyValueRepository,
 	private val authAPI: AuthAPI,
 	private val searchAPI: SearchAPI,
 	private val accountAPI: AccountAPI,
-	private val profileAPI: ProfileAPI
+	private val profileAPI: ProfileAPI,
+	private val usersAPI: UsersAPI,
+	private val profileRepository: ProfileRepository,
+	private val userRepository: UserRepository,
+	private val sharedPreferences: SharedPreferencesManagerImpl
 ) :
 	AndroidViewModel(application) {
 
-	private val oBKeyValueBox: Box<OBKeyValue> = ObjectBox.store.boxFor()
-
 	private val workManager: WorkManager = WorkManager.getInstance(application)
 
-	fun getUserID(): Long {
-		val query = oBKeyValueBox.query(OBKeyValue_.key.equal("user_id")).build()
-		val result = query.findFirst()
-		query.close()
+	fun getUserID(): Long = sharedPreferences.getLong("userId", 0L)
 
-		return result?.value?.toLong() ?: 0L
-	}
+	fun getUsername(): String = sharedPreferences.getString("username", "")
 
-	fun gePair(key: String): OBKeyValue? {
-		return keyValueRepository.getPair(key)
-	}
+	fun getEmail(): String = sharedPreferences.getString("email", "")
+
+	fun getAvatar(): String = sharedPreferences.getString("avatar", "")
+
+	fun getStatus(): String = sharedPreferences.getString("status", "")
+
+	fun getDescription(): String = sharedPreferences.getString("description", "")
 
 	suspend fun authenticate(
 		navController: NavController,
@@ -76,64 +74,43 @@ class UserViewModel @Inject constructor(
 					password
 				)
 			)
-			withContext(Dispatchers.Main) {
-				if (response.isSuccessful) {
-					buttonLoading(false)
-					buttonEnabled(false)
-					buttonText("Logging In...")
-					val jsonRes = JSONObject(response.body()?.string())
-					val userRes = JSONObject(jsonRes.getString("user"))
+			if (response.isSuccessful) {
+				buttonLoading(false)
+				buttonEnabled(false)
+				buttonText("Logging In...")
+				val jsonRes = JSONObject(response.body()?.string())
+				val userRes = JSONObject(jsonRes.getString("user"))
 
-					getLoggedUserProfile(userRes.getLong("user_id"))
+				sharedPreferences.set("accessToken", jsonRes.getString("access_token"))
+				sharedPreferences.set("refreshToke", jsonRes.getString("refresh_token"))
+				sharedPreferences.set("accessTokenExpiresAt", jsonRes.getString("expires"))
 
-					keyValueRepository.createOrUpdate(
-						listOf(
-							OBKeyValue(
-								key = "accessToken",
-								value = jsonRes.getString("access_token")
-							),
-							OBKeyValue(
-								key = "refreshToken",
-								value = jsonRes.getString("refresh_token")
-							),
-							OBKeyValue(
-								key = "accessTokenExpiresAt",
-								value = jsonRes.getString("expires")
-							),
-							OBKeyValue(
-								key = "user_id",
-								value = userRes.getString("user_id")
-							),
-							OBKeyValue(
-								key = "username",
-								value = userRes.getString("username")
-							),
-							OBKeyValue(
-								key = "email",
-								value = userRes.getString("email")
-							),
-							OBKeyValue(
-								key = "avatar",
-								value = userRes.getString("avatar")
-							)
-						)
-					)
+				sharedPreferences.set("userId", userRes.getString("user_id").toLong())
+				sharedPreferences.set("username", userRes.getString("username"))
+				sharedPreferences.set("email", userRes.getString("email"))
+				sharedPreferences.set("avatar", userRes.getString("avatar"))
 
+				getLoggedUserProfile(userRes.getLong("user_id"))
+
+				withContext(Dispatchers.Main) {
 					navController.navigate("Conversations") {
 						launchSingleTop = true
 						popUpTo("Login") { inclusive = true }
 					}
-				} else {
-					buttonLoading(false)
-					buttonEnabled(false)
-					buttonText("Credentials Wrong")
-					buttonColor(0xFFe11d48)
-					Timer().schedule(2500) {
-						buttonColor(0xFF0336FF)
-						buttonText("Login")
-						buttonEnabled(true)
-					}
 				}
+
+
+			} else {
+				buttonLoading(false)
+				buttonEnabled(false)
+				buttonText("Credentials Wrong")
+				buttonColor(0xFFe11d48)
+				Timer().schedule(2500) {
+					buttonColor(0xFF0336FF)
+					buttonText("Login")
+					buttonEnabled(true)
+				}
+
 			}
 		}
 	}
@@ -145,7 +122,7 @@ class UserViewModel @Inject constructor(
 			.build()
 
 		val builder = Data.Builder()
-		builder.putString("refreshToken", keyValueRepository.getPair("refreshToken")?.value)
+		builder.putString("refreshToken", sharedPreferences.getString("refreshToken", ""))
 
 		val revokeTokenRequest = OneTimeWorkRequestBuilder<RevokeTokenWorker>()
 			.setConstraints(constraints)
@@ -155,19 +132,7 @@ class UserViewModel @Inject constructor(
 		workManager.beginUniqueWork("REVOKE_TOKEN", ExistingWorkPolicy.KEEP, revokeTokenRequest)
 			.enqueue()
 
-		keyValueRepository.delete(
-			listOf(
-				"accessToken",
-				"refreshToken",
-				"accessTokenExpiresAt",
-				"user_id",
-				"username",
-				"email",
-				"avatar",
-				"status",
-				"description"
-			)
-		)
+		sharedPreferences.clear()
 
 		navController.navigate("Login") {
 			launchSingleTop = true
@@ -247,9 +212,7 @@ class UserViewModel @Inject constructor(
 					buttonText("Username Changed")
 					buttonColor(AccentGreenLong)
 
-					if (response.code() == 200) keyValueRepository.setUsername(
-						newUsername
-					)
+					if (response.code() == 200) sharedPreferences.set("username", newUsername)
 
 					Timer().schedule(2000) {
 						buttonColor(0xFF0336FF)
@@ -381,9 +344,7 @@ class UserViewModel @Inject constructor(
 					buttonText("Status Updated")
 					buttonColor(AccentGreenLong)
 
-					if (response.code() == 200) keyValueRepository.setStatus(
-						newStatus
-					)
+					if (response.code() == 200) sharedPreferences.set("status", newStatus)
 
 					Timer().schedule(2000) {
 						buttonColor(0xFF0336FF)
@@ -409,18 +370,8 @@ class UserViewModel @Inject constructor(
 
 		val response = profileAPI.getProfileByID(user_id)
 
-		keyValueRepository.createOrUpdate(
-			listOf(
-				OBKeyValue(
-					key = "status",
-					value = response.status ?: ""
-				),
-				OBKeyValue(
-					key = "description",
-					value = response.description ?: ""
-				),
-			)
-		);
+		sharedPreferences.set("description", response.description ?: "")
+		sharedPreferences.set("status", response.status ?: "")
 	}
 
 	fun searchUsers(input: String, fetchedUsers: (List<UserAPI>) -> Unit) {
@@ -433,11 +384,10 @@ class UserViewModel @Inject constructor(
 				response: Response<List<UserAPI>>
 			) {
 				response.body()?.let { fetchedUsers(it) }
-				Timber.d(response.code().toString())
 			}
 
 			override fun onFailure(call: Call<List<UserAPI>>, t: Throwable) {
-				Timber.d(t)
+				Log.e("UserViewModel.kt", "onFailure")
 			}
 
 		})
@@ -462,6 +412,6 @@ class UserViewModel @Inject constructor(
 	}
 
 	fun removeAvatar() {
-		keyValueRepository.removeAvatar()
+		sharedPreferences.remove("avatar")
 	}
 }

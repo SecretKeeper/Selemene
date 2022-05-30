@@ -9,15 +9,11 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import io.objectbox.kotlin.equal
-import net.teamof.whisper.ObjectBox
 import net.teamof.whisper.Whisper
 import net.teamof.whisper.api.UserTokenInterceptor
-import net.teamof.whisper.models.OBKeyValue
-import net.teamof.whisper.models.OBKeyValue_
-import net.teamof.whisper.repositories.ConversationRepository
-import net.teamof.whisper.repositories.KeyValueRepository
-import net.teamof.whisper.repositories.MessageRepository
+import net.teamof.whisper.data.ConversationRepository
+import net.teamof.whisper.data.MessageRepository
+import net.teamof.whisper.sharedprefrences.SharedPreferencesManagerImpl
 import net.teamof.whisper.sockets.Socket
 import net.teamof.whisper.sockets.SocketBroadcastListener
 import net.teamof.whisper.utils.DateMoshiAdapter
@@ -35,14 +31,8 @@ class AppModule {
 
 	@Singleton
 	@Provides
-	fun provideGetUserToken(): String {
-		val obKeyValueBox = ObjectBox.store.boxFor(OBKeyValue::class.java)
-		val query = obKeyValueBox.query(OBKeyValue_.key equal "accessToken").build()
-		val result = query.findFirst()
-
-		query.close()
-		return result?.value ?: ""
-	}
+	fun provideGetUserToken(sharedPreferencesManagerImpl: SharedPreferencesManagerImpl): String =
+		sharedPreferencesManagerImpl.getString("accessToken", "")
 
 	private val baseGatewayAddress = "http://10.0.2.2:3333"
 
@@ -62,13 +52,13 @@ class AppModule {
 	}
 
 	@Provides
-	fun provideHttpClient(keyValueRepository: KeyValueRepository): OkHttpClient {
+	fun provideHttpClient(sharedPreferencesManagerImpl: SharedPreferencesManagerImpl): OkHttpClient {
 		val logging = HttpLoggingInterceptor()
 		logging.setLevel(HttpLoggingInterceptor.Level.BODY)
 
 		return OkHttpClient.Builder()
 			.addInterceptor(logging)
-			.addInterceptor(UserTokenInterceptor(keyValueRepository))
+			.addInterceptor(UserTokenInterceptor(sharedPreferencesManagerImpl))
 			.connectTimeout(120, TimeUnit.SECONDS)
 			.readTimeout(120, TimeUnit.SECONDS)
 			.writeTimeout(120, TimeUnit.SECONDS)

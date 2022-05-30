@@ -130,6 +130,7 @@ private fun MainScreenNavigationConfigurations(
 					to_user_id = backStackEntry.arguments?.getString("to_user_id")!!,
 					messagesViewModel,
 					currentUserId,
+					userViewModel,
 					profileViewModel
 				)
 			}
