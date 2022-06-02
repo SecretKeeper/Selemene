@@ -52,7 +52,7 @@ fun MainScreen(
 			"Login",
 			"Register",
 			"Messaging/{to_user_id}",
-			"Profile/{to_user_id}",
+			"Profile",
 			"Contacts/{action}"
 		)
 	val conversationsActionsViewModel = hiltViewModel<ConversationActionsViewModel>()
@@ -154,11 +154,10 @@ private fun MainScreenNavigationConfigurations(
 
 			composable("Security") { SecurityScreen(navController) }
 			composable("ChangeAccountPassword") { ChangeAccountPasswordScreen() }
-			composable("Profile/{to_user_id}") { backStackEntry ->
+			composable("Profile") {
 				Profile(
 					navController,
-					profileViewModel,
-					backStackEntry.arguments?.getString("to_user_id")!!
+					profileViewModel
 				)
 			}
 			composable("CreateGroup") { CreateGroup(navController) }

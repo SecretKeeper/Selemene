@@ -98,7 +98,7 @@ fun MainHeader(
 				) {
 					profileViewModel.getUserWithProfileByIdBeforeNavigate(
 						user.user.userId,
-					) { navController.navigate("Profile/${user.user.userId}") }
+					) { navController.navigate("Profile") }
 				}
 		) {
 			Avatar(
@@ -112,7 +112,7 @@ fun MainHeader(
 					.padding(start = 15.dp)
 			) {
 				Text(
-					text = user.user.username,
+					text = user.user.username!!,
 					fontFamily = fontFamily,
 					fontWeight = FontWeight.Bold,
 					fontSize = 16.sp,

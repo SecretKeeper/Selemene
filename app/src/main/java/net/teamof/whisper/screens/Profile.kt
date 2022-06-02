@@ -53,7 +53,6 @@ val gridImages = listOf(
 fun Profile(
 	navController: NavController,
 	profileViewModel: ProfileViewModel,
-	targetUser: String
 ) {
 
 	val user = profileViewModel.userState.observeAsState()
@@ -345,7 +344,9 @@ fun Profile(
 				elevation = FloatingActionButtonDefaults.elevation(0.dp),
 				onClick = {
 					profileViewModel.getUserWithProfileByIdBeforeNavigate(user.value!!.user.userId) {
-						navController.navigate("Messaging/${user.value!!.user.userId}")
+						navController.navigate("Messaging/${user.value!!.user.userId}") {
+							launchSingleTop = true
+						}
 					}
 				},
 				modifier = Modifier.scale(scaleFab.value)

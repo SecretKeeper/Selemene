@@ -44,7 +44,7 @@ fun Contact(
 				"Messaging" -> {
 					profileViewModel.getUserWithProfileByIdBeforeNavigate(
 						data.user_id
-					) { navController.navigate("Profile/${data.user_id}") }
+					) { navController.navigate("Profile") }
 				}
 			}
 		}) {
