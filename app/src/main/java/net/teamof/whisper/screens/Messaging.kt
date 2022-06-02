@@ -57,6 +57,10 @@ fun Messaging(
 			selection.value = false
 			scope.launch { bottomSheetState.hide() }
 		}
+	} else {
+		BackPressHandler {
+			navController.navigate("Conversations")
+		}
 	}
 
 	ModalBottomSheetLayout(
