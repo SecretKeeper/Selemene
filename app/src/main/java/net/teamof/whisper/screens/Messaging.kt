@@ -40,7 +40,6 @@ fun Messaging(
     to_user_id: String,
     messagesViewModel: MessagesViewModel,
     currentUserId: Long,
-    userViewModel: UserViewModel,
     profileViewModel: ProfileViewModel
 ) {
 
