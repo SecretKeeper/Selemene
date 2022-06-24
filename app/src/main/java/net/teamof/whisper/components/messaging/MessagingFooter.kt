@@ -2,14 +2,13 @@ package net.teamof.whisper.components.messaging
 
 import android.Manifest
 import android.annotation.SuppressLint
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,6 +24,8 @@ import com.google.accompanist.permissions.rememberPermissionState
 import kotlinx.coroutines.launch
 import net.teamof.whisper.R
 import net.teamof.whisper.data.Message
+import net.teamof.whisper.screens.LocalEditMessage
+import net.teamof.whisper.screens.LocalInputText
 import net.teamof.whisper.ui.theme.fontFamily
 import net.teamof.whisper.viewModel.MessagesViewModel
 
@@ -33,96 +34,126 @@ import net.teamof.whisper.viewModel.MessagesViewModel
 @ExperimentalMaterialApi
 @Composable
 fun MessagingFooter(
-	bottomSheetState: ModalBottomSheetState,
-	messagesViewModel: MessagesViewModel,
-	currentUserId: Long,
-	toUserID: Long
+    bottomSheetState: ModalBottomSheetState,
+    messagesViewModel: MessagesViewModel,
+    currentUserId: Long,
+    toUserID: Long
 ) {
-	val scope = rememberCoroutineScope()
-	val text = remember { mutableStateOf("") }
+    val scope = rememberCoroutineScope()
+    val inputTextCtx = LocalInputText.current
 
-	val cameraPermissionState = rememberPermissionState(
-		Manifest.permission.READ_EXTERNAL_STORAGE
-	)
+    val cameraPermissionState = rememberPermissionState(
+        Manifest.permission.READ_EXTERNAL_STORAGE
+    )
 
-	Column(Modifier.background(Color(red = 245, green = 245, blue = 253))) {
-		Row(
-			verticalAlignment = Alignment.CenterVertically,
-			modifier = Modifier.padding(
-				start = 15.dp,
-				end = 20.dp,
-				top = 3.dp,
-				bottom = 3.dp
-			)
-		) {
-			Box(
-				modifier = Modifier
-					.width(32.dp)
-					.height(32.dp)
-					.clip(shape = CircleShape)
-					.background(MaterialTheme.colors.primary)
-					.clickable {
-						when {
-							cameraPermissionState.hasPermission -> scope.launch { bottomSheetState.show() }
+    Column(Modifier.background(Color(red = 245, green = 245, blue = 253))) {
+        EditingPreview()
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(
+                start = 15.dp,
+                end = 20.dp,
+                top = 3.dp,
+                bottom = 3.dp
+            )
+        ) {
+            Box(
+                modifier = Modifier
+                    .width(32.dp)
+                    .height(32.dp)
+                    .clip(shape = CircleShape)
+                    .background(MaterialTheme.colors.primary)
+                    .clickable {
+                        when {
+                            cameraPermissionState.hasPermission -> scope.launch { bottomSheetState.show() }
 
-							cameraPermissionState.shouldShowRationale ||
-									!cameraPermissionState.permissionRequested -> cameraPermissionState.launchPermissionRequest()
-						}
-					}
-			) {
-				Icon(
-					painter = painterResource(id = R.drawable.ic_add),
-					contentDescription = null,
-					tint = Color.White,
-					modifier = Modifier
-						.width(23.dp)
-						.height(23.dp)
-						.align(Alignment.Center)
-				)
-			}
-			OutlinedTextField(
-				value = text.value,
-				onValueChange = { text.value = it },
-				modifier = Modifier
-					.weight(1f)
-					.padding(horizontal = 8.dp),
-				textStyle = TextStyle(fontSize = 14.sp),
-				placeholder = {
-					Text(
-						text = "Write message here...",
-						fontSize = 14.sp,
-						fontFamily = fontFamily,
-						fontWeight = FontWeight.Normal
-					)
-				},
-				colors = TextFieldDefaults.textFieldColors(
-					backgroundColor = Color.Transparent,
-					focusedIndicatorColor = Color.Transparent,
-					unfocusedIndicatorColor = Color.Transparent
-				)
-			)
-			IconButton(onClick = {
-				if (text.value.isNotEmpty()) {
+                            cameraPermissionState.shouldShowRationale ||
+                                    !cameraPermissionState.permissionRequested -> cameraPermissionState.launchPermissionRequest()
+                        }
+                    }
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_add),
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier
+                        .width(23.dp)
+                        .height(23.dp)
+                        .align(Alignment.Center)
+                )
+            }
+            OutlinedTextField(
+                value = inputTextCtx.value,
+                onValueChange = { inputTextCtx.value = it },
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = 8.dp),
+                textStyle = TextStyle(fontSize = 14.sp),
+                placeholder = {
+                    Text(
+                        text = "Write message here...",
+                        fontSize = 14.sp,
+                        fontFamily = fontFamily,
+                        fontWeight = FontWeight.Normal
+                    )
+                },
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
+                )
+            )
+            IconButton(onClick = {
+                if (inputTextCtx.value.isNotEmpty()) {
 
-					val message = Message(
-						sender = currentUserId,
-						receiver = toUserID,
-						content = text.value,
-					)
+                    val message = Message(
+                        sender = currentUserId,
+                        receiver = toUserID,
+                        content = inputTextCtx.value,
+                    )
 
-					messagesViewModel.sendMessage(message)
+                    messagesViewModel.sendMessage(message)
 
-					text.value = ""
-				}
-			}) {
-				Icon(
-					painter = painterResource(id = R.drawable.ic_send),
-					contentDescription = null,
-					Modifier
-						.width(23.dp)
-						.height(23.dp)
-				)
-			}
-		}
-	}
+                    inputTextCtx.value = ""
+                }
+            }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_send),
+                    contentDescription = null,
+                    Modifier
+                        .width(23.dp)
+                        .height(23.dp)
+                )
+            }
+        }
+    }
+}
+
+
+@Composable
+fun EditingPreview() {
+    val currentEditMessageCtx = LocalEditMessage.current
+    val inputTextCtx = LocalInputText.current
+
+    AnimatedVisibility(visible = (currentEditMessageCtx.value.id != 0L)) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(start = 15.dp, end = 5.dp)
+        ) {
+            Text(text = currentEditMessageCtx.value.content, modifier = Modifier.weight(1f))
+            IconButton(onClick = {
+                currentEditMessageCtx.value = Message()
+                inputTextCtx.value = ""
+            }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_x),
+                    contentDescription = null,
+                    tint = Color.Red,
+                    modifier = Modifier
+                        .width(22.dp)
+                        .height(22.dp)
+                )
+            }
+        }
+    }
 }

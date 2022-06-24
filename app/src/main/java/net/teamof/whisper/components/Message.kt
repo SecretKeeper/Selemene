@@ -26,6 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import net.teamof.whisper.R
 import net.teamof.whisper.data.Message
+import net.teamof.whisper.screens.LocalEditMessage
+import net.teamof.whisper.screens.LocalInputText
 import net.teamof.whisper.ui.theme.fontFamily
 
 @ExperimentalAnimationApi
@@ -36,7 +38,6 @@ fun Message(
     selection: Boolean,
     enableSelectionMode: () -> Unit
 ) {
-
     val isOwnMessage = data.sender == currentUserId
     val expandedMessageDropdown = remember { mutableStateOf(false) }
     val messageSelected = remember { mutableStateOf(false) }
@@ -69,7 +70,7 @@ fun Message(
                 .fillMaxWidth()
         ) {
 
-            MessageDropdown(isOwnMessage, expandedMessageDropdown)
+            MessageDropdown(data, isOwnMessage, expandedMessageDropdown)
 
             MessageContent(data.content, isOwnMessage)
 
@@ -108,7 +109,14 @@ fun MessageContent(content: String, isOwnMessage: Boolean) {
 
 
 @Composable
-fun MessageDropdown(isOwnMessage: Boolean, expandedMessageDropdown: MutableState<Boolean>) {
+fun MessageDropdown(
+    message: Message,
+    isOwnMessage: Boolean,
+    expandedMessageDropdown: MutableState<Boolean>
+) {
+
+    val currentEditMessageCtx = LocalEditMessage.current
+    val inputTextCtx = LocalInputText.current
 
     val displayMetrics = Resources.getSystem().displayMetrics
     val widthDp = displayMetrics.widthPixels / displayMetrics.density
@@ -123,12 +131,17 @@ fun MessageDropdown(isOwnMessage: Boolean, expandedMessageDropdown: MutableState
                 0.dp
             ),
         ) {
+            if (isOwnMessage)
+                DropdownMenuItem(onClick = {
+                    currentEditMessageCtx.value = message
+                    expandedMessageDropdown.value = false
+                    inputTextCtx.value = message.content
+                }) {
+                    Text("Edit")
+                }
             DropdownMenuItem(onClick = {
-
+                expandedMessageDropdown.value = false
             }) {
-                Text("Edit")
-            }
-            DropdownMenuItem(onClick = { /* Handle settings! */ }) {
                 Text("Delete")
             }
         }

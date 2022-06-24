@@ -40,37 +40,37 @@ import net.teamof.whisper.viewModel.*
 @Composable
 fun MainScreen(
 ) {
-	val systemUiController = rememberSystemUiController()
+    val systemUiController = rememberSystemUiController()
 
-	systemUiController.setSystemBarsColor(
-		color = Color.White
-	)
+    systemUiController.setSystemBarsColor(
+        color = Color.White
+    )
 
-	val navController = rememberNavController()
-	val disabledNavScreens =
-		listOf(
-			"Login",
-			"Register",
-			"Messaging/{to_user_id}",
-			"Profile",
-			"Contacts/{action}"
-		)
-	val conversationsActionsViewModel = hiltViewModel<ConversationActionsViewModel>()
+    val navController = rememberNavController()
+    val disabledNavScreens =
+        listOf(
+            "Login",
+            "Register",
+            "Messaging/{to_user_id}",
+            "Profile",
+            "Contacts/{action}"
+        )
+    val conversationsActionsViewModel = hiltViewModel<ConversationActionsViewModel>()
 
-	WhisperTheme {
-		Scaffold(
-			bottomBar = {
-				if (!disabledNavScreens.contains(currentRoute(navController))) BottomAppBar(
-					navController,
-					conversationsActionsViewModel
-				)
-			},
-			isFloatingActionButtonDocked = true,
-			floatingActionButtonPosition = FabPosition.Center,
-		) {
-			MainScreenNavigationConfigurations(navController, conversationsActionsViewModel)
-		}
-	}
+    WhisperTheme {
+        Scaffold(
+            bottomBar = {
+                if (!disabledNavScreens.contains(currentRoute(navController))) BottomAppBar(
+                    navController,
+                    conversationsActionsViewModel
+                )
+            },
+            isFloatingActionButtonDocked = true,
+            floatingActionButtonPosition = FabPosition.Center,
+        ) {
+            MainScreenNavigationConfigurations(navController, conversationsActionsViewModel)
+        }
+    }
 }
 
 
@@ -82,92 +82,91 @@ fun MainScreen(
 @ExperimentalFoundationApi
 @Composable
 private fun MainScreenNavigationConfigurations(
-	navController: NavHostController,
-	conversationsActionsViewModel: ConversationActionsViewModel
+    navController: NavHostController,
+    conversationsActionsViewModel: ConversationActionsViewModel
 ) {
 
-	val userViewModel = hiltViewModel<UserViewModel>()
-	val messagesViewModel = hiltViewModel<MessagesViewModel>()
-	val conversationsViewModel = hiltViewModel<ConversationsViewModel>()
-	val profileViewModel = hiltViewModel<ProfileViewModel>()
+    val userViewModel = hiltViewModel<UserViewModel>()
+    val messagesViewModel = hiltViewModel<MessagesViewModel>()
+    val conversationsViewModel = hiltViewModel<ConversationsViewModel>()
+    val profileViewModel = hiltViewModel<ProfileViewModel>()
 
-	val currentUserId = userViewModel.getUserID()
+    val currentUserId = userViewModel.getUserID()
 
-	NavHost(
-		navController = navController,
-		startDestination = if (currentUserId == 0L) "Authentication" else "AppsDirection"
-	) {
+    NavHost(
+        navController = navController,
+        startDestination = if (currentUserId == 0L) "Authentication" else "AppsDirection"
+    ) {
 
-		navigation("Login", "Authentication") {
-			composable("Login") {
-				LoginScreen(userViewModel, navController)
-			}
-			composable("Register") {
-				RegisterScreen(userViewModel, navController)
-			}
-		}
+        navigation("Login", "Authentication") {
+            composable("Login") {
+                LoginScreen(userViewModel, navController)
+            }
+            composable("Register") {
+                RegisterScreen(userViewModel, navController)
+            }
+        }
 
-		navigation("Conversations", "AppsDirection") {
-			composable("Conversations") {
-				Conversations(
-					navController,
-					conversationsViewModel,
-					conversationsActionsViewModel,
-					profileViewModel
-				)
-			}
-			composable("Feeds") {
-				val feedsViewModel = hiltViewModel<FeedsViewModel>()
-				Feeds(feedsViewModel)
-			}
-			composable(
-				"Messaging"
-					.plus("/{to_user_id}")
-			) { backStackEntry ->
+        navigation("Conversations", "AppsDirection") {
+            composable("Conversations") {
+                Conversations(
+                    navController,
+                    conversationsViewModel,
+                    conversationsActionsViewModel,
+                    profileViewModel
+                )
+            }
+            composable("Feeds") {
+                val feedsViewModel = hiltViewModel<FeedsViewModel>()
+                Feeds(feedsViewModel)
+            }
+            composable(
+                "Messaging"
+                    .plus("/{to_user_id}")
+            ) { backStackEntry ->
 
-				Messaging(
-					navController,
-					to_user_id = backStackEntry.arguments?.getString("to_user_id")!!,
-					messagesViewModel,
-					currentUserId,
-					userViewModel,
-					profileViewModel
-				)
-			}
-			composable("Create") { Create(navController) }
-			composable("Contacts/{action}") { backStackEntry ->
-				backStackEntry.arguments?.getString("action")?.let {
-					Contacts(userViewModel, profileViewModel, navController, action = it)
-				}
-			}
-			composable("SelfProfile") { SelfProfile(navController, userViewModel) }
-
+                Messaging(
+                    navController,
+                    to_user_id = backStackEntry.arguments?.getString("to_user_id")!!,
+                    messagesViewModel,
+                    currentUserId,
+                    profileViewModel
+                )
+            }
+            composable("Create") { Create(navController) }
+            composable("Contacts/{action}") { backStackEntry ->
+                backStackEntry.arguments?.getString("action")?.let {
+                    Contacts(userViewModel, profileViewModel, navController, action = it)
+                }
+            }
+            composable("SelfProfile") { SelfProfile(navController, userViewModel) }
 
 
 
-			composable("MyAccount") { MyAccount(navController, userViewModel) }
-			composable("ChangeUsername") { ChangeUsername(navController, userViewModel) }
-			composable("ChangeEmail") { ChangeEmail(navController, userViewModel) }
-			composable("ChangePassword") { ChangePassword(navController, userViewModel) }
-			composable("SetStatus") { SetStatus(navController, userViewModel) }
+
+            composable("MyAccount") { MyAccount(navController, userViewModel) }
+            composable("ChangeUsername") { ChangeUsername(navController, userViewModel) }
+            composable("ChangeEmail") { ChangeEmail(navController, userViewModel) }
+            composable("ChangePassword") { ChangePassword(navController, userViewModel) }
+            composable("SetStatus") { SetStatus(navController, userViewModel) }
 
 
-			composable("Security") { SecurityScreen(navController) }
-			composable("ChangeAccountPassword") { ChangeAccountPasswordScreen() }
-			composable("Profile") {
-				Profile(
-					navController,
-					profileViewModel
-				)
-			}
-			composable("CreateGroup") { CreateGroup(navController) }
-			composable("Activities") { Activities() }
-		}
-	}
+            composable("Security") { SecurityScreen(navController) }
+            composable("ChangeAccountPassword") { ChangeAccountPasswordScreen() }
+            composable("Profile") {
+                Profile(
+                    navController,
+                    profileViewModel
+                )
+            }
+            composable("CreateGroup") { CreateGroup(navController) }
+            composable("Activities") { Activities() }
+        }
+    }
 }
 
 @Composable
 fun currentRoute(navController: NavHostController): String? {
-	val navBackStackEntry by navController.currentBackStackEntryAsState()
-	return navBackStackEntry?.destination?.route
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    return navBackStackEntry?.destination?.route
 }

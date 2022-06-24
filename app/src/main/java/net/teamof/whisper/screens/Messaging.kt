@@ -25,8 +25,9 @@ import net.teamof.whisper.components.messaging.MessagingHeader
 import net.teamof.whisper.data.Message
 import net.teamof.whisper.viewModel.MessagesViewModel
 import net.teamof.whisper.viewModel.ProfileViewModel
-import net.teamof.whisper.viewModel.UserViewModel
 
+val LocalEditMessage = compositionLocalOf { mutableStateOf(Message()) }
+val LocalInputText = compositionLocalOf { mutableStateOf("") }
 
 @ExperimentalPermissionsApi
 @OptIn(DelicateCoroutinesApi::class)
@@ -40,7 +41,6 @@ fun Messaging(
     to_user_id: String,
     messagesViewModel: MessagesViewModel,
     currentUserId: Long,
-    userViewModel: UserViewModel,
     profileViewModel: ProfileViewModel
 ) {
 
@@ -52,6 +52,7 @@ fun Messaging(
 
     val scope = rememberCoroutineScope()
     val selection = remember { mutableStateOf(false) }
+
     if (selection.value || bottomSheetState.isVisible) {
         BackPressHandler {
             selection.value = false
@@ -63,41 +64,54 @@ fun Messaging(
         }
     }
 
+
+    val editMessageMode = remember {
+        mutableStateOf(Message())
+    }
+
+    val inputText = remember {
+        mutableStateOf("")
+    }
+
     ModalBottomSheetLayout(
         sheetContent = { MessagingAttachSource() },
         sheetState = bottomSheetState
     ) {
-
-        Column {
-            MessagingHeader(
-                navController,
-                profileViewModel,
-                to_user_id.toLong(),
-                selection
-            )
-            Column(Modifier.weight(1f)) {
-                Column(
-                    Modifier.verticalScroll(
-                        state = rememberScrollState(),
-                        reverseScrolling = true
-                    )
-                ) {
-                    messages.forEach { message ->
-                        Message(
-                            currentUserId,
-                            message,
-                            selection.value,
-                            enableSelectionMode = { selection.value = true }
+        CompositionLocalProvider(
+            LocalEditMessage provides editMessageMode,
+            LocalInputText provides inputText
+        ) {
+            Column {
+                MessagingHeader(
+                    navController,
+                    profileViewModel,
+                    to_user_id.toLong(),
+                    selection
+                )
+                Column(Modifier.weight(1f)) {
+                    Column(
+                        Modifier.verticalScroll(
+                            state = rememberScrollState(),
+                            reverseScrolling = true
                         )
+                    ) {
+                        messages.forEach { message ->
+                            Message(
+                                currentUserId,
+                                message,
+                                selection.value,
+                                enableSelectionMode = { selection.value = true }
+                            )
+                        }
                     }
                 }
+                MessagingFooter(
+                    bottomSheetState,
+                    messagesViewModel,
+                    currentUserId,
+                    to_user_id.toLong()
+                )
             }
-            MessagingFooter(
-                bottomSheetState,
-                messagesViewModel,
-                currentUserId,
-                to_user_id.toLong()
-            )
         }
     }
 }
