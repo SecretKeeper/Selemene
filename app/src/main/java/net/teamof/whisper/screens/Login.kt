@@ -35,26 +35,10 @@ fun LoginScreen(
 
 
     Column(Modifier.padding(horizontal = 25.dp, vertical = 15.dp)) {
+
+        LoginHeader()
+
         Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = "Welcome to Whispers!",
-                textAlign = TextAlign.Center,
-                fontFamily = fontFamily,
-                fontSize = 26.sp,
-                fontWeight = FontWeight(700),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 15.dp)
-            )
-            Text(
-                text = "Keep your data safe",
-                textAlign = TextAlign.Center,
-                color = Color(97, 102, 125),
-                fontFamily = fontFamily,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 35.dp)
-            )
             TextField(
                 text = "Username",
                 value = username.value,
@@ -160,4 +144,28 @@ fun LoginScreen(
             )
         }
     }
+}
+
+
+@Composable
+fun LoginHeader() {
+    Text(
+        text = "Welcome to Whispers!",
+        textAlign = TextAlign.Center,
+        fontFamily = fontFamily,
+        fontSize = 26.sp,
+        fontWeight = FontWeight(700),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 15.dp)
+    )
+    Text(
+        text = "Keep your data safe",
+        textAlign = TextAlign.Center,
+        color = Color(97, 102, 125),
+        fontFamily = fontFamily,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 35.dp)
+    )
 }
