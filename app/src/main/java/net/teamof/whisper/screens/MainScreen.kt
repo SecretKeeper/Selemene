@@ -1,5 +1,6 @@
 package net.teamof.whisper.screens
 
+import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -31,6 +32,7 @@ import net.teamof.whisper.screens.settings.myAccount.SetStatus
 import net.teamof.whisper.ui.theme.WhisperTheme
 import net.teamof.whisper.viewModel.*
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @RequiresApi(Build.VERSION_CODES.P)
 @ExperimentalCoilApi
 @ExperimentalPermissionsApi
