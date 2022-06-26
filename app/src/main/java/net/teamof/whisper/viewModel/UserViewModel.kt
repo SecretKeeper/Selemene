@@ -17,9 +17,7 @@ import net.teamof.whisper.data.UserRepository
 import net.teamof.whisper.models.UserAPI
 import net.teamof.whisper.sharedprefrences.SharedPreferencesManagerImpl
 import net.teamof.whisper.ui.theme.AccentGreenLong
-import net.teamof.whisper.workers.RevokeTokenWorker
 import net.teamof.whisper.workers.UpdateProfilePhoto
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -43,7 +41,7 @@ class UserViewModel @Inject constructor(
 
     private val workManager: WorkManager = WorkManager.getInstance(application)
 
-    fun getUserID(): Long = sharedPreferences.getLong("userId", 0L)
+    fun getUserID(): Long = sharedPreferences.getLong("user_id", 0L)
 
     fun getUsername(): String = sharedPreferences.getString("username", "")
 
@@ -54,91 +52,7 @@ class UserViewModel @Inject constructor(
     fun getStatus(): String = sharedPreferences.getString("status", "")
 
     fun getDescription(): String = sharedPreferences.getString("description", "")
-
-    suspend fun authenticate(
-        navController: NavController,
-        username: String,
-        password: String,
-        buttonLoading: (Boolean) -> Unit,
-        buttonText: (String) -> Unit,
-        buttonColor: (Long) -> Unit,
-        buttonEnabled: (Boolean) -> Unit
-    ) {
-        buttonLoading(true)
-        buttonEnabled(false)
-
-        CoroutineScope(Dispatchers.IO).launch {
-            val response = authAPI.login(
-                LoginRequest(
-                    username,
-                    password
-                )
-            )
-            if (response.isSuccessful) {
-                buttonLoading(false)
-                buttonEnabled(false)
-                buttonText("Logging In...")
-                val jsonRes = JSONObject(response.body()?.string())
-
-                sharedPreferences.set("accessToken", jsonRes.getString("access_token"))
-                sharedPreferences.set("refreshToke", jsonRes.getString("refresh_token"))
-                sharedPreferences.set("accessTokenExpiresAt", jsonRes.getString("expires"))
-
-                sharedPreferences.set("userId", jsonRes.getString("user_id").toLong())
-                sharedPreferences.set("username", jsonRes.getString("username"))
-                sharedPreferences.set("email", jsonRes.getString("email"))
-                sharedPreferences.set("avatar", jsonRes.getString("avatar"))
-
-                getLoggedUserProfile(jsonRes.getLong("user_id"))
-
-                withContext(Dispatchers.Main) {
-                    navController.navigate("Conversations") {
-                        launchSingleTop = true
-                        popUpTo("Login") { inclusive = true }
-                    }
-                }
-
-
-            } else {
-                buttonLoading(false)
-                buttonEnabled(false)
-                buttonText("Credentials Wrong")
-                buttonColor(0xFFe11d48)
-                Timer().schedule(2500) {
-                    buttonColor(0xFF0336FF)
-                    buttonText("Login")
-                    buttonEnabled(true)
-                }
-
-            }
-        }
-    }
-
-    fun signOut(navController: NavController) {
-
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-
-        val builder = Data.Builder()
-        builder.putString("refreshToken", sharedPreferences.getString("refreshToken", ""))
-
-        val revokeTokenRequest = OneTimeWorkRequestBuilder<RevokeTokenWorker>()
-            .setConstraints(constraints)
-            .setInputData(builder.build())
-            .build()
-
-        workManager.beginUniqueWork("REVOKE_TOKEN", ExistingWorkPolicy.KEEP, revokeTokenRequest)
-            .enqueue()
-
-        sharedPreferences.clear()
-
-        navController.navigate("Login") {
-            launchSingleTop = true
-            popUpTo(0)
-        }
-    }
-
+    
     suspend fun changePassword(
         navController: NavController,
         current_password: String,
