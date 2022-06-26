@@ -14,10 +14,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import net.teamof.whisper.ui.theme.fontFamily
-import net.teamof.whisper.viewModel.UserViewModel
+import net.teamof.whisper.viewModel.AuthViewModel
 
 @Composable
-fun Logout(navController: NavController, userViewModel: UserViewModel) {
+fun Logout(navController: NavController, authViewModel: AuthViewModel) {
     val composableScope = rememberCoroutineScope()
     val openDialog = remember { mutableStateOf(false) }
 
@@ -59,7 +59,7 @@ fun Logout(navController: NavController, userViewModel: UserViewModel) {
                     onClick = {
                         composableScope.launch {
                             openDialog.value = false
-                            userViewModel.signOut(navController)
+                            authViewModel.signOut(navController)
                         }
                     }
                 ) {

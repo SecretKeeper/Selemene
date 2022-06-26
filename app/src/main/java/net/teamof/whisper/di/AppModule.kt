@@ -29,69 +29,69 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class AppModule {
 
-	@Singleton
-	@Provides
-	fun provideGetUserToken(sharedPreferencesManagerImpl: SharedPreferencesManagerImpl): String =
-		sharedPreferencesManagerImpl.getString("accessToken", "")
+    @Singleton
+    @Provides
+    fun provideGetUserToken(sharedPreferencesManagerImpl: SharedPreferencesManagerImpl): String =
+        sharedPreferencesManagerImpl.getString("access_token", "")
 
-	private val baseGatewayAddress = "http://10.0.2.2:3333"
+    private val baseGatewayAddress = "http://10.0.2.2:3333"
 
-	private val baseWhisperAddress = "http://10.0.2.2:3335"
+    private val baseWhisperAddress = "http://10.0.2.2:3335"
 
-	@Provides
-	fun providesApplication(@ApplicationContext context: Context): Whisper {
-		return context as Whisper
-	}
+    @Provides
+    fun providesApplication(@ApplicationContext context: Context): Whisper {
+        return context as Whisper
+    }
 
-	@Singleton
-	@Provides
-	fun provideMoshi(): Moshi {
-		return Moshi.Builder().add(Date::class.java, DateMoshiAdapter().nullSafe())
-			.addLast(KotlinJsonAdapterFactory())
-			.build()
-	}
+    @Singleton
+    @Provides
+    fun provideMoshi(): Moshi {
+        return Moshi.Builder().add(Date::class.java, DateMoshiAdapter().nullSafe())
+            .addLast(KotlinJsonAdapterFactory())
+            .build()
+    }
 
-	@Provides
-	fun provideHttpClient(sharedPreferencesManagerImpl: SharedPreferencesManagerImpl): OkHttpClient {
-		val logging = HttpLoggingInterceptor()
-		logging.setLevel(HttpLoggingInterceptor.Level.BODY)
+    @Provides
+    fun provideHttpClient(sharedPreferencesManagerImpl: SharedPreferencesManagerImpl): OkHttpClient {
+        val logging = HttpLoggingInterceptor()
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY)
 
-		return OkHttpClient.Builder()
-			.addInterceptor(logging)
-			.addInterceptor(UserTokenInterceptor(sharedPreferencesManagerImpl))
-			.connectTimeout(120, TimeUnit.SECONDS)
-			.readTimeout(120, TimeUnit.SECONDS)
-			.writeTimeout(120, TimeUnit.SECONDS)
-			.build()
-	}
+        return OkHttpClient.Builder()
+            .addInterceptor(logging)
+            .addInterceptor(UserTokenInterceptor(sharedPreferencesManagerImpl))
+            .connectTimeout(120, TimeUnit.SECONDS)
+            .readTimeout(120, TimeUnit.SECONDS)
+            .writeTimeout(120, TimeUnit.SECONDS)
+            .build()
+    }
 
-	@Singleton
-	@Provides
-	fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
-		.addConverterFactory(MoshiConverterFactory.create())
-		.baseUrl(baseWhisperAddress)
-		.client(okHttpClient)
-		.build()
+    @Singleton
+    @Provides
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
+        .addConverterFactory(MoshiConverterFactory.create())
+        .baseUrl(baseWhisperAddress)
+        .client(okHttpClient)
+        .build()
 
-	@Singleton
-	@Provides
-	fun provideWhisperSocket(getUserToken: String): Socket {
-		return Socket.Builder.with("ws://10.0.2.2:3335/ws/")
-			.addHeader("Authorization", "Bearer $getUserToken")
-			.build().connect()
-	}
+    @Singleton
+    @Provides
+    fun provideWhisperSocket(getUserToken: String): Socket {
+        return Socket.Builder.with("ws://10.0.2.2:3335/ws/")
+            .addHeader("Authorization", "Bearer $getUserToken")
+            .build().connect()
+    }
 
-	@Singleton
-	@Provides
-	fun provideSocketBroadcastListener(
-		application: Application,
-		moshi: Moshi,
-		messageRepository: MessageRepository,
-		conversationRepository: ConversationRepository
-	) = SocketBroadcastListener(
-		application,
-		moshi,
-		messageRepository,
-		conversationRepository
-	)
+    @Singleton
+    @Provides
+    fun provideSocketBroadcastListener(
+        application: Application,
+        moshi: Moshi,
+        messageRepository: MessageRepository,
+        conversationRepository: ConversationRepository
+    ) = SocketBroadcastListener(
+        application,
+        moshi,
+        messageRepository,
+        conversationRepository
+    )
 }
