@@ -88,6 +88,7 @@ private fun MainScreenNavigationConfigurations(
     conversationsActionsViewModel: ConversationActionsViewModel
 ) {
 
+    val authViewModel = hiltViewModel<AuthViewModel>()
     val userViewModel = hiltViewModel<UserViewModel>()
     val messagesViewModel = hiltViewModel<MessagesViewModel>()
     val conversationsViewModel = hiltViewModel<ConversationsViewModel>()
@@ -102,7 +103,7 @@ private fun MainScreenNavigationConfigurations(
 
         navigation("Login", "Authentication") {
             composable("Login") {
-                LoginScreen(userViewModel, navController)
+                LoginScreen(authViewModel, navController)
             }
             composable("Register") {
                 RegisterScreen(userViewModel, navController)
@@ -146,7 +147,7 @@ private fun MainScreenNavigationConfigurations(
 
 
 
-            composable("MyAccount") { MyAccount(navController, userViewModel) }
+            composable("MyAccount") { MyAccount(navController, authViewModel, userViewModel) }
             composable("ChangeUsername") { ChangeUsername(navController, userViewModel) }
             composable("ChangeEmail") { ChangeEmail(navController, userViewModel) }
             composable("ChangePassword") { ChangePassword(navController, userViewModel) }
