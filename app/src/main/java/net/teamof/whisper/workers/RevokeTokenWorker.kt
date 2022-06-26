@@ -12,25 +12,25 @@ import net.teamof.whisper.api.RevokeTokenRequest
 
 @HiltWorker
 class RevokeTokenWorker @AssistedInject constructor(
-	@Assisted appContext: Context,
-	@Assisted workerParams: WorkerParameters,
-	private val authAPI: AuthAPI
+    @Assisted appContext: Context,
+    @Assisted workerParams: WorkerParameters,
+    private val authAPI: AuthAPI
 ) :
-	CoroutineWorker(appContext, workerParams) {
-	override suspend fun doWork(): Result {
+    CoroutineWorker(appContext, workerParams) {
+    override suspend fun doWork(): Result {
 
-		return try {
-			val refreshToken = inputData.getString("refreshToken")
+        return try {
+            val refreshToken = inputData.getString("refresh_token")
 
-			if (refreshToken != null)
-				authAPI.revokeToken(RevokeTokenRequest(refreshToken))
+            if (refreshToken != null)
+                authAPI.revokeToken(RevokeTokenRequest(refreshToken))
 
-			Result.success()
+            Result.success()
 
-		} catch (throwable: Throwable) {
-			Log.e("RevokeTokenWorker.kt", throwable.toString())
+        } catch (throwable: Throwable) {
+            Log.e("RevokeTokenWorker.kt", throwable.toString())
 
-			Result.retry()
-		}
-	}
+            Result.retry()
+        }
+    }
 }
