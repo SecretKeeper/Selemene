@@ -22,7 +22,7 @@ import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import net.teamof.whisper.components.BottomAppBar
-import net.teamof.whisper.components.settings.ChangeAccountPasswordScreen
+import net.teamof.whisper.screens.settings.ChangeAccountPasswordScreen
 import net.teamof.whisper.screens.settings.MyAccount
 import net.teamof.whisper.screens.settings.SecurityScreen
 import net.teamof.whisper.screens.settings.myAccount.ChangeEmail
