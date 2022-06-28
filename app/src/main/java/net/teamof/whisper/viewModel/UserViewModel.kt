@@ -4,7 +4,6 @@ import android.app.Application
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
-import androidx.navigation.NavController
 import androidx.work.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -15,6 +14,10 @@ import net.teamof.whisper.api.*
 import net.teamof.whisper.data.ProfileRepository
 import net.teamof.whisper.data.UserRepository
 import net.teamof.whisper.models.UserAPI
+import net.teamof.whisper.screens.settings.myAccount.ChangeEmailButtonState
+import net.teamof.whisper.screens.settings.myAccount.ChangePasswordButtonState
+import net.teamof.whisper.screens.settings.myAccount.ChangeStatusButtonState
+import net.teamof.whisper.screens.settings.myAccount.ChangeUsernameButtonState
 import net.teamof.whisper.sharedprefrences.SharedPreferencesManagerImpl
 import net.teamof.whisper.ui.theme.AccentGreenLong
 import net.teamof.whisper.workers.UpdateProfilePhoto
@@ -52,18 +55,13 @@ class UserViewModel @Inject constructor(
     fun getStatus(): String = sharedPreferences.getString("status", "")
 
     fun getDescription(): String = sharedPreferences.getString("description", "")
-    
+
     suspend fun changePassword(
-        navController: NavController,
         current_password: String,
         new_password: String,
-        buttonLoading: (Boolean) -> Unit,
-        buttonText: (String) -> Unit,
-        buttonColor: (Long) -> Unit,
-        buttonEnabled: (Boolean) -> Unit
+        buttonState: (ChangePasswordButtonState) -> Unit,
     ) {
-        buttonLoading(true)
-        buttonEnabled(false)
+        buttonState(ChangePasswordButtonState(isLoading = true, isEnabled = false))
 
         CoroutineScope(Dispatchers.IO).launch {
             val response = accountAPI.changePassword(
@@ -74,25 +72,43 @@ class UserViewModel @Inject constructor(
             )
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
-                    buttonLoading(false)
-                    buttonEnabled(false)
-                    buttonText("Password Change Successfully")
-                    buttonColor(AccentGreenLong)
+                    buttonState(
+                        ChangePasswordButtonState(
+                            isLoading = false,
+                            isEnabled = false,
+                            text = "Password Change Successfully",
+                            btnColor = AccentGreenLong
+                        )
+                    )
 
                     Timer().schedule(2000) {
-                        buttonColor(0xFF0336FF)
-                        buttonText("Change Password")
-                        buttonEnabled(true)
+                        buttonState(
+                            ChangePasswordButtonState(
+                                isLoading = false,
+                                isEnabled = true,
+                                text = "Change Password",
+                                btnColor = 0xFF0336FF
+                            )
+                        )
                     }
                 } else {
-                    buttonLoading(false)
-                    buttonEnabled(false)
-                    buttonText("Credentials Wrong")
-                    buttonColor(0xFFe11d48)
+                    buttonState(
+                        ChangePasswordButtonState(
+                            isLoading = false,
+                            isEnabled = false,
+                            text = "Credentials Wrong",
+                            btnColor = 0xFFe11d48
+                        )
+                    )
                     Timer().schedule(2500) {
-                        buttonColor(0xFF0336FF)
-                        buttonText("Change Password")
-                        buttonEnabled(true)
+                        buttonState(
+                            ChangePasswordButtonState(
+                                isLoading = false,
+                                isEnabled = true,
+                                text = "Change Password",
+                                btnColor = 0xFF0336FF
+                            )
+                        )
                     }
                 }
             }
@@ -100,16 +116,11 @@ class UserViewModel @Inject constructor(
     }
 
     suspend fun changeUsername(
-        navController: NavController,
         newUsername: String,
         current_password: String,
-        buttonLoading: (Boolean) -> Unit,
-        buttonText: (String) -> Unit,
-        buttonColor: (Long) -> Unit,
-        buttonEnabled: (Boolean) -> Unit
+        buttonState: (ChangeUsernameButtonState) -> Unit,
     ) {
-        buttonLoading(true)
-        buttonEnabled(false)
+        buttonState(ChangeUsernameButtonState(isLoading = true, isEnabled = false))
 
         CoroutineScope(Dispatchers.IO).launch {
             val response = accountAPI.changeUsername(
@@ -120,27 +131,43 @@ class UserViewModel @Inject constructor(
             )
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
-                    buttonLoading(false)
-                    buttonEnabled(false)
-                    buttonText("Username Changed")
-                    buttonColor(AccentGreenLong)
+                    buttonState(
+                        ChangeUsernameButtonState(
+                            isLoading = false,
+                            isEnabled = false,
+                            text = "Username Changed",
+                            btnColor = AccentGreenLong
+                        )
+                    )
 
                     if (response.code() == 200) sharedPreferences.set("username", newUsername)
 
                     Timer().schedule(2000) {
-                        buttonColor(0xFF0336FF)
-                        buttonText("Change Username")
-                        buttonEnabled(true)
+                        buttonState(
+                            ChangeUsernameButtonState(
+                                isEnabled = true,
+                                text = "Username Username",
+                                btnColor = 0xFF0336FF
+                            )
+                        )
                     }
                 } else {
-                    buttonLoading(false)
-                    buttonEnabled(false)
-                    buttonText("Credentials Wrong")
-                    buttonColor(0xFFe11d48)
+                    buttonState(
+                        ChangeUsernameButtonState(
+                            isLoading = false,
+                            isEnabled = false,
+                            text = "Credentials Wrong",
+                            btnColor = 0xFFe11d48
+                        )
+                    )
                     Timer().schedule(2500) {
-                        buttonColor(0xFF0336FF)
-                        buttonText("Change Username")
-                        buttonEnabled(true)
+                        buttonState(
+                            ChangeUsernameButtonState(
+                                isEnabled = true,
+                                text = "Credentials Username",
+                                btnColor = 0xFF0336FF
+                            )
+                        )
                     }
                 }
             }
@@ -148,16 +175,11 @@ class UserViewModel @Inject constructor(
     }
 
     suspend fun changeEmail(
-        navController: NavController,
         email: String,
         password: String,
-        buttonLoading: (Boolean) -> Unit,
-        buttonText: (String) -> Unit,
-        buttonColor: (Long) -> Unit,
-        buttonEnabled: (Boolean) -> Unit
+        buttonState: (ChangeEmailButtonState) -> Unit,
     ) {
-        buttonLoading(true)
-        buttonEnabled(false)
+        buttonState(ChangeEmailButtonState(isLoading = true, isEnabled = false))
 
         CoroutineScope(Dispatchers.IO).launch {
             val response = accountAPI.changeEmail(
@@ -168,22 +190,30 @@ class UserViewModel @Inject constructor(
             )
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
-                    buttonLoading(false)
-                    buttonEnabled(false)
-                    buttonText("Done..")
-//                    navController.navigate("Conversations") {
-//                        launchSingleTop = true
-//                        popUpTo("Login") { inclusive = true }
-//                    }
+                    buttonState(
+                        ChangeEmailButtonState(
+                            isLoading = false,
+                            isEnabled = false,
+                            text = "Done.."
+                        )
+                    )
                 } else {
-                    buttonLoading(false)
-                    buttonEnabled(false)
-                    buttonText("Credentials Wrong")
-                    buttonColor(0xFFe11d48)
+                    buttonState(
+                        ChangeEmailButtonState(
+                            isLoading = false,
+                            isEnabled = false,
+                            text = "Credentials Wrong",
+                            btnColor = 0xFFe11d48
+                        )
+                    )
                     Timer().schedule(2500) {
-                        buttonColor(0xFF0336FF)
-                        buttonText("Change Email")
-                        buttonEnabled(true)
+                        buttonState(
+                            ChangeEmailButtonState(
+                                isEnabled = true,
+                                text = "Change Email",
+                                btnColor = 0xFF0336FF
+                            )
+                        )
                     }
                 }
             }
@@ -236,15 +266,10 @@ class UserViewModel @Inject constructor(
     }
 
     suspend fun setStatus(
-        navController: NavController,
         newStatus: String,
-        buttonLoading: (Boolean) -> Unit,
-        buttonText: (String) -> Unit,
-        buttonColor: (Long) -> Unit,
-        buttonEnabled: (Boolean) -> Unit
+        buttonState: (ChangeStatusButtonState) -> Unit,
     ) {
-        buttonLoading(true)
-        buttonEnabled(false)
+        buttonState(ChangeStatusButtonState(isLoading = true, isEnabled = false))
 
         CoroutineScope(Dispatchers.IO).launch {
             val response = profileAPI.setStatus(
@@ -252,27 +277,43 @@ class UserViewModel @Inject constructor(
             )
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
-                    buttonLoading(false)
-                    buttonEnabled(false)
-                    buttonText("Status Updated")
-                    buttonColor(AccentGreenLong)
+                    buttonState(
+                        ChangeStatusButtonState(
+                            isLoading = false,
+                            isEnabled = false,
+                            text = "Status Updated",
+                            btnColor = AccentGreenLong
+                        )
+                    )
 
                     if (response.code() == 200) sharedPreferences.set("status", newStatus)
 
                     Timer().schedule(2000) {
-                        buttonColor(0xFF0336FF)
-                        buttonText("Set Status")
-                        buttonEnabled(true)
+                        buttonState(
+                            ChangeStatusButtonState(
+                                isEnabled = true,
+                                text = "Set Status",
+                                btnColor = 0xFF0336FF
+                            )
+                        )
                     }
                 } else {
-                    buttonLoading(false)
-                    buttonEnabled(false)
-                    buttonText("Credentials Wrong")
-                    buttonColor(0xFFe11d48)
+                    buttonState(
+                        ChangeStatusButtonState(
+                            isLoading = false,
+                            isEnabled = false,
+                            text = "Credentials Wrong",
+                            btnColor = 0xFFe11d48
+                        )
+                    )
                     Timer().schedule(2500) {
-                        buttonColor(0xFF0336FF)
-                        buttonText("Set Status")
-                        buttonEnabled(true)
+                        buttonState(
+                            ChangeStatusButtonState(
+                                isLoading = true,
+                                text = "Set Status",
+                                btnColor = 0xFF0336FF
+                            )
+                        )
                     }
                 }
             }
