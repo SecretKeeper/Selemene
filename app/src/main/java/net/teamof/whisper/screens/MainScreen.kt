@@ -106,7 +106,7 @@ private fun MainScreenNavigationConfigurations(
                 LoginScreen(authViewModel, navController)
             }
             composable("Register") {
-                RegisterScreen(userViewModel, navController)
+                RegisterScreen(navController, authViewModel)
             }
         }
 
