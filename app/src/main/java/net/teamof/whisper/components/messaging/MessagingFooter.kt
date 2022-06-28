@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberPermissionState
 import kotlinx.coroutines.launch
 import net.teamof.whisper.R
@@ -64,11 +65,10 @@ fun MessagingFooter(
                     .clip(shape = CircleShape)
                     .background(MaterialTheme.colors.primary)
                     .clickable {
-                        when {
-                            cameraPermissionState.hasPermission -> scope.launch { bottomSheetState.show() }
+                        when (cameraPermissionState.status) {
+                            is PermissionStatus.Granted -> scope.launch { bottomSheetState.show() }
 
-                            cameraPermissionState.shouldShowRationale ||
-                                    !cameraPermissionState.permissionRequested -> cameraPermissionState.launchPermissionRequest()
+                            is PermissionStatus.Denied -> cameraPermissionState.launchPermissionRequest()
                         }
                     }
             ) {

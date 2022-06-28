@@ -10,7 +10,6 @@ import androidx.compose.material.FabPosition
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -20,7 +19,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import net.teamof.whisper.components.BottomAppBar
 import net.teamof.whisper.screens.settings.MyAccount
 import net.teamof.whisper.screens.settings.SecurityScreen
@@ -41,12 +39,6 @@ import net.teamof.whisper.viewModel.*
 @Composable
 fun MainScreen(
 ) {
-    val systemUiController = rememberSystemUiController()
-
-    systemUiController.setSystemBarsColor(
-        color = Color.White
-    )
-
     val navController = rememberNavController()
     val disabledNavScreens =
         listOf(
