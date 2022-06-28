@@ -2,17 +2,16 @@ package net.teamof.whisper.components
 
 
 import android.content.res.Resources
+import androidx.compose.animation.Animatable
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
@@ -72,7 +71,7 @@ fun Message(
 
             MessageDropdown(data, isOwnMessage, expandedMessageDropdown)
 
-            MessageContent(data.content, isOwnMessage)
+            MessageContent(data, isOwnMessage)
 
         }
     }
@@ -80,9 +79,18 @@ fun Message(
 
 
 @Composable
-fun MessageContent(content: String, isOwnMessage: Boolean) {
+fun MessageContent(message: Message, isOwnMessage: Boolean) {
+
+    val primaryColor = MaterialTheme.colors.primary
+    val backgroundColor =
+        remember { Animatable(if (message.id == 0L) Color(0x990a5dfe) else primaryColor) }
+
+    LaunchedEffect(key1 = message.id) {
+        if (message.id != 0L) backgroundColor.animateTo(primaryColor, animationSpec = tween(500))
+    }
+
     Text(
-        text = content,
+        text = message.content,
         color = if (isOwnMessage) Color.White else Color.Black,
         fontSize = 14.sp,
         lineHeight = 22.sp,
@@ -99,7 +107,7 @@ fun MessageContent(content: String, isOwnMessage: Boolean) {
                 )
             )
             .background(
-                if (isOwnMessage) MaterialTheme.colors.primary else Color(
+                if (isOwnMessage) backgroundColor.value else Color(
                     0xfff7f8f7
                 )
             )
