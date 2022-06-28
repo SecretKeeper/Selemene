@@ -148,8 +148,13 @@ class AuthViewModel @Inject constructor(
 
     private suspend fun saveUserData(userData: JSONObject) {
 
-        dataKeys.map { sharedPreferences.set(it, userData.getString(it)) }
-
+        dataKeys.map {
+            sharedPreferences.set(
+                it,
+                if (it == "user_id") userData.getString(it).toLong() else userData.getString(it)
+            )
+        }
+        
         // Fetch and save also user profile info
         getLoggedUserProfile(userData.getLong("user_id"))
     }
