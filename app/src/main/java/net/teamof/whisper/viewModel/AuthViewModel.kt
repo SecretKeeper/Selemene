@@ -12,7 +12,10 @@ import kotlinx.coroutines.withContext
 import net.teamof.whisper.api.AuthAPI
 import net.teamof.whisper.api.LoginRequest
 import net.teamof.whisper.api.ProfileAPI
+import net.teamof.whisper.api.SignupRequest
 import net.teamof.whisper.screens.LoginButtonState
+import net.teamof.whisper.screens.RegisterButtonState
+import net.teamof.whisper.screens.RegisterScreenState
 import net.teamof.whisper.sharedprefrences.SharedPreferencesManagerImpl
 import net.teamof.whisper.workers.RevokeTokenWorker
 import org.json.JSONObject
@@ -111,6 +114,70 @@ class AuthViewModel @Inject constructor(
         }
     }
 
+    suspend fun signupWithEmailPassword(
+        username: String,
+        email: String,
+        password: String,
+        registerScreenState: (RegisterScreenState) -> Unit
+    ) {
+        registerScreenState(
+            RegisterScreenState(
+                buttonState = RegisterButtonState(
+                    isLoading = true,
+                    isEnabled = false
+                )
+            )
+        )
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = authAPI.signup(
+                SignupRequest(
+                    username,
+                    email,
+                    password
+                )
+            )
+
+            withContext(Dispatchers.Main) {
+                if (response.isSuccessful) {
+                    registerScreenState(
+                        RegisterScreenState(
+                            isRegistrationComplete = true,
+                            buttonState = RegisterButtonState(
+                                isLoading = false,
+                                isEnabled = false,
+                                text = "Your account successfully created"
+                            )
+                        )
+                    )
+
+                } else {
+                    registerScreenState(
+                        RegisterScreenState(
+                            buttonState = RegisterButtonState(
+                                isLoading = false,
+                                isEnabled = false,
+                                text = "Credentials Wrong",
+                                btnColor = 0xFFe11d48
+                            )
+                        )
+                    )
+                    Timer().schedule(2500) {
+                        registerScreenState(
+                            RegisterScreenState(
+                                buttonState = RegisterButtonState(
+                                    isEnabled = true,
+                                    text = "Signup",
+                                    btnColor = 0xFF0336FF
+                                )
+                            )
+                        )
+                    }
+                }
+            }
+        }
+    }
+
     fun signOut(navController: NavController) {
 
         val constraints = Constraints.Builder()
@@ -154,7 +221,7 @@ class AuthViewModel @Inject constructor(
                 if (it == "user_id") userData.getString(it).toLong() else userData.getString(it)
             )
         }
-        
+
         // Fetch and save also user profile info
         getLoggedUserProfile(userData.getLong("user_id"))
     }
