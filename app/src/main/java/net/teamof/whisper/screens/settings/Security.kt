@@ -11,10 +11,6 @@ import net.teamof.whisper.components.settings.SettingsItem
 @Composable
 fun SecurityScreen(navController: NavController) {
     Column(modifier = Modifier.padding(top = 30.dp, start = 20.dp, end = 20.dp)) {
-        SettingsItem(
-            title = "Change Password Account",
-            event = { navController.navigate("ChangeAccountPassword") }
-        )
         SettingsItem(title = "Password Lock")
         SettingsItem(title = "Fingerprint Unlock")
     }
