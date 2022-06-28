@@ -54,6 +54,10 @@ class MessagesViewModel @Inject constructor(
                 messageRepository.update(
                     assignedMessage
                 )
+                conversationRepository.updateConversationByReceivingMessage(
+                    MessageSide.MYSELF,
+                    assignedMessage
+                )
             }
         }
     }
@@ -71,7 +75,6 @@ class MessagesViewModel @Inject constructor(
     fun sendMessage(message: Message) =
         CoroutineScope(Dispatchers.IO).launch {
             message.localId = messageRepository.insert(message)
-            conversationRepository.updateConversationByReceivingMessage(MessageSide.MYSELF, message)
 
             application.sendBroadcast(
                 Intent("SEND_MESSAGE").putExtra(
