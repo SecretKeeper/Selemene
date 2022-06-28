@@ -20,56 +20,56 @@ import retrofit2.Response
 
 @HiltWorker
 class UpdateProfilePhoto @AssistedInject constructor(
-	@Assisted appContext: Context,
-	@Assisted workerParams: WorkerParameters,
-	private val usersAPI: UsersAPI,
-	private val sharedPreferencesManagerImpl: SharedPreferencesManagerImpl
+    @Assisted appContext: Context,
+    @Assisted workerParams: WorkerParameters,
+    private val usersAPI: UsersAPI,
+    private val sharedPreferencesManagerImpl: SharedPreferencesManagerImpl
 ) :
-	CoroutineWorker(appContext, workerParams) {
-	override suspend fun doWork(): Result {
-		return try {
-			val avatarUriString = inputData.getString("avatar_uri")!!
+    CoroutineWorker(appContext, workerParams) {
+    override suspend fun doWork(): Result {
+        return try {
+            val avatarUriString = inputData.getString("avatar_uri")!!
 
-			val imageFileStream =
-				applicationContext.contentResolver.openInputStream(
-					avatarUriString.toUri()
-				)
+            val imageFileStream =
+                applicationContext.contentResolver.openInputStream(
+                    avatarUriString.toUri()
+                )
 
-			val mime = MimeTypeMap.getSingleton()
-			val type = mime.getExtensionFromMimeType(
-				applicationContext.contentResolver.getType(avatarUriString.toUri())
-			)
+            val mime = MimeTypeMap.getSingleton()
+            val type = mime.getExtensionFromMimeType(
+                applicationContext.contentResolver.getType(avatarUriString.toUri())
+            )
 
-			val part = MultipartBody.Part.createFormData(
-				"avatar", "avatar.${type}", RequestBody.create(
-					"image/${type}".toMediaType(),
-					imageFileStream!!.readBytes()
-				)
-			)
+            val part = MultipartBody.Part.createFormData(
+                "avatar", "avatar.${type}", RequestBody.create(
+                    "image/${type}".toMediaType(),
+                    imageFileStream!!.readBytes()
+                )
+            )
 
-			val response =
-				usersAPI.setAvatar(part, sharedPreferencesManagerImpl.getString("accessToken", ""))
+            val response =
+                usersAPI.setAvatar(part, sharedPreferencesManagerImpl.getString("access_token", ""))
 
-			response.enqueue(object : Callback<SetAvatarResponse> {
-				override fun onResponse(
-					call: Call<SetAvatarResponse>,
-					response: Response<SetAvatarResponse>
-				) {
-					response.body()?.let {
-						sharedPreferencesManagerImpl.set("avatar", it.avatar)
-					}
-					Result.success()
-				}
+            response.enqueue(object : Callback<SetAvatarResponse> {
+                override fun onResponse(
+                    call: Call<SetAvatarResponse>,
+                    response: Response<SetAvatarResponse>
+                ) {
+                    response.body()?.let {
+                        sharedPreferencesManagerImpl.set("avatar", it.avatar)
+                    }
+                    Result.success()
+                }
 
-				override fun onFailure(call: Call<SetAvatarResponse>, t: Throwable) {
-					Result.retry()
-				}
-			})
+                override fun onFailure(call: Call<SetAvatarResponse>, t: Throwable) {
+                    Result.retry()
+                }
+            })
 
-			Result.success()
+            Result.success()
 
-		} catch (throwable: Throwable) {
-			Result.retry()
-		}
-	}
+        } catch (throwable: Throwable) {
+            Result.retry()
+        }
+    }
 }

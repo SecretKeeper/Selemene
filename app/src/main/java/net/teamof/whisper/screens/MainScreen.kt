@@ -1,5 +1,6 @@
 package net.teamof.whisper.screens
 
+import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -21,7 +22,6 @@ import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import net.teamof.whisper.components.BottomAppBar
-import net.teamof.whisper.components.settings.ChangeAccountPasswordScreen
 import net.teamof.whisper.screens.settings.MyAccount
 import net.teamof.whisper.screens.settings.SecurityScreen
 import net.teamof.whisper.screens.settings.myAccount.ChangeEmail
@@ -31,6 +31,7 @@ import net.teamof.whisper.screens.settings.myAccount.SetStatus
 import net.teamof.whisper.ui.theme.WhisperTheme
 import net.teamof.whisper.viewModel.*
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @RequiresApi(Build.VERSION_CODES.P)
 @ExperimentalCoilApi
 @ExperimentalPermissionsApi
@@ -86,6 +87,7 @@ private fun MainScreenNavigationConfigurations(
     conversationsActionsViewModel: ConversationActionsViewModel
 ) {
 
+    val authViewModel = hiltViewModel<AuthViewModel>()
     val userViewModel = hiltViewModel<UserViewModel>()
     val messagesViewModel = hiltViewModel<MessagesViewModel>()
     val conversationsViewModel = hiltViewModel<ConversationsViewModel>()
@@ -100,10 +102,10 @@ private fun MainScreenNavigationConfigurations(
 
         navigation("Login", "Authentication") {
             composable("Login") {
-                LoginScreen(userViewModel, navController)
+                LoginScreen(authViewModel, navController)
             }
             composable("Register") {
-                RegisterScreen(userViewModel, navController)
+                RegisterScreen(navController, authViewModel)
             }
         }
 
@@ -144,7 +146,7 @@ private fun MainScreenNavigationConfigurations(
 
 
 
-            composable("MyAccount") { MyAccount(navController, userViewModel) }
+            composable("MyAccount") { MyAccount(navController, authViewModel, userViewModel) }
             composable("ChangeUsername") { ChangeUsername(navController, userViewModel) }
             composable("ChangeEmail") { ChangeEmail(navController, userViewModel) }
             composable("ChangePassword") { ChangePassword(navController, userViewModel) }
@@ -152,7 +154,6 @@ private fun MainScreenNavigationConfigurations(
 
 
             composable("Security") { SecurityScreen(navController) }
-            composable("ChangeAccountPassword") { ChangeAccountPasswordScreen() }
             composable("Profile") {
                 Profile(
                     navController,

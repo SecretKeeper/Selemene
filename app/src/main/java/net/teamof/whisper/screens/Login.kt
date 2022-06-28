@@ -16,18 +16,22 @@ import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import net.teamof.whisper.components.TextField
 import net.teamof.whisper.ui.theme.fontFamily
-import net.teamof.whisper.viewModel.UserViewModel
+import net.teamof.whisper.viewModel.AuthViewModel
+
+data class LoginButtonState(
+    var text: String = "Login",
+    var isLoading: Boolean = false,
+    var btnColor: Long = 0xFF0336FF,
+    var isEnabled: Boolean = true
+)
 
 @Composable()
 fun LoginScreen(
-    userViewModel: UserViewModel,
+    authViewModel: AuthViewModel,
     navController: NavController
 ) {
     val composableScope = rememberCoroutineScope()
-    val buttonEnabled = remember { mutableStateOf(true) }
-    val buttonText = remember { mutableStateOf("Login") }
-    val buttonLoading = remember { mutableStateOf(false) }
-    val buttonColor = remember { mutableStateOf(0xFF0336FF) }
+    val buttonState = remember { mutableStateOf(LoginButtonState()) }
     val username = remember { mutableStateOf("") }
     val usernameError = remember { mutableStateOf(false) }
     val password = remember { mutableStateOf("") }
@@ -35,26 +39,10 @@ fun LoginScreen(
 
 
     Column(Modifier.padding(horizontal = 25.dp, vertical = 15.dp)) {
+
+        LoginHeader()
+
         Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = "Welcome to Whispers!",
-                textAlign = TextAlign.Center,
-                fontFamily = fontFamily,
-                fontSize = 26.sp,
-                fontWeight = FontWeight(700),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 15.dp)
-            )
-            Text(
-                text = "Keep your data safe",
-                textAlign = TextAlign.Center,
-                color = Color(97, 102, 125),
-                fontFamily = fontFamily,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 35.dp)
-            )
             TextField(
                 text = "Username",
                 value = username.value,
@@ -78,22 +66,18 @@ fun LoginScreen(
                 onClick = {
                     composableScope.launch {
                         username.value.let {
-                            userViewModel.authenticate(
+                            authViewModel.login(
                                 navController,
                                 username.value,
                                 password.value,
-                                { buttonLoading.value = it },
-                                { buttonText.value = it },
-                                { buttonColor.value = it },
-                                { buttonEnabled.value = it }
-                            )
+                            ) { buttonState.value = it }
                         }
                     }
                 },
-                enabled = !passwordError.value || !usernameError.value || buttonEnabled.value,
+                enabled = !passwordError.value || !usernameError.value || buttonState.value.isEnabled,
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color(buttonColor.value),
-                    disabledBackgroundColor = Color(buttonColor.value)
+                    backgroundColor = Color(buttonState.value.btnColor),
+                    disabledBackgroundColor = Color(buttonState.value.btnColor)
                 ),
                 modifier = Modifier
                     .padding(vertical = 25.dp)
@@ -103,7 +87,7 @@ fun LoginScreen(
                     modifier = Modifier
                         .padding(vertical = 10.dp)
                 ) {
-                    if (buttonLoading.value)
+                    if (buttonState.value.isLoading)
                         Box(
                             modifier = Modifier
                                 .width(20.dp)
@@ -116,7 +100,7 @@ fun LoginScreen(
                             )
                         }
                     else Text(
-                        text = buttonText.value,
+                        text = buttonState.value.text,
                         color = Color.White,
                         textAlign = TextAlign.Center,
                         fontFamily = fontFamily,
@@ -143,21 +127,52 @@ fun LoginScreen(
             }
         }
 
-        TextButton(
-            onClick = {
-                navController.navigate("Register") {
-                    launchSingleTop = true
-                }
-            }) {
-            Text(
-                text = "Does not have an account yet?",
-                textAlign = TextAlign.Center,
-                fontFamily = fontFamily,
-                color = Color.Gray,
-                modifier = Modifier
-                    .padding(vertical = 6.dp)
-                    .fillMaxWidth()
-            )
-        }
+        LoginFooter(navController)
+
+    }
+}
+
+
+@Composable
+fun LoginHeader() {
+    Text(
+        text = "Welcome to Whispers!",
+        textAlign = TextAlign.Center,
+        fontFamily = fontFamily,
+        fontSize = 26.sp,
+        fontWeight = FontWeight(700),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 15.dp)
+    )
+    Text(
+        text = "Keep your data safe",
+        textAlign = TextAlign.Center,
+        color = Color(97, 102, 125),
+        fontFamily = fontFamily,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 35.dp)
+    )
+}
+
+
+@Composable
+fun LoginFooter(navController: NavController) {
+    TextButton(
+        onClick = {
+            navController.navigate("Register") {
+                launchSingleTop = true
+            }
+        }) {
+        Text(
+            text = "Does not have an account yet?",
+            textAlign = TextAlign.Center,
+            fontFamily = fontFamily,
+            color = Color.Gray,
+            modifier = Modifier
+                .padding(vertical = 6.dp)
+                .fillMaxWidth()
+        )
     }
 }

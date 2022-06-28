@@ -22,85 +22,86 @@ import net.teamof.whisper.components.settings.SettingTemplate
 import net.teamof.whisper.ui.theme.fontFamily
 import net.teamof.whisper.viewModel.UserViewModel
 
+data class ChangeStatusButtonState(
+    var text: String = "Set Status",
+    var isLoading: Boolean = false,
+    var btnColor: Long = 0xFF0336FF,
+    var isEnabled: Boolean = true
+)
+
 @Composable
 fun SetStatus(navController: NavController, userViewModel: UserViewModel) {
 
-	val composableScope = rememberCoroutineScope()
+    val composableScope = rememberCoroutineScope()
 
-	val status = remember { mutableStateOf(userViewModel.getStatus()) }
+    val status = remember { mutableStateOf(userViewModel.getStatus()) }
 
-	val buttonEnabled = remember { mutableStateOf(true) }
-	val buttonText = remember { mutableStateOf("Set Status") }
-	val buttonLoading = remember { mutableStateOf(false) }
-	val buttonColor = remember { mutableStateOf(0xFF0336FF) }
+    val buttonState = remember { mutableStateOf(ChangeStatusButtonState()) }
 
-	SettingTemplate(navController = navController, title = "Set Status") {
+    SettingTemplate(navController = navController, title = "Set Status") {
 
-		TextField(
-			text = "Status",
-			value = status.value,
-			onChange = {
-				status.value = it.toString()
-			},
-			singleLine = true
-		)
+        TextField(
+            text = "Status",
+            value = status.value,
+            onChange = {
+                status.value = it.toString()
+            },
+            singleLine = true
+        )
 
-		Button(
-			onClick = {
-				composableScope.launch {
-					userViewModel.setStatus(
-						navController,
-						status.value,
-						{ buttonLoading.value = it },
-						{ buttonText.value = it },
-						{ buttonColor.value = it },
-						{ buttonEnabled.value = it }
-					)
-				}
-			},
-			colors = ButtonDefaults.buttonColors(
-				backgroundColor = Color(buttonColor.value),
-				disabledBackgroundColor = Color(buttonColor.value)
-			),
-			shape = RoundedCornerShape(50)
-		) {
-			Box(
-				modifier = Modifier
-					.padding(vertical = 5.dp)
-			) {
-				if (buttonLoading.value)
-					Box(
-						modifier = Modifier
+        Button(
+            onClick = {
+                composableScope.launch {
+                    userViewModel.setStatus(
+                        status.value
+                    ) {
+                        buttonState.value = it
+                    }
+                }
+            },
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color(buttonState.value.btnColor),
+                disabledBackgroundColor = Color(buttonState.value.btnColor)
+            ),
+            shape = RoundedCornerShape(50)
+        ) {
+            Box(
+                modifier = Modifier
+                    .padding(vertical = 5.dp)
+            ) {
+                if (buttonState.value.isLoading)
+                    Box(
+                        modifier = Modifier
 							.width(20.dp)
 							.height(20.dp)
-					) {
-						CircularProgressIndicator(
-							color = Color.White,
-							strokeWidth = 2.dp,
-							modifier = Modifier.height(10.dp)
-						)
-					}
-				else {
-					Row(verticalAlignment = Alignment.CenterVertically) {
-						Text(
-							text = buttonText.value,
-							color = Color.White,
-							textAlign = TextAlign.Center,
-							fontFamily = fontFamily,
-							fontWeight = FontWeight.Medium,
-							modifier = Modifier.padding(end = 10.dp)
-						)
-						Icon(
-							painter = painterResource(id = R.drawable.ic_right_arrow),
-							contentDescription = null,
-							tint = Color.White,
-							modifier = Modifier
+                    ) {
+                        CircularProgressIndicator(
+                            color = Color.White,
+                            strokeWidth = 2.dp,
+                            modifier = Modifier.height(10.dp)
+                        )
+                    }
+                else {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = buttonState.value.text,
+                            color = Color.White,
+                            textAlign = TextAlign.Center,
+                            fontFamily = fontFamily,
+                            fontWeight = FontWeight.Medium,
+                            modifier = Modifier.padding(end = 10.dp)
+                        )
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_right_arrow),
+                            contentDescription = null,
+                            tint = Color.White,
+                            modifier = Modifier
 								.width(20.dp)
 								.height(20.dp)
-						)
-					}
-				}
-			}
-		}
-	}
+                        )
+                    }
+                }
+            }
+        }
+    }
 }

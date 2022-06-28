@@ -14,22 +14,35 @@ import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import net.teamof.whisper.components.TextField
 import net.teamof.whisper.ui.theme.fontFamily
-import net.teamof.whisper.viewModel.UserViewModel
+import net.teamof.whisper.viewModel.AuthViewModel
+
+data class RegisterButtonState(
+    var text: String = "Register",
+    var isLoading: Boolean = false,
+    var btnColor: Long = 0xFF0336FF,
+    var isEnabled: Boolean = true
+)
+
+data class RegisterScreenState(
+    var isRegistrationComplete: Boolean = false,
+    var buttonState: RegisterButtonState
+)
 
 @ExperimentalAnimationApi
 @Composable
 fun RegisterScreen(
-    userViewModel: UserViewModel,
-    navController: NavController
+    navController: NavController,
+    authViewModel: AuthViewModel,
 ) {
-    val completedRegistration = remember { mutableStateOf(false) }
     val username = remember { mutableStateOf("") }
+    val registerScreenState =
+        remember { mutableStateOf(RegisterScreenState(buttonState = RegisterButtonState())) }
 
     Column(Modifier.padding(horizontal = 25.dp, vertical = 15.dp)) {
         AnimatedContent(
-            targetState = completedRegistration.value,
+            targetState = registerScreenState.value.isRegistrationComplete,
             transitionSpec = {
-                if (completedRegistration.value) {
+                if (registerScreenState.value.isRegistrationComplete) {
                     slideInHorizontally(initialOffsetX = { height -> height }) + fadeIn() with
                             slideOutHorizontally(targetOffsetX = { height -> -height }) + fadeOut()
                 } else {
@@ -43,27 +56,23 @@ fun RegisterScreen(
             if (showActions)
                 SigningAfterRegistration(
                     navController,
-                    userViewModel,
-                    completedRegistration,
+                    authViewModel,
+                    registerScreenState.value,
                     username
                 )
             else
-                RegisterForm(userViewModel, completedRegistration, username)
+                RegisterForm(authViewModel, registerScreenState, username)
         }
     }
 }
 
 @Composable
 fun RegisterForm(
-    userViewModel: UserViewModel,
-    completedRegistration: MutableState<Boolean>,
+    authViewModel: AuthViewModel,
+    registerScreenState: MutableState<RegisterScreenState>,
     username: MutableState<String>
 ) {
     val composableScope = rememberCoroutineScope()
-    val buttonEnabled = remember { mutableStateOf(true) }
-    val buttonText = remember { mutableStateOf("Register") }
-    val buttonLoading = remember { mutableStateOf(false) }
-    val buttonColor = remember { mutableStateOf(0xFF0336FF) }
     val usernameError = remember { mutableStateOf(false) }
     val email = remember { mutableStateOf("") }
     val emailError = remember { mutableStateOf(false) }
@@ -71,6 +80,7 @@ fun RegisterForm(
     val passwordError = remember { mutableStateOf(false) }
     val cPassword = remember { mutableStateOf("") }
     val cPasswordError = remember { mutableStateOf(false) }
+
 
     Column {
         Column(modifier = Modifier.weight(1f)) {
@@ -135,22 +145,18 @@ fun RegisterForm(
                 onClick = {
                     composableScope.launch {
                         username.value.let {
-                            userViewModel.signupWithEmailPassword(
-                                { completedRegistration.value = it },
+                            authViewModel.signupWithEmailPassword(
                                 username.value,
                                 email.value,
                                 password.value,
-                                { buttonLoading.value = it },
-                                { buttonText.value = it },
-                                { buttonColor.value = it }
-                            ) { buttonEnabled.value = it }
+                            ) { registerScreenState.value = it }
                         }
                     }
                 },
-                enabled = !passwordError.value || !usernameError.value || buttonEnabled.value,
+                enabled = !passwordError.value || !usernameError.value || registerScreenState.value.buttonState.isEnabled,
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color(buttonColor.value),
-                    disabledBackgroundColor = Color(buttonColor.value)
+                    backgroundColor = Color(registerScreenState.value.buttonState.btnColor),
+                    disabledBackgroundColor = Color(registerScreenState.value.buttonState.btnColor)
                 ),
                 modifier = Modifier
                     .padding(vertical = 25.dp)
@@ -160,7 +166,7 @@ fun RegisterForm(
                     modifier = Modifier
                         .padding(vertical = 10.dp)
                 ) {
-                    if (buttonLoading.value)
+                    if (registerScreenState.value.buttonState.isLoading)
                         Box(
                             modifier = Modifier
                                 .width(20.dp)
@@ -173,7 +179,7 @@ fun RegisterForm(
                             )
                         }
                     else Text(
-                        text = buttonText.value,
+                        text = registerScreenState.value.buttonState.text,
                         color = Color.White,
                         textAlign = TextAlign.Center,
                         fontFamily = fontFamily,
@@ -187,7 +193,7 @@ fun RegisterForm(
 //                    launchSingleTop = true
 //                    popUpTo("Login") { inclusive = true }
 //                }
-                completedRegistration.value = true
+                registerScreenState.value.isRegistrationComplete = true
             }) {
             Text(
                 text = "Already have account? Sign in",
@@ -203,16 +209,13 @@ fun RegisterForm(
 @Composable
 fun SigningAfterRegistration(
     navController: NavController,
-    userViewModel: UserViewModel,
-    completedRegistration: MutableState<Boolean>,
+    authViewModel: AuthViewModel,
+    registerScreenState: RegisterScreenState,
     username: MutableState<String>
 ) {
 
     val composableScope = rememberCoroutineScope()
-    val buttonEnabled = remember { mutableStateOf(true) }
-    val buttonText = remember { mutableStateOf("Register") }
-    val buttonLoading = remember { mutableStateOf(false) }
-    val buttonColor = remember { mutableStateOf(0xFF0336FF) }
+    val loginButtonState = remember { mutableStateOf(LoginButtonState()) }
     val password = remember { mutableStateOf("") }
     val passwordError = remember { mutableStateOf(false) }
 
@@ -260,22 +263,20 @@ fun SigningAfterRegistration(
                 onClick = {
                     composableScope.launch {
                         username.value.let {
-                            userViewModel.authenticate(
+                            authViewModel.login(
                                 navController,
                                 username.value,
-                                password.value,
-                                { buttonLoading.value = it },
-                                { buttonText.value = it },
-                                { buttonColor.value = it },
-                                { buttonEnabled.value = it }
-                            )
+                                password.value
+                            ) {
+                                loginButtonState.value = it
+                            }
                         }
                     }
                 },
-                enabled = !passwordError.value || buttonEnabled.value,
+                enabled = !passwordError.value || loginButtonState.value.isEnabled,
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color(buttonColor.value),
-                    disabledBackgroundColor = Color(buttonColor.value)
+                    backgroundColor = Color(loginButtonState.value.btnColor),
+                    disabledBackgroundColor = Color(loginButtonState.value.btnColor)
                 ),
                 modifier = Modifier
                     .padding(vertical = 25.dp)
@@ -285,7 +286,7 @@ fun SigningAfterRegistration(
                     modifier = Modifier
                         .padding(vertical = 10.dp)
                 ) {
-                    if (buttonLoading.value)
+                    if (loginButtonState.value.isLoading)
                         Box(
                             modifier = Modifier
                                 .width(20.dp)
@@ -298,7 +299,7 @@ fun SigningAfterRegistration(
                             )
                         }
                     else Text(
-                        text = buttonText.value,
+                        text = loginButtonState.value.text,
                         color = Color.White,
                         textAlign = TextAlign.Center,
                         fontFamily = fontFamily,
@@ -312,7 +313,7 @@ fun SigningAfterRegistration(
 //                    launchSingleTop = true
 //                    popUpTo("Login") { inclusive = true }
 //                }
-                completedRegistration.value = false
+                registerScreenState.isRegistrationComplete = false
             }) {
             Text(
                 text = "Already have account? Sign in",

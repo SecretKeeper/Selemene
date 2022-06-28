@@ -23,6 +23,13 @@ import net.teamof.whisper.components.settings.SettingTemplate
 import net.teamof.whisper.ui.theme.fontFamily
 import net.teamof.whisper.viewModel.UserViewModel
 
+data class ChangePasswordButtonState(
+    var text: String = "Change Password",
+    var isLoading: Boolean = false,
+    var btnColor: Long = 0xFF0336FF,
+    var isEnabled: Boolean = true
+)
+
 @Composable
 fun ChangePassword(navController: NavController, userViewModel: UserViewModel) {
     val composableScope = rememberCoroutineScope()
@@ -36,10 +43,7 @@ fun ChangePassword(navController: NavController, userViewModel: UserViewModel) {
     val confirmPassword = remember { mutableStateOf("") }
     val confirmPasswordError = remember { mutableStateOf(false) }
 
-    val buttonEnabled = remember { mutableStateOf(true) }
-    val buttonText = remember { mutableStateOf("Change Password") }
-    val buttonLoading = remember { mutableStateOf(false) }
-    val buttonColor = remember { mutableStateOf(0xFF0336FF) }
+    val buttonState = remember { mutableStateOf(ChangePasswordButtonState()) }
 
     SettingTemplate(navController = navController, title = "Change password") {
 
@@ -92,22 +96,17 @@ fun ChangePassword(navController: NavController, userViewModel: UserViewModel) {
             onClick = {
                 composableScope.launch {
                     userViewModel.changePassword(
-                        navController,
                         currentPassword.value,
-                        newPassword.value,
-                        { buttonLoading.value = it },
-                        { buttonText.value = it },
-                        { buttonColor.value = it },
-                        { buttonEnabled.value = it }
-                    )
+                        newPassword.value
+                    ) { buttonState.value = it }
                 }
             },
             enabled = !newPasswordError.value || !newPasswordError.value ||
-                    !confirmPasswordError.value || buttonEnabled.value ||
+                    !confirmPasswordError.value || buttonState.value.isEnabled ||
                     newPassword.value != confirmPassword.value,
             colors = ButtonDefaults.buttonColors(
-                backgroundColor = Color(buttonColor.value),
-                disabledBackgroundColor = Color(buttonColor.value)
+                backgroundColor = Color(buttonState.value.btnColor),
+                disabledBackgroundColor = Color(buttonState.value.btnColor)
             ),
             shape = RoundedCornerShape(50)
         ) {
@@ -115,7 +114,7 @@ fun ChangePassword(navController: NavController, userViewModel: UserViewModel) {
                 modifier = Modifier
                     .padding(vertical = 5.dp)
             ) {
-                if (buttonLoading.value)
+                if (buttonState.value.isLoading)
                     Box(
                         modifier = Modifier
                             .width(20.dp)
@@ -130,7 +129,7 @@ fun ChangePassword(navController: NavController, userViewModel: UserViewModel) {
                 else {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
-                            text = buttonText.value,
+                            text = buttonState.value.text,
                             color = Color.White,
                             textAlign = TextAlign.Center,
                             fontFamily = fontFamily,

@@ -15,102 +15,107 @@ import androidx.navigation.NavController
 import net.teamof.whisper.components.settings.Logout
 import net.teamof.whisper.components.settings.SettingsItem
 import net.teamof.whisper.ui.theme.fontFamily
+import net.teamof.whisper.viewModel.AuthViewModel
 import net.teamof.whisper.viewModel.UserViewModel
 
 @Composable
-fun MyAccount(navController: NavController, userViewModel: UserViewModel) {
+fun MyAccount(
+    navController: NavController,
+    authViewModel: AuthViewModel,
+    userViewModel: UserViewModel
+) {
 
-	val context = LocalContext.current
+    val context = LocalContext.current
 
-	Column {
-		Column(modifier = Modifier.padding(top = 30.dp, start = 20.dp, end = 20.dp)) {
-			Text(
-				text = "Account Information",
-				fontFamily = fontFamily,
-				fontWeight = FontWeight.Bold,
-				fontSize = 18.sp,
-				modifier = Modifier.padding(bottom = 30.dp)
-			)
-			SettingsItem(
-				title = "Username",
-				subTitle = userViewModel.getUsername(),
-				event = { navController.navigate("ChangeUsername") }
-			)
-			SettingsItem(
-				title = "Email",
-				subTitle = userViewModel.getEmail(),
-				event = { navController.navigate("ChangeEmail") }
-			)
-			SettingsItem(
-				title = "Change Password",
-				event = { navController.navigate("ChangePassword") }
-			)
-			SettingsItem(
-				title = "Set Status",
-				event = { navController.navigate("SetStatus") }
-			)
-		}
+    Column {
+        Column(modifier = Modifier.padding(top = 30.dp, start = 20.dp, end = 20.dp)) {
+            Text(
+                text = "Account Information",
+                fontFamily = fontFamily,
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                modifier = Modifier.padding(bottom = 30.dp)
+            )
+            SettingsItem(
+                title = "Username",
+                subTitle = userViewModel.getUsername(),
+                event = { navController.navigate("ChangeUsername") }
+            )
+            SettingsItem(
+                title = "Email",
+                subTitle = userViewModel.getEmail(),
+                event = { navController.navigate("ChangeEmail") }
+            )
+            SettingsItem(
+                title = "Change Password",
+                event = { navController.navigate("ChangePassword") }
+            )
+            SettingsItem(
+                title = "Set Status",
+                event = { navController.navigate("SetStatus") }
+            )
+        }
 
-		Box(
-			modifier = Modifier
+        Box(
+            modifier = Modifier
 				.fillMaxWidth()
 				.background(Color(red = 235, green = 235, blue = 235))
 				.height(1.dp)
-		)
+        )
 
-		Column(modifier = Modifier.padding(top = 30.dp, start = 20.dp, end = 20.dp)) {
-			SettingsItem(
-				title = "Blocked Users",
-				event = {
-					Toast.makeText(
-						context,
-						"This feature is not available yet",
-						Toast.LENGTH_SHORT
-					).show()
-				}
-			)
-		}
+        Column(modifier = Modifier.padding(top = 30.dp, start = 20.dp, end = 20.dp)) {
+            SettingsItem(
+                title = "Blocked Users",
+                event = {
+                    Toast.makeText(
+                        context,
+                        "This feature is not available yet",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            )
+        }
 
-		Box(
-			modifier = Modifier
+        Box(
+            modifier = Modifier
 				.fillMaxWidth()
 				.background(Color(red = 235, green = 235, blue = 235))
 				.height(1.dp)
-		)
+        )
 
-		Column(modifier = Modifier.padding(top = 30.dp, start = 20.dp, end = 20.dp)) {
-			SettingsItem(
-				title = "Deactivate Account",
-				event = {
-					Toast.makeText(
-						context,
-						"This feature is not available yet",
-						Toast.LENGTH_SHORT
-					).show()
-				}
-			)
+        Column(modifier = Modifier.padding(top = 30.dp, start = 20.dp, end = 20.dp)) {
+            SettingsItem(
+                title = "Deactivate Account",
+                event = {
+                    Toast.makeText(
+                        context,
+                        "This feature is not available yet",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            )
 
-			SettingsItem(
-				title = "Delete Your Account",
-				event = {
-					Toast.makeText(
-						context,
-						"This feature is not available yet",
-						Toast.LENGTH_SHORT
-					).show()
-				},
-			)
-		}
+            SettingsItem(
+                title = "Delete Your Account",
+                event = {
+                    Toast.makeText(
+                        context,
+                        "This feature is not available yet",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                },
+            )
+        }
 
-		Box(
-			modifier = Modifier
+        Box(
+            modifier = Modifier
 				.fillMaxWidth()
 				.background(Color(red = 235, green = 235, blue = 235))
 				.height(1.dp)
-		)
+        )
 
-		Column(modifier = Modifier.padding(top = 30.dp, start = 20.dp, end = 20.dp)) {
-			Logout(navController, userViewModel)
-		}
-	}
+        Column(modifier = Modifier.padding(top = 30.dp, start = 20.dp, end = 20.dp)) {
+            Logout(navController, authViewModel)
+        }
+    }
 }
