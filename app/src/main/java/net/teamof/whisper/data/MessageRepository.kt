@@ -7,31 +7,31 @@ import javax.inject.Singleton
 @Singleton
 class MessageRepository @Inject constructor(private val messageDAO: MessageDAO) {
 
-	val getAllMessages: LiveData<List<Message>> =
-		messageDAO.getAllMessages()
+    val getAllMessages: LiveData<List<Message>> =
+        messageDAO.getAllMessages()
 
-	fun getConversationMessages(targetUserId: Long) =
-		messageDAO.getMessagesByTargetUserId(targetUserId)
+    fun getConversationMessages(targetUserId: Long) =
+        messageDAO.getMessagesByTargetUserId(targetUserId)
 
-	fun insert(message: Message) =
-		messageDAO.insert(message)
+    fun insert(message: Message) =
+        messageDAO.insert(message)
 
-	fun insert(messages: MutableList<Message>) =
-		messageDAO.insert(messages)
+    fun insert(messages: MutableList<Message>) =
+        messageDAO.insert(messages)
 
-	fun upsert(message: Message) =
-		messageDAO.upsert(message)
+    fun upsert(message: Message) =
+        messageDAO.upsert(message)
 
-	fun upsert(messages: MutableList<Message>) =
-		messageDAO.upsert(messages)
-
-
-	fun update(message: Message) =
-		messageDAO.update(message)
+    fun upsert(messages: MutableList<Message>) =
+        messageDAO.upsert(messages)
 
 
-	fun deleteUser(message: Message) =
-		messageDAO.delete(message)
+    fun update(message: Message) =
+        messageDAO.update(message)
+
+
+    fun deleteMessageById(id: Long) =
+        messageDAO.deleteMessageById(id)
 
 
 }

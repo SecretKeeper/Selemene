@@ -102,6 +102,7 @@ fun Messaging(
                                 currentUserId,
                                 message,
                                 selection.value,
+                                messagesViewModel,
                                 enableSelectionMode = { selection.value = true }
                             )
                         }

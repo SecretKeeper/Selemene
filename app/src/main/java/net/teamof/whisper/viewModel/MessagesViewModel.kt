@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -52,14 +51,10 @@ class MessagesViewModel @Inject constructor(
             }
 
             if (assignedMessage != null) CoroutineScope(Dispatchers.IO).launch {
-
-                Log.e("OH WTF !!! ASSIGNED_MESSAGE", assignedMessage.toString())
-
                 messageRepository.update(
                     assignedMessage
                 )
             }
-
         }
     }
 
@@ -70,13 +65,10 @@ class MessagesViewModel @Inject constructor(
         )
     }
 
-    private val currentUserId = getCurrentUserId()
-
     private fun getCurrentUserId(): Long =
         sharedPreferencesManagerImpl.getLong("userId", 0L)
 
-    fun sendMessage(message: Message) {
-
+    fun sendMessage(message: Message) =
         CoroutineScope(Dispatchers.IO).launch {
             message.localId = messageRepository.insert(message)
             conversationRepository.updateConversationByReceivingMessage(MessageSide.MYSELF, message)
@@ -88,9 +80,13 @@ class MessagesViewModel @Inject constructor(
                 )
             )
         }
-    }
 
     fun getConversationMessages(targetUserId: Long): LiveData<List<Message>> =
         messageRepository.getConversationMessages(targetUserId)
 
+
+    fun cancelSendingMessage(messageLocalId: Long) =
+        CoroutineScope(Dispatchers.IO).launch {
+            messageRepository.deleteMessageById(messageLocalId)
+        }
 }
