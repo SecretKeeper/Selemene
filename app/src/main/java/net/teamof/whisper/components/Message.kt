@@ -139,7 +139,13 @@ fun MessageDropdown(
                 0.dp
             ),
         ) {
-            if (isOwnMessage)
+            if (isOwnMessage && message.id == 0L)
+                DropdownMenuItem(onClick = {
+                    expandedMessageDropdown.value = false
+                }) {
+                    Text("Send Again")
+                }
+            if (isOwnMessage && message.id != 0L)
                 DropdownMenuItem(onClick = {
                     currentEditMessageCtx.value = message
                     expandedMessageDropdown.value = false
@@ -147,11 +153,18 @@ fun MessageDropdown(
                 }) {
                     Text("Edit")
                 }
-            DropdownMenuItem(onClick = {
-                expandedMessageDropdown.value = false
-            }) {
-                Text("Delete")
-            }
+            if (isOwnMessage && message.id == 0L)
+                DropdownMenuItem(onClick = {
+                    expandedMessageDropdown.value = false
+                }) {
+                    Text("Cancel")
+                }
+            else
+                DropdownMenuItem(onClick = {
+                    expandedMessageDropdown.value = false
+                }) {
+                    Text("Delete")
+                }
         }
 
 }
