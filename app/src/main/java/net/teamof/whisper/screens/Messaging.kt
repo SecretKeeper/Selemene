@@ -60,7 +60,9 @@ fun Messaging(
         }
     } else {
         BackPressHandler {
-            navController.navigate("Conversations")
+            navController.navigate("Conversations") {
+                popUpTo("Conversations")
+            }
         }
     }
 
