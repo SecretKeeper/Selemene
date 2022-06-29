@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -83,6 +84,14 @@ class MessagesViewModel @Inject constructor(
                 )
             )
         }
+
+    fun sendAgain(message: Message) =
+        application.sendBroadcast(
+            Intent("SEND_MESSAGE").putExtra(
+                "MESSAGE_MODEL",
+                message
+            )
+        )
 
     fun getConversationMessages(targetUserId: Long): LiveData<List<Message>> =
         messageRepository.getConversationMessages(targetUserId)

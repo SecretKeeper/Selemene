@@ -146,6 +146,7 @@ fun MessageDropdown(
                 DropdownMenuItem(onClick = {
                     expandedMessageDropdown.value = false
                 }) {
+                    messagesViewModel.sendAgain(message)
                     Text("Send Again")
                 }
             if (isOwnMessage && message.id != 0L)
