@@ -3,6 +3,9 @@ package net.teamof.whisper.viewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import net.teamof.whisper.data.ConversationRepository
 import javax.inject.Inject
 
@@ -55,6 +58,8 @@ class ConversationActionsViewModel @Inject constructor(
 
     fun deleteSelectedConversations() {
         if (_selectedConversations.value != null)
-            conversationRepository.deleteByUserIds(_selectedConversations.value!!.toMutableList())
+            CoroutineScope(Dispatchers.IO).launch {
+                conversationRepository.deleteByUserIds(_selectedConversations.value!!.toMutableList())
+            }
     }
 }
