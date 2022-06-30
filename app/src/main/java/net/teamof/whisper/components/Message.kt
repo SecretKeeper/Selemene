@@ -159,13 +159,14 @@ fun MessageDropdown(
                 }
             if (isOwnMessage && message.id == 0L)
                 DropdownMenuItem(onClick = {
-                    messagesViewModel.cancelSendingMessage(message.localId)
+                    messagesViewModel.cancelSendingMessage(message)
                     expandedMessageDropdown.value = false
                 }) {
                     Text("Cancel")
                 }
             else
                 DropdownMenuItem(onClick = {
+                    messagesViewModel.deleteMessage(message)
                     expandedMessageDropdown.value = false
                 }) {
                     Text("Delete")
