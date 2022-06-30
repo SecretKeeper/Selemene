@@ -22,7 +22,7 @@ data class Message(
     // server for
     var verifyDeliveryReport: Boolean = false,
     @Json(name = "created_at")
-    var createdAt: Date = Date(),
+    var createdAt: Date? = Date(),
     @Json(name = "updated_at")
     var updatedAt: Date? = null,
 ) : Serializable
@@ -30,5 +30,9 @@ data class Message(
 @JsonClass(generateAdapter = true)
 data class MessagesArray(
     val messages: List<Message>
-)
+) : Serializable
 
+@JsonClass(generateAdapter = true)
+data class DestroyMessageIds(
+    val message_ids: List<Long>
+) : Serializable
