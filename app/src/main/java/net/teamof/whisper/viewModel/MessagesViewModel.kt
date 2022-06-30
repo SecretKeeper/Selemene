@@ -5,16 +5,13 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import net.teamof.whisper.data.ConversationRepository
-import net.teamof.whisper.data.Message
-import net.teamof.whisper.data.MessageRepository
+import net.teamof.whisper.data.*
 import net.teamof.whisper.models.DeliveryReport
 import net.teamof.whisper.models.MessageSide
 import net.teamof.whisper.sharedprefrences.SharedPreferencesManagerImpl
@@ -34,6 +31,9 @@ class MessagesViewModel @Inject constructor(
 
             val assignedMessage =
                 intent.getSerializableExtra("RECEIVE_ASSIGNED_MESSAGE") as? Message
+
+            val destroyMessages =
+                intent.getSerializableExtra("DESTROY_MESSAGES") as? DestroyMessageIds
 
             if (message != null) {
                 CoroutineScope(Dispatchers.IO).launch {
@@ -59,6 +59,17 @@ class MessagesViewModel @Inject constructor(
                     MessageSide.MYSELF,
                     assignedMessage
                 )
+            }
+
+            if (destroyMessages != null) CoroutineScope(Dispatchers.IO).launch {
+                messageRepository.delete(
+                    destroyMessages.message_ids
+                )
+                // we also need update conversation
+//                conversationRepository.updateConversationByReceivingMessage(
+//                    MessageSide.MYSELF,
+//                    destroyMessages
+//                )
             }
         }
     }
