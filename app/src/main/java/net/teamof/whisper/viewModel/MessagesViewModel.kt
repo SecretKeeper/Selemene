@@ -108,8 +108,22 @@ class MessagesViewModel @Inject constructor(
         messageRepository.getConversationMessages(targetUserId)
 
 
-    fun cancelSendingMessage(messageLocalId: Long) =
+    fun cancelSendingMessage(message: Message) =
         CoroutineScope(Dispatchers.IO).launch {
-            messageRepository.deleteMessageById(messageLocalId)
+            messageRepository.delete(message)
         }
+
+    fun deleteMessage(message: Message) {
+
+        CoroutineScope(Dispatchers.IO).launch {
+            messageRepository.delete(message)
+        }
+
+        application.sendBroadcast(
+            Intent("DESTROY_MESSAGE").putExtra(
+                "DESTROY_MESSAGE_MODEL",
+                MessagesArray(messages = listOf(message))
+            )
+        )
+    }
 }
