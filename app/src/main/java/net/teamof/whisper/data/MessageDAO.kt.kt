@@ -25,6 +25,9 @@ abstract class MessageDAO : BaseDao<Message>() {
     @Update
     abstract override fun update(obj: MutableList<Message>?)
 
-    @Query("DELETE FROM messages WHERE localId = (:id)")
-    abstract fun deleteMessageById(id: Long)
+    @Delete
+    abstract override fun delete(obj: Message)
+
+    @Query("delete from messages where id in (:messageIDs)")
+    abstract fun delete(messageIDs: List<Long>)
 }

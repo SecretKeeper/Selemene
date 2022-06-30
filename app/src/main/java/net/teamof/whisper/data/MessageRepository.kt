@@ -30,8 +30,9 @@ class MessageRepository @Inject constructor(private val messageDAO: MessageDAO) 
         messageDAO.update(message)
 
 
-    fun deleteMessageById(id: Long) =
-        messageDAO.deleteMessageById(id)
+    fun delete(message: Message) =
+        messageDAO.delete(message)
 
-
+    fun delete(messageIds: List<Long>) =
+        messageDAO.delete(messageIds)
 }
