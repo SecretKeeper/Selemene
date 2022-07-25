@@ -28,6 +28,7 @@ import net.teamof.whisper.data.Message
 import net.teamof.whisper.screens.LocalEditMessage
 import net.teamof.whisper.screens.LocalInputText
 import net.teamof.whisper.ui.theme.fontFamily
+import net.teamof.whisper.viewModel.MessagesViewModel
 
 @ExperimentalAnimationApi
 @Composable
@@ -35,6 +36,7 @@ fun Message(
     currentUserId: Long,
     data: Message,
     selection: Boolean,
+    messagesViewModel: MessagesViewModel,
     enableSelectionMode: () -> Unit
 ) {
     val isOwnMessage = data.sender == currentUserId
@@ -69,7 +71,7 @@ fun Message(
                 .fillMaxWidth()
         ) {
 
-            MessageDropdown(data, isOwnMessage, expandedMessageDropdown)
+            MessageDropdown(data, messagesViewModel, isOwnMessage, expandedMessageDropdown)
 
             MessageContent(data, isOwnMessage)
 
@@ -119,6 +121,7 @@ fun MessageContent(message: Message, isOwnMessage: Boolean) {
 @Composable
 fun MessageDropdown(
     message: Message,
+    messagesViewModel: MessagesViewModel,
     isOwnMessage: Boolean,
     expandedMessageDropdown: MutableState<Boolean>
 ) {
@@ -143,6 +146,7 @@ fun MessageDropdown(
                 DropdownMenuItem(onClick = {
                     expandedMessageDropdown.value = false
                 }) {
+                    messagesViewModel.sendAgain(message)
                     Text("Send Again")
                 }
             if (isOwnMessage && message.id != 0L)
@@ -155,12 +159,14 @@ fun MessageDropdown(
                 }
             if (isOwnMessage && message.id == 0L)
                 DropdownMenuItem(onClick = {
+                    messagesViewModel.cancelSendingMessage(message)
                     expandedMessageDropdown.value = false
                 }) {
                     Text("Cancel")
                 }
             else
                 DropdownMenuItem(onClick = {
+                    messagesViewModel.deleteMessage(message)
                     expandedMessageDropdown.value = false
                 }) {
                     Text("Delete")

@@ -15,6 +15,7 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.hilt.android.AndroidEntryPoint
 import net.teamof.whisper.data.Message
+import net.teamof.whisper.data.MessagesArray
 import net.teamof.whisper.models.DeliveryReport
 import net.teamof.whisper.sockets.Socket
 import net.teamof.whisper.sockets.SocketBroadcastListener
@@ -26,95 +27,114 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MessageListenerService : Service() {
 
-	@Inject
-	lateinit var whisperSocket: Socket
+    @Inject
+    lateinit var whisperSocket: Socket
 
-	@Inject
-	lateinit var socketBroadcastListener: SocketBroadcastListener
+    @Inject
+    lateinit var socketBroadcastListener: SocketBroadcastListener
 
-	private val moshi = Moshi.Builder().add(Date::class.java, DateMoshiAdapter()).addLast(
-		KotlinJsonAdapterFactory()
-	).build()
+    private val moshi = Moshi.Builder().add(Date::class.java, DateMoshiAdapter()).addLast(
+        KotlinJsonAdapterFactory()
+    ).build()
 
-	private val binder = LocalBinder()
+    private val binder = LocalBinder()
 
-	private val moshiMessageAdapter: JsonAdapter<Message> = moshi.adapter(Message::class.java)
+    private val moshiMessageAdapter: JsonAdapter<Message> = moshi.adapter(Message::class.java)
 
-	private val moshiDeliveryReportAdapter: JsonAdapter<DeliveryReport> =
-		moshi.adapter(DeliveryReport::class.java)
+    private val moshiMessagesArrayAdapter: JsonAdapter<MessagesArray> =
+        moshi.adapter(MessagesArray::class.java)
 
-	inner class LocalBinder : Binder() {
-		fun getService(): MessageListenerService = this@MessageListenerService
-	}
 
-	private val broadcastReceiver = object : BroadcastReceiver() {
-		override fun onReceive(context: Context, intent: Intent) {
-			when (intent.action) {
-				"SEND_MESSAGE" -> {
-					whisperSocket.send(
-						"message",
-						moshiMessageAdapter.toJson(intent.getSerializableExtra("MESSAGE_MODEL") as Message?)
-					)
-				}
-				"SEND_DELIVERY_REPORT" -> {
-					whisperSocket.send(
-						"delivery-report",
-						moshiDeliveryReportAdapter.toJson(intent.getSerializableExtra("DELIVERY_REPORT_MODEL") as DeliveryReport?)
-					)
-				}
-			}
-		}
-	}
+    private val moshiDeliveryReportAdapter: JsonAdapter<DeliveryReport> =
+        moshi.adapter(DeliveryReport::class.java)
 
-	private fun createNotificationChannel() {
-		val name: CharSequence = "WhisperChannelName"
-		val description = "channel_desc"
-		val importance = NotificationManager.IMPORTANCE_DEFAULT
-		val channel = NotificationChannel("MYWhisperCHANNEL_ID", name, importance)
-		channel.description = description
+    private val moshiDestroyMessagesAdapter: JsonAdapter<MessagesArray> =
+        moshi.adapter(MessagesArray::class.java)
 
-		val notificationManager = getSystemService(
-			NotificationManager::class.java
-		)
-		notificationManager.createNotificationChannel(channel)
-	}
+    inner class LocalBinder : Binder() {
+        fun getService(): MessageListenerService = this@MessageListenerService
+    }
 
-	override fun onCreate() {
-		super.onCreate()
+    private val broadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            when (intent.action) {
+                "SEND_MESSAGE" -> {
+                    whisperSocket.send(
+                        "message",
+                        moshiMessageAdapter.toJson(intent.getSerializableExtra("MESSAGE_MODEL") as Message?)
+                    )
+                }
+                "SEND_DELIVERY_REPORT" -> {
+                    whisperSocket.send(
+                        "delivery-report",
+                        moshiDeliveryReportAdapter.toJson(intent.getSerializableExtra("DELIVERY_REPORT_MODEL") as DeliveryReport?)
+                    )
+                }
+                "DESTROY_MESSAGE" -> {
+                    whisperSocket.send(
+                        "destroy-message",
+                        moshiDestroyMessagesAdapter.toJson((intent.getSerializableExtra("DESTROY_MESSAGE_MODEL") as MessagesArray?))
+                    )
+                }
+            }
+        }
+    }
 
-		createNotificationChannel()
+    private fun createNotificationChannel() {
+        val name: CharSequence = "WhisperChannelName"
+        val description = "channel_desc"
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel("MYWhisperCHANNEL_ID", name, importance)
+        channel.description = description
 
-		registerReceiver(broadcastReceiver, IntentFilter().apply {
-			addAction("SEND_MESSAGE")
-			addAction("SEND_DELIVERY_REPORT")
-		})
+        val notificationManager = getSystemService(
+            NotificationManager::class.java
+        )
+        notificationManager.createNotificationChannel(channel)
+    }
 
-		whisperSocket.onEvent(Socket.EVENT_OPEN, socketBroadcastListener.broadcastSubscribe())
+    override fun onCreate() {
+        super.onCreate()
 
-		whisperSocket.onEventResponse("message", socketBroadcastListener.onMessageListener())
+        createNotificationChannel()
 
-		whisperSocket.onEventResponse(
-			"assigned_message",
-			socketBroadcastListener.onAssignedMessageListener()
-		)
+        registerReceiver(broadcastReceiver, IntentFilter().apply {
+            addAction("SEND_MESSAGE")
+            addAction("SEND_DELIVERY_REPORT")
+            addAction("DESTROY_MESSAGE")
+        })
 
-		whisperSocket.onEventResponse(
-			"new-messages-array",
-			socketBroadcastListener.onNewMessagesArrayListener()
-		)
-	}
+        whisperSocket.onEvent(Socket.EVENT_OPEN, socketBroadcastListener.broadcastSubscribe())
 
-	override fun onDestroy() {
-		unregisterReceiver(broadcastReceiver)
-		super.onDestroy()
-	}
+        whisperSocket.onEventResponse("message", socketBroadcastListener.onMessageListener())
 
-	override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-		return START_STICKY
-	}
+        whisperSocket.onEventResponse(
+            "assigned_message",
+            socketBroadcastListener.onAssignedMessageListener()
+        )
 
-	@SuppressLint("CheckResult")
-	override fun onBind(intent: Intent?): IBinder {
-		return binder
-	}
+        whisperSocket.onEventResponse(
+            "new-messages-array",
+            socketBroadcastListener.onNewMessagesArrayListener()
+        )
+
+        whisperSocket.onEventResponse(
+            "destroy-messages-to-receiver",
+            socketBroadcastListener.onDestroyMessagesArrayListener()
+        )
+    }
+
+    override fun onDestroy() {
+        unregisterReceiver(broadcastReceiver)
+        super.onDestroy()
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        return START_STICKY
+    }
+
+    @SuppressLint("CheckResult")
+    override fun onBind(intent: Intent?): IBinder {
+        return binder
+    }
 }

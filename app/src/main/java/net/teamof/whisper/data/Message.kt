@@ -21,12 +21,18 @@ data class Message(
     // this is not for first or second tick , this is just a helper to prevent sending request
     // server for
     var verifyDeliveryReport: Boolean = false,
-    var createdAt: Date? = null,
+    @Json(name = "created_at")
+    var createdAt: Date? = Date(),
+    @Json(name = "updated_at")
     var updatedAt: Date? = null,
 ) : Serializable
 
 @JsonClass(generateAdapter = true)
 data class MessagesArray(
     val messages: List<Message>
-)
+) : Serializable
 
+@JsonClass(generateAdapter = true)
+data class DestroyMessageIds(
+    val message_ids: List<Long>
+) : Serializable
