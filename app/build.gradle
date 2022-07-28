@@ -49,7 +49,6 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
-        useIR = true
         freeCompilerArgs += [
                 "-Xopt-in=kotlin.RequiresOptIn"
         ]
@@ -75,7 +74,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0-rc02"
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1'
-    implementation 'androidx.activity:activity-compose:1.4.0'
+    implementation 'androidx.activity:activity-compose:1.5.0'
     implementation("androidx.security:security-crypto:1.0.0")
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.13.2'
@@ -84,7 +83,7 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
 
 
-    def room_version = "2.4.2"
+    def room_version = "2.4.3"
 
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
